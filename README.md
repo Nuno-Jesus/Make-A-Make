@@ -49,7 +49,7 @@ Let's break this down:
 
 Each command should be indented with a tab, otherwise an error like this might show up:
 
-		Makefile:38: *** missing separator.  Stop.
+	Makefile:38: *** missing separator.  Stop.
 
 
 A rule explains how, when and what files/rules are involved so the own rule is executed properly.
@@ -58,9 +58,57 @@ Here's an example of a perfectly valid rule that attempts to generate a `hello.o
 	hello.o: hello.c
 		clang -c hello.c
 
-Ok! Given the current knowledge you acquired so far, you are ready to create your first simple Makefile. It will VERY simple, but functional! Let's assemble a Makefile that compiles our initial project all together.
+Ok! Given the current knowledge you acquired so far, you are ready to create your first simple Makefile. It will **VERY** simple, but functional! Let's assemble a Makefile that compiles our initial project all together.
 
-## <a name="index-5">The first Makefile</a>
+## <a name="index-5">Your first Makefile</a>
+
+Remember our project structure:
+
+		├── hello.c 
+		├── main.c
+		└── Makefile
+
+Here's a simple Makefile:
+
+	hello.o: hello.c
+		cc -c hello.c
+
+	main: hello.o
+		cc main.c hello.c hello.o
+
+How can we prove its working? Let's try to execute it. On a terminal you can run:
+
+	make target_name
+
+where `target_name` should be substituted by the name of the target you want to build. But let's forget about that and run only:
+
+	make
+
+You should see this message printed on the terminal:
+
+	cc -c hello.c
+
+And the `hello.o` file was created:
+
+	├── hello.c 
+	├── hello.o 
+	├── main.c
+	└── Makefile
+
+That means the `hello.o` rule was called. But it's not really that useful since our main file wasn't compiled. A good compilation would result in the main rule to be called and compile both `hello.c` and `main.c`. This is because by default
+, when no target name is specified after the make command, the first rule from top to bottom is executed. 
+
+After reading this, you switch the order of the rules and you `make` again. This is the new output:
+
+	cc -c hello.c
+	cc main.c hello.o
+
+This is great! The compilation worked out and finally we can execute our program and print "Hello World!"!
+
+But what if create 10 more files? Do I need to create 10 more rules? The answer is no.
+
+## <a name="index-4">Implicit rules</a> 
+
 <!-- 
 
 ## <a name="index-4">Implicit rules</a> 
@@ -68,5 +116,23 @@ Ok! Given the current knowledge you acquired so far, you are ready to create you
 		$(CC) $(CPPFLAGS) $(CFLAGS) -c
 	Implicit rule for C++:
 		$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## <a name="index-4">Special rules</a> 
+.SILENT: silences all the commands printed on the output
+.PHONY: used to tell the Makefile to not confuse the names of the targets with filenames. For instance, having a file called `hello`, should not enter in conflict with the `hello` rule
+
+## <a name="index-4">Builtin variables</a>
+Some variables are already recognized by the Makefile when given a certain name. Those are the variables the Makefile will use to execute the implicit rules. Here are some useful variables:
+	AR("ar") - used to create archives, .a files
+	CC("cc") - the default compiler to use when compiling C programs
+	CXX("g++") - the default compiler to use when compiling C++ programs
+	ARFLAGS("-rv") - flags to work with AR
+	CFLAGS("") - extra flags to work with CC
+	CXXFLAGS("") - extra flags to work with CXX
+	
+## <a name="index-4">Automatic variables</a>
+	$@ - The target name
+	$< - The name of the first pre requisite
+	$^ - The name of all the pre requisites, separated by spaces
 
 -->
