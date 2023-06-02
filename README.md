@@ -82,6 +82,8 @@ You should see something like this on the terminal:
 
 This is great! The compilation worked out and finally we can execute our program and print "Hello World!"! But what if one was to create `N` more files, would they need to create `N` more rules?
 
+## <a name="index-6">Variables</a>
+
 <!-- 
 
 ## <a name="index-4">Implicit rules</a> 
