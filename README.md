@@ -2,7 +2,7 @@
 An introduction to the basics of the make utility.
 
 
-## Index
+## <a name="index-0">Index</a>
 
 - [What is make?](#index-1)
 - [Introduction to Makefiles](#index-2)
@@ -15,99 +15,72 @@ The make utility is an automatic tool capable of deciding which commands can / s
 This tutorial will only display a Makefile with C files, but it can be used with any language.
 
 ## <a name="index-2">Introduction to Makefiles</a>
-Creating a valid Makefile is your first priority. Typically, a Makefile is called to handle compilation and linkage of a project and its files.
+Typically, a Makefile is called to handle compilation and linkage of a project and its files.
 
 For instance, when compiling a `C` project, the final executable file, would be the zipped version of every `.o` file, which was in turn created from the `.c` files.
 
-## <a name="index-3">Let's start</a>
-First off, let's define a project we will be working with. This is the directory structure.
+Let's create a simple project to work with. You can find this files in the [code](/code) folder.
 
-		├── hello.c 
-		├── main.c
-		└── Makefile
+	├── hello.c 
+	├── main.c
+	└── Makefile
 
 ## <a name="index-4">Makefile rules</a>
-A Makefile is essentially composed of rules. Rules define how files and commands are linked together in order for the compilation to take effect.
+Rules are the core of a Makefile. Rules define how, when and what files and commands are used to achieve the final executable.
 
 A rule has the following syntax:
 
-```		
 	target: pre-requisit-1 pre-requisit-2 pre-requisit-3 ...
 		command-1
 		command-2
 		command-3
 		...
-```
 
-Let's break this down:
+- A `target` is the name of a rule. Usually, it is also the name of a compilation related file, but not always.
 
-- A `target` is the name of a rule. Usually, the name of the rule is also the name of the a file that has to be generated, but it is not mandatory. Sometimes we just need an auxiliary rule to do some extra work like cleaning files or debugging.
+- A rule can (can have 0) have dependecies, something to be fulfilled before its own execution, named `pre-requisits`. A pre-requisit can be either the name of a file or the name of another rule. In the last case, the dependecy rule is executed first. If the pre-requisit does not match neither a file or rule name, the Makefile will halt with and print an error.
 
-- `Pre-requisits` are mandatory requisits that should be fulfilled before the rule executes its commands. A rule can have 0 or more pre-requisites. Pre-requisits can be files that should be present or other rules. If one of the pre-requisits is another rule, it will be executed first. Should one of the pre-requisits not be present, the rule might not be executed.
-
-- `Commands` are the commands to be executed within a rule and usually lead to the compilation/linkage of object files. A set of commands within a rule is called a `recipe`.
+- Finally, after all pre-requisits, the rule can execute its `recipe`, a collection of `commands`. A rule can also have an empty recipe.
 
 Each command should be indented with a tab, otherwise an error like this might show up:
 
 	Makefile:38: *** missing separator.  Stop.
 
-
-A rule explains how, when and what files/rules are involved so the own rule is executed properly.
 Here's an example of a perfectly valid rule that attempts to generate a `hello.o` file from a `hello.c` file:
 
 	hello.o: hello.c
 		clang -c hello.c
 
-Ok! Given the current knowledge you acquired so far, you are ready to create your first simple Makefile. It will **VERY** simple, but functional! Let's assemble a Makefile that compiles our initial project all together.
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
 
 ## <a name="index-5">Your first Makefile</a>
-
-Remember our project structure:
-
-		├── hello.c 
-		├── main.c
-		└── Makefile
-
-Here's a simple Makefile:
+The Makefile bellow is capable of compiling our example project. 
 
 	hello.o: hello.c
 		cc -c hello.c
 
-	main: hello.o
-		cc main.c hello.c hello.o
+	all: hello.o
+		cc main.c hello.o
 
-How can we prove its working? Let's try to execute it. On a terminal you can run:
+In the terminal, you must use the following command:
 
-	make target_name
+	make target
 
-where `target_name` should be substituted by the name of the target you want to build. But let's forget about that and run only:
+...where `target` is the name of the rule you want to run. In this case, we need both main.c and hello.c file to be compiled, so you must run:
 
-	make
+	make all
 
-You should see this message printed on the terminal:
+> **Warning**
+> If no rule is specified, the Makefile will execute the very first rule (from top to bottom). Make sure you place your default rule above all others. Yes, this example is not doing that.
 
-	cc -c hello.c
-
-And the `hello.o` file was created:
-
-	├── hello.c 
-	├── hello.o 
-	├── main.c
-	└── Makefile
-
-That means the `hello.o` rule was called. But it's not really that useful since our main file wasn't compiled. A good compilation would result in the main rule to be called and compile both `hello.c` and `main.c`. This is because by default
-, when no target name is specified after the make command, the first rule from top to bottom is executed. 
-
-After reading this, you switch the order of the rules and you `make` again. This is the new output:
+You should see something like this on the terminal:
 
 	cc -c hello.c
 	cc main.c hello.o
 
-This is great! The compilation worked out and finally we can execute our program and print "Hello World!"!
-
-But what if create 10 more files? Do I need to create 10 more rules? The answer is no.
-
-## <a name="index-4">Implicit rules</a> 
+This is great! The compilation worked out and finally we can execute our program and print "Hello World!"! But what if one was to create `N` more files, would they need to create `N` more rules?
 
 <!-- 
 
@@ -116,6 +89,10 @@ But what if create 10 more files? Do I need to create 10 more rules? The answer 
 		$(CC) $(CPPFLAGS) $(CFLAGS) -c
 	Implicit rule for C++:
 		$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## <a name="index-4">Relinking</a>
+Relinking is mentioned whenever your makefile compiles your files, over and over again, even though no modifications were performed.
+
 
 ## <a name="index-4">Special rules</a> 
 .SILENT: silences all the commands printed on the output
@@ -135,4 +112,41 @@ Some variables are already recognized by the Makefile when given a certain name.
 	$< - The name of the first pre requisite
 	$^ - The name of all the pre requisites, separated by spaces
 
+## <a name="index-4">Typical errors</a>
+
 -->
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+
+## <a name="index-4">Glossary</a>
+
+<details>
+	<summary>P</summary>
+	<ul>
+		<li><strong>Pre-requisit</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>R</summary>
+	<ul>
+		<li><strong>Re-linking</strong> - </li>
+	</ul>
+	<ul>
+		<li><strong>Recipe</strong> - </li>
+	</ul>
+	<ul>
+		<li><strong>Rule</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>T</summary>
+	<ul>
+		<li><strong>Target</strong> - </li>
+	</ul>
+</details>
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
