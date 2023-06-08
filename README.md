@@ -125,6 +125,12 @@ Some variables are already recognized by the Makefile when given a certain name.
 --debug Displays the thinking process of the makefile before executing any targets
 --no-print-directory Disables message printing of whenever the makefile enters or exits a directory
 
+## <a name="index-4">Makefile functions</a>
+
+## <a name="index-4">Command line variables</a>
+
+
+
 -->
 
 <div align=center>

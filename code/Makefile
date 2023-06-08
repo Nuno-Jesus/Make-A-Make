@@ -1,4 +1,4 @@
-main: hello.o
+all: hello.o
 	cc main.c hello.o
 
 hello.o: hello.c
