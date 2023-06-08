@@ -66,14 +66,14 @@ The Makefile bellow is capable of compiling our example project.
 
 In the terminal, you must use the following command:
 
-	make target
+	make <target>
 
 ...where `target` is the name of the rule you want to run. In this case, we need both main.c and hello.c file to be compiled, so you must run:
 
 	make all
 
-> **Warning**
-> If no rule is specified, the Makefile will execute the very first rule (from top to bottom). Make sure you place your default rule above all others. Yes, this example is not doing that.
+> **Note**
+> If if the target field is ommited, by default, the first written rule will be executed (from top to bottom). Make sure you place your primary rule above all others. And yes, this example is not doing that.
 
 You should see something like this on the terminal:
 
@@ -95,8 +95,7 @@ This is great! The compilation worked out and finally we can execute our program
 ## <a name="index-4">Relinking</a>
 Relinking is mentioned whenever your makefile compiles your files, over and over again, even though no modifications were performed.
 
-
-## <a name="index-4">Special rules</a> 
+## <a name="index-4">Builtin target names</a> 
 .SILENT: silences all the commands printed on the output
 .PHONY: used to tell the Makefile to not confuse the names of the targets with filenames. For instance, having a file called `hello`, should not enter in conflict with the `hello` rule
 
@@ -116,6 +115,16 @@ Some variables are already recognized by the Makefile when given a certain name.
 
 ## <a name="index-4">Typical errors</a>
 
+## <a name="index-4">Useful flags</a>
+-C <directory> Call another makefile located at <dir>
+-k Continue as much as possible after an error occurred.
+-s Turns off printing of the makefile actions in the terminal
+-r Tells the makefile to ignore any builtin rules
+-j<number of threads> Allows parallel computation of makefile actions. Needs $(MAKE) to work properly.
+-n Displays the commands the makefile would run without actually running them
+--debug Displays the thinking process of the makefile before executing any targets
+--no-print-directory Disables message printing of whenever the makefile enters or exits a directory
+
 -->
 
 <div align=center>
@@ -124,6 +133,12 @@ Some variables are already recognized by the Makefile when given a certain name.
 
 ## <a name="index-4">Glossary</a>
 
+<details>
+	<summary>F</summary>
+	<ul>
+		<li><strong>Flag</strong> - </li>
+	</ul>
+</details>
 <details>
 	<summary>P</summary>
 	<ul>
