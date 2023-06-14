@@ -6,4 +6,6 @@ hello.o: hello.c
 
 clean:
 	rm -f a.out hello.o
+
+.DEFAULT_GOAL := clean
 	
