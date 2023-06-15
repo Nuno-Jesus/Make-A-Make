@@ -103,16 +103,16 @@ Here's an image to display the dependencies in a more organized way:
 	<image src=images/graph_1.png width=65%>
 </div>
 
-In the terminal, you must use the following command:
+In the terminal, run:
 
 	make <target>
 
-...where `target` is the name of the rule you want to run. In this case, we need both `main.c` and `hello.c` file to be compiled, so you must run:
+...where `<target>` is the name of the rule you want to run. In this case, we need both `main.c` and `hello.c` file to be compiled, so you can run:
 
 	make all
 
 > **Note**
-> If if the target field is ommited, by default, the first written rule will be executed (from top to bottom). Make sure you place your primary rule above all others. And yes, this example is not doing that, the primary rule should be 'all'.
+> If the `<target>` field is ommited, the Makefile will execute the first rule. And yes, this example is not doing that, the primary rule should be 'all'.
 
 You should see something like this on the terminal:
 ```zsh
@@ -120,7 +120,7 @@ cc -c hello.c
 cc main.c hello.o
 ```
 
-This is great! The compilation worked out and finally we can execute our program and print "Hello World!"! But what if one was to create `N` more files, would they need to create `N` more rules?
+This is great! The compilation worked out and finally we can execute our program and print "Hello World!"! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
 
 ## <a name="index-6">Variables</a>
 Similar to programming languages, the Makefile syntax allows you to define variables. Variables can only be strings (a single one or a list of strings). Here are some examples:
@@ -174,11 +174,9 @@ all: hello.o bye.o highfive.o
 ```
 
 This would be the new dependency graph:
-<!--                                                       -->
-<!--                                                       -->
-<!--                  PLACE AN IMAGE HERE                  -->
-<!--                                                       -->
-<!--                                                       -->
+<div align=center>
+	<image src=images/graph_2.png width=65%>
+</div>
 
 But this is very much redundant, since the command in each recipe is the same. You are only changing the filename. Let us use the newly learn variables to clean this up!
 
