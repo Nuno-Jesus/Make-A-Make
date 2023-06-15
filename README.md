@@ -30,17 +30,19 @@ Rules are the core of a Makefile. Rules define how, when and what files and comm
 
 A rule has the following syntax:
 
-	target: pre-requisit-1 pre-requisit-2 pre-requisit-3 ...
-		command-1
-		command-2
-		command-3
-		...
+```Makefile
+target: pre-requisit-1 pre-requisit-2 pre-requisit-3 ...
+	command-1
+	command-2
+	command-3
+	...
+```
 
 - A `target` is the name of a rule. Its, usually, also the name of a file, but not always.
 
-- A rule can (can have 0) have dependecies, something to be fulfilled before its own execution, named `pre-requisits`. A pre-requisit **can be either a file another rule**. In the last case, the dependecy rule is executed first. If the pre-requisit does not match neither a file or rule name, the Makefile will halt with and print an error.
+- A rule can have dependencies, some stuff to be fulfilled before execution, named `pre-requisits`. A pre-requisit **can be either a file or another rule**. In the last case, the dependency rule is executed first. If the pre-requisit doesn't match neither a file or a rule's name, the Makefile halts and prints an error.
 
-- Finally, after all pre-requisits are fullfilled, the rule can execute its `recipe`, a collection of `commands`. A rule can also have an empty recipe.
+- Finally, after all pre-requisits are fulfilled, the rule can execute its `recipe`, a collection of `commands`. A rule can also have an empty recipe.
 
 Each command should be indented with a **tab**, otherwise an error like this might show up:
 
@@ -69,12 +71,7 @@ all: hello.o
 ```
 
 Here's an image to display the dependencies in a more organized way:
-<!--                                                       -->
-<!--                                                       -->
-<!--                  PLACE AN IMAGE HERE                  -->
-<!--                                                       -->
-<!--                                                       -->
-
+![](images/graph_1.png)
 
 In the terminal, you must use the following command:
 
@@ -119,7 +116,7 @@ Similar to programming languages, the Makefile syntax allows you to define varia
 ```Makefile
 FIRST_NAMES := Nuno Miguel 				
 LAST_NAMES := Carvalho de Jesus
-FULL_NAME := $(FIRST_NAMES) $(LAST_NAMES) #
+FULL_NAME := $(FIRST_NAMES) $(LAST_NAMES) # Nuno Miguel Carvalho de Jesus
 ```
 
 > **Note**: typically you should use the ':=' operator but '=' also works. 
@@ -184,25 +181,25 @@ all: $(OBJS)
 
 ```
 
-Variables allow you to focus your changes on one place, preventing error-prone and repeated values across your Makefile.
+Variables allow you to focus your changes on one place, preventing error-prone implementations and repeated values across your Makefile.
 
-Ok, pause. I know this is a lot to take in, let's break it in pieces. When running `make`:
+Ok, pause. I know this is a lot to take in. Let's look into the details.When running `make`:
 
-1. The all rule is chosen by default to execute:
+**1.** The all rule is chosen by default to execute:
 
 ```Makefile
 all: $(OBJS)
 	cc main.c $(OBJS)
 ```
 
-2. The `OBJS` variable is expanded its values, creating multiple dependencies
+**2.** The `OBJS` variable is expanded its values, creating multiple dependencies
 
 ```Makefile
 all: hello.o bye.o highfive.o
 	cc main.c $(OBJS)
 ```
 
-3. Since in the first time the `hello.o` file doesn't exist, the Makefile will search for a rule that matches the pattern of `hello.o`.
+**3.** Since in the first time the `hello.o` file doesn't exist, the Makefile will search for a rule that matches the pattern of `hello.o`.
 
 ```Makefile
 %.o: %.c
@@ -223,7 +220,7 @@ hello.o: hello.c
 	cc -c hello.c
 ```
 
-4. Finally, after all dependencies are fulfilled, the `all` rule can execute its recipe. The `OBJS` variable is expanded again to its values
+**4.** Finally, after all dependencies are fulfilled, the `all` rule can execute its recipe. The `OBJS` variable is expanded again to its values
 
 ```Makefile
 all: hello.o bye.o highfive.o
