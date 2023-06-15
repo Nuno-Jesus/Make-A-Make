@@ -55,6 +55,26 @@ hello.o: hello.c
 	clang -c hello.c
 ```
 
+The `clean` rule is used to clean temporary files. Those would be the object files in a C project:
+
+```Makefile
+clean:
+	rm -rf hello.o
+```
+
+You can also have a similar rule to clean both object files and the executable:
+
+```Makefile
+fclean: clean
+	rm -rf a.out
+```
+
+Finally, if you're lazy like me and need to re-compile everything, you might want to create a rule to clean and re-compile:
+
+```Makefile
+re: fclean all
+```
+
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
@@ -68,10 +88,20 @@ hello.o: hello.c
 
 all: hello.o
 	cc main.c hello.o
+
+clean:
+	rm -rf hello.o
+
+fclean: clean
+	rm -rf a.out
+
+re: fclean all
 ```
 
 Here's an image to display the dependencies in a more organized way:
-![](images/graph_1.png)
+<div align=center>
+	<image src=images/graph_1.png width=65%>
+</div>
 
 In the terminal, you must use the following command:
 
@@ -83,24 +113,6 @@ In the terminal, you must use the following command:
 
 > **Note**
 > If if the target field is ommited, by default, the first written rule will be executed (from top to bottom). Make sure you place your primary rule above all others. And yes, this example is not doing that, the primary rule should be 'all'.
-
-<!--                                                         -->
-<!--                                                         -->
-<!--                    TALK ABOUT CLEAN RULE                -->
-<!--                                                         -->
-<!--                                                         -->
-
-<!--                                                         -->
-<!--                                                         -->
-<!--                   TALK ABOUT FCLEAN RULE                -->
-<!--                                                         -->
-<!--                                                         -->
-
-<!--                                                         -->
-<!--                                                         -->
-<!--                    TALK ABOUT RE RULE                   -->
-<!--                                                         -->
-<!--                                                         -->
 
 You should see something like this on the terminal:
 ```zsh

@@ -1,17 +1,16 @@
-# all: hello.o highfive.o bye.o
-# 	cc main.c hello.o highfive.o bye.o
-
 # hello.o: hello.c
-# 		cc -c hello.c
+# 	cc -c hello.c
 
-# bye.o: bye.c
-# 		cc -c bye.c
-
-# highfive.o: highfive.c
-# 		cc -c highfive.c
+# all: hello.o
+# 	cc main.c hello.o
 
 # clean:
-# 	rm -f a.out hello.o highfive.o bye.o
+# 	rm -rf hello.o
+
+# fclean: clean
+# 	rm -rf a.out
+
+# re: fclean all
 
 OBJS := hello.o highfive.o bye.o
 
