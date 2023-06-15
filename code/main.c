@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarvalh <ncarvalh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 21:43:38 by ncarvalh          #+#    #+#             */
-/*   Updated: 2023/06/01 22:10:37 by ncarvalh         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:53:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
 void hello(void);
+void bye(void);
+void highfive(void);
 
 int main()
 {

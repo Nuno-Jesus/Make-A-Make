@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hello.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarvalh <ncarvalh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 21:44:01 by ncarvalh          #+#    #+#             */
-/*   Updated: 2023/06/01 22:10:39 by ncarvalh         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:52:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 void hello(void)
 {
-	printf("Hello World!\n");
+	printf("Hello!\n");
 }

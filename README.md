@@ -89,7 +89,13 @@ In the terminal, you must use the following command:
 
 <!--                                                         -->
 <!--                                                         -->
-<!--                  TALK ABOUT CLEAN RULE                  -->
+<!--                    TALK ABOUT CLEAN RULE                -->
+<!--                                                         -->
+<!--                                                         -->
+
+<!--                                                         -->
+<!--                                                         -->
+<!--                   TALK ABOUT FCLEAN RULE                -->
 <!--                                                         -->
 <!--                                                         -->
 
@@ -122,7 +128,17 @@ FULL_NAME := $(FIRST_NAMES) $(LAST_NAMES) #
 
 > **Note**: When more than one string is specified in a variable, it isn't considered as a string with spaces, but a list of strings.
 
-You can use variables in rules and other variables as well. To access their values, you must use the "$(VARIABLE_NAME_HERE)" or the "${VARIABLE_NAME_HERE}" syntax.
+You can use variables in rules and other variables as well. To access their values, you must use:
+
+```Makefile
+$(FIRST_NAME)
+```
+
+or 
+
+```Makefile
+${FIRST_NAME}
+```
 
 Let's expand our project and add some more files:
 
@@ -132,7 +148,7 @@ Let's expand our project and add some more files:
 	├── main.c
 	└── Makefile
 
-A naive solution to update the Makefile would be to create more rules:
+A naive solution would be to create more rules:
 
 ```Makefile
 hello.o: hello.c
@@ -168,9 +184,11 @@ all: $(OBJS)
 
 ```
 
+Variables allow you to focus your changes on one place, preventing error-prone and repeated values across your Makefile.
+
 Ok, pause. I know this is a lot to take in, let's break it in pieces. When running `make`:
 
-1. The all rule is executed.
+1. The all rule is chosen by default to execute:
 
 ```Makefile
 all: $(OBJS)
@@ -184,7 +202,33 @@ all: hello.o bye.o highfive.o
 	cc main.c $(OBJS)
 ```
 
+3. Since in the first time the `hello.o` file doesn't exist, the Makefile will search for a rule that matches the pattern of `hello.o`.
 
+```Makefile
+%.o: %.c
+	cc -c $<
+```
+
+The `%` can be used in several cases, but in this one is used as a **Regular Expression (REGEX)**. You can read it as "any dependency that ends on `.o` can be generated here and needs a corresponding `.c` dependency with the same prefix". For `hello.o` we have:
+
+```Makefile
+hello.o: hello.c
+	cc -c $< # The $< expands to the first dependency of this rule (hello.c)
+```
+
+The same goes for other dependencies having a `.o` suffix. The `$<` is an **Automatic Variable** (learn more about Automatic variables [here](#index-4)), used to handle variable dependency strings. Final expansion:
+
+```Makefile
+hello.o: hello.c
+	cc -c hello.c
+```
+
+4. Finally, after all dependencies are fulfilled, the `all` rule can execute its recipe. The `OBJS` variable is expanded again to its values
+
+```Makefile
+all: hello.o bye.o highfive.o
+	cc main.c hello.o bye.o highfive.o
+```
 
 
 <!-- 
@@ -244,6 +288,24 @@ Some variables are already recognized by the Makefile when given a certain name.
 ## <a name="index-4">Glossary</a>
 
 <details>
+	<summary>A</summary>
+	<ul>
+		<li><strong>Automatic Variable</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>D</summary>
+	<ul>
+		<li><strong>Dependency</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>E</summary>
+	<ul>
+		<li><strong>Expansion</strong> - </li>
+	</ul>
+</details>
+<details>
 	<summary>F</summary>
 	<ul>
 		<li><strong>Flag</strong> - </li>
@@ -258,10 +320,13 @@ Some variables are already recognized by the Makefile when given a certain name.
 <details>
 	<summary>R</summary>
 	<ul>
-		<li><strong>Re-linking</strong> - </li>
+		<li><strong>Recipe</strong> - </li>
 	</ul>
 	<ul>
-		<li><strong>Recipe</strong> - </li>
+		<li><strong>Regular Expression</strong> - </li>
+	</ul>
+	<ul>
+		<li><strong>Re-linking</strong> - </li>
 	</ul>
 	<ul>
 		<li><strong>Rule</strong> - </li>
