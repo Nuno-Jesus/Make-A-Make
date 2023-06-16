@@ -17,9 +17,6 @@ OBJS := hello.o highfive.o bye.o
 all: $(OBJS)
 	cc main.c $(OBJS)
 
-%.o: %.c
-	cc -c $<
-
 clean:
 	rm -f $(OBJS)
 

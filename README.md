@@ -5,7 +5,10 @@ An introduction to the basics of the make utility.
 ## <a name="index-0">Index</a>
 
 - [What is make?](#index-1)
-- [Introduction to Makefiles](#index-2)
+- [An introduction to Makefiles](#index-2)
+- [Rules](#index-3)
+- [A simple Makefile](#index-4)
+- [Variables](#index-5)
 - ...
 
 ## <a name="index-1">What is make?</a>
@@ -14,7 +17,7 @@ The make utility is an automatic tool capable of deciding which commands can / s
 
 This tutorial will only display a Makefile with C files, but it can be used with any language.
 
-## <a name="index-2">Introduction to Makefiles</a>
+## <a name="index-2">An introduction to Makefiles</a>
 Typically, a Makefile is called to handle compilation and linkage of a project and its files.
 
 For instance, when compiling a `C` project, the final executable file, would be the zipped version of every `.o` file, which was in turn created from the `.c` files.
@@ -25,7 +28,7 @@ Let's create a simple project to work with. You can find this files in the [code
 	├── main.c
 	└── Makefile
 
-## <a name="index-4">Makefile rules</a>
+## <a name="index-3">Rules</a>
 Rules are the core of a Makefile. Rules define how, when and what files and commands are used to achieve the final executable.
 
 A rule has the following syntax:
@@ -79,7 +82,7 @@ re: fclean all
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
-## <a name="index-5">Your first Makefile</a>
+## <a name="index-4">A simple Makefile</a>
 The Makefile bellow is capable of compiling our example project. 
 
 ```Makefile
@@ -100,7 +103,7 @@ re: fclean all
 
 Here's an image to display the dependencies in a more organized way:
 <div align=center>
-	<image src=images/graph_1.png width=65%>
+	<image src=images/graph_1.png>
 </div>
 
 In the terminal, run:
@@ -111,18 +114,17 @@ In the terminal, run:
 
 	make all
 
-> **Note**
+> **Warning**
 > If the `<target>` field is ommited, the Makefile will execute the first rule. And yes, this example is not doing that, the primary rule should be 'all'.
 
 You should see something like this on the terminal:
-```zsh
-cc -c hello.c
-cc main.c hello.o
-```
+
+	cc -c hello.c
+	cc main.c hello.o
 
 This is great! The compilation worked out and finally we can execute our program and print "Hello World!"! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
 
-## <a name="index-6">Variables</a>
+## <a name="index-5">Variables</a>
 Similar to programming languages, the Makefile syntax allows you to define variables. Variables can only be strings (a single one or a list of strings). Here are some examples:
 
 ```Makefile
@@ -139,15 +141,11 @@ FULL_NAME := $(FIRST_NAMES) $(LAST_NAMES) # Nuno Miguel Carvalho de Jesus
 
 You can use variables in rules and other variables as well. To access their values, you must use:
 
-```Makefile
-$(FIRST_NAME)
-```
+	$(FIRST_NAME)
 
 or 
 
-```Makefile
-${FIRST_NAME}
-```
+	${FIRST_NAME}
 
 Let's expand our project and add some more files:
 
@@ -175,10 +173,10 @@ all: hello.o bye.o highfive.o
 
 This would be the new dependency graph:
 <div align=center>
-	<image src=images/graph_2.png width=65%>
+	<image src=images/graph_2.png>
 </div>
 
-But this is very much redundant, since the command in each recipe is the same. You are only changing the filename. Let us use the newly learn variables to clean this up!
+But this is ugly and unnecessary since the pattern is always the same. Let us use the newly learn variables to clean this up!
 
 ```Makefile
 OBJS := hello.o bye.o highfive.o # Dependency list of the 'all' rule
@@ -188,35 +186,34 @@ all: $(OBJS)
 
 %.o: %.c
 	cc -c $<
-
 ```
 
 Variables allow you to focus your changes on one place, preventing error-prone implementations and repeated values across your Makefile.
 
 Ok, pause. I know this is a lot to take in. Let's look into the details.When running `make`:
 
-**1.** The all rule is chosen by default to execute:
+**1.** The `all` rule is chosen by default:
 
 ```Makefile
 all: $(OBJS)
 	cc main.c $(OBJS)
 ```
 
-**2.** The `OBJS` variable is expanded its values, creating multiple dependencies
+**2.** The `OBJS` variable is expanded its values, creating multiple dependencies:
 
 ```Makefile
 all: hello.o bye.o highfive.o
 	cc main.c $(OBJS)
 ```
 
-**3.** Since in the first time the `hello.o` file doesn't exist, the Makefile will search for a rule that matches the pattern of `hello.o`.
+**3.** In the first compilation, the `hello.o` file doesn't exist. The dependency must then be remade, which forces the .
 
 ```Makefile
 %.o: %.c
 	cc -c $<
 ```
 
-The `%` can be used in several cases, but in this one is used as a **Regular Expression (REGEX)**. You can read it as "any dependency that ends on `.o` can be generated here and needs a corresponding `.c` dependency with the same prefix". For `hello.o` we have:
+The `%` can be used in several cases.For this one, its used to represent a **Regular Expression (REGEX)**. You can read it as "any dependency that ends on `.o` can be generated here and needs a corresponding `.c` dependency with the same prefix". For `hello.o` we have:
 
 ```Makefile
 hello.o: hello.c
@@ -236,6 +233,82 @@ hello.o: hello.c
 all: hello.o bye.o highfive.o
 	cc main.c hello.o bye.o highfive.o
 ```
+
+Here's what we have so far:
+
+```Makefile
+OBJS := hello.o bye.o highfive.o # Dependency list of the 'all' rule
+
+all: $(OBJS)
+	cc main.c $(OBJS)
+
+%.o: %.c
+	cc -c $<
+
+clean:
+	rm -rf $(OBJS)
+
+fclean: clean
+	rm -rf a.out
+
+re: fclean all
+```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+
+## <a name="index-6">Towards a more flexible Makefile</a>
+Now that the basics are settled (at least they should be), let's have a look at some details. Noticed how the `rm -rf` and the `cc` commands are repeating? We can place them in variables:
+
+```Makefile
+CC		:= cc
+RM		:= rm -rf
+OBJS	:= hello.o bye.o highfive.o
+
+all: $(OBJS)
+	$(CC) main.c $(OBJS)
+
+%.o: %.c
+	$(CC) -c $<
+
+clean:
+	$(RM) $(OBJS)
+
+fclean: clean
+	$(RM) a.out
+
+re: fclean all
+```
+
+Suppose now, you need a more secure compilation, so you need compilation flags. You also want to name your executable `final`. For both cases we can define variables to avoid unecessary repetition. The `-o` flag is part of the `cc` compiler, which allows you to specify which name the executable will have.
+Here are the new changes:
+
+```Makefile
+CC		:= cc
+CFLAGS	:= -Wall -Werror -Wextra
+RM		:= rm -rf
+NAME	:= final
+OBJS	:= hello.o bye.o highfive.o
+
+all: $(OBJS)
+	$(CC) $(CFLAGS) main.c $(OBJS) -o $(NAME)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
+
+...
+
+fclean: clean
+	$(RM) $(NAME)
+
+```
+
+> **Note**: the CC and CFLAGS names are not randomly chosen...
+
+Have you tried to remove the `%.o: %.c` rule? Is the Makefile still working? If you are confused about it, check the [Implicit Rules](#index-0) and [Builtin Variables](#index-0) section.
+
+
 
 
 <!-- 
@@ -284,8 +357,7 @@ Some variables are already recognized by the Makefile when given a certain name.
 
 ## <a name="index-4">Command line variables</a>
 
-
-
+## <a name="index-4">The vpath directive and project organization</a>
 -->
 
 <div align=center>
