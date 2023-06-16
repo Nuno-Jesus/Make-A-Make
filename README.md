@@ -295,11 +295,11 @@ Automatic variables are special variables used by the Makefile to dynamically co
 Below, is a table of some of the most useful ones:
 
 <div align=center width>
-	<table>
+	<table width=100%>
 		<thead>
 			<tr>
-				<td align=center>Variables</td>
-				<td align=center>Description</td>
+				<td align=center><strong>Variables</strong></td>
+				<td align=center><strong>Description</strong></td>
 			<tr>
 		</thead>
 		<tbody>
