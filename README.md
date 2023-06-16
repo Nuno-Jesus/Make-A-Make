@@ -23,7 +23,7 @@ It starts with a beginners guide, followed up by some medium-advanced concepts.
 			<li><a href="#index-7.4">Relinking</a></li>
 		</ul>
 	</ul>
-	<li>Advanced topics</li>
+	<!-- <li>Advanced topics</li>
 	<ul>
 		<li><a href="#builtin-targets">Builtin Targets</a></li>
 		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
@@ -38,7 +38,7 @@ It starts with a beginners guide, followed up by some medium-advanced concepts.
 		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
 		<li><a href="#general-tips">General tips</a></li>
 	</ul>
-	<li>Questions</li>
+	<li>Questions</li> -->
 </ul>
 
 
@@ -550,6 +550,12 @@ This version does the same job as before. The main difference lies on the new de
 	make: Nothing to be done for 'all'.
 
 And there you have it! I hope this beginner's guide cleared a bit of your doubts. If you're not a beginner (or don't want to be one anymore), I advise you to check the contents up ahead. Many of those might be useful to change and upgrade your Makefiles!
+
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+
 <!-- 
 ## <a name="index-4">Builtin target names</a> 
 .SILENT: silences all the commands printed on the output
@@ -590,11 +596,6 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 
 - In this Makefile, what does the $(SRCS:.c=.o) do?
 
--->
-
-<div align=center>
-	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
-</div>
 
 ## <a name="index-4">Glossary</a>
 
@@ -659,3 +660,4 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
+ -->
