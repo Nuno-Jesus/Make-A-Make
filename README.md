@@ -1,6 +1,9 @@
 # Makefile Tutorial
-An introduction to the basics of the make utility.
 
+## Description
+This README was developed mainly to help 42 students to clear the fog around Makefiles and how they work. But, it will be for sure helpful to anyone out there struggling as well. 
+
+It starts with a beginners guide, followed up by some medium-advanced concepts.
 
 ## <a name="index-0">Index</a>
 
@@ -14,8 +17,9 @@ An introduction to the basics of the make utility.
 	<li><a href="#index-7">Towards a more flexible Makefile</a></li>
 	<ul>
 		<li><a href="#index-7.1">Removing more redundancy</a></li>
-		<li><a href="#index-7.2">Is this Magic?</a></li>
-		<li><a href="#index-7.3">Relinking</a></li>
+		<li><a href="#index-7.2">Implicit Rules</a></li>
+		<li><a href="#index-7.3">Implicit Variables</a></li>
+		<li><a href="#index-7.4">Relinking</a></li>
 	</ul>
 </ul>
 
@@ -23,7 +27,7 @@ An introduction to the basics of the make utility.
 <!-- ------------------------------------------------------------------ -->
 
 
-## <a name="index-1">What is make?</a>
+## <a name="index-1">An introduction to Makefiles</a>
 The make utility is an automatic tool capable of deciding which commands can / should be executed. Mostly, the make is used to automate the compilation process, preventing manual file-by-file compilation. This utility is used through a special file called `Makefile`.
 
 This tutorial will only display a Makefile with C files, but it can be used with any language.
@@ -294,33 +298,35 @@ Automatic variables are special variables used by the Makefile to dynamically co
 
 Below, is a table of some of the most useful ones:
 
-<table align=center width=100%>
-	<thead>
-		<tr>
-			<td align=center><strong>Variables</strong></td>
-			<td align=center><strong>Description</strong></td>
-		<tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td align=center><code>$@</code></td>
-			<td>The name of a target rule</td>
-		<tr>
-		<tr>
-			<td align=center><code>$<</code></td>
-			<td>The name of the first pre-requisit</td>
-		<tr>
-		<tr>
-			<td align=center><code>$^</code></td>
-			<td>The name of all pre-requisits, separated by spaces</td>
-		<tr>
-		<tr>
-			<td align=center><code>$*</code></td>
-			<td>The stem that matched the pattern of a rule</td>
-		<tr>
-	</tbody>
-</table>
-	
+<div>
+	<table align=center width=100%>
+		<thead>
+			<tr>
+				<td align=center><strong>Variables</strong></td>
+				<td align=center><strong>Description</strong></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td align=center><code>$@</code></td>
+				<td>The name of a target rule</td>
+			</tr>
+			<tr>
+				<td align=center><code>$<</code></td>
+				<td>The name of the first pre-requisit</td>
+			</tr>
+			<tr>
+				<td align=center><code>$^</code></td>
+				<td>The name of all pre-requisits, separated by spaces</td>
+			</tr>
+			<tr>
+				<td align=center><code>$*</code></td>
+				<td>The stem that matched the pattern of a rule</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
 ```Makefile
 all: lib.a this.example
 
@@ -345,6 +351,9 @@ lib.a: hello.o bye.o highfive.o
 
 We are reaching the end of the tutorial! This section is all about polishing what we've developed so far. There will (much) more contents after this section, but its up to you to go further. 
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
 
 <!-- ------------------------------------------------------------------ -->
 
@@ -397,20 +406,111 @@ fclean: clean
 
 > **Note**: The `-o` flag signals the compiler, to specify the name the executable will have.
 
-> **Note**: the `CC` and `CFLAGS` names are not randomly chosen...
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
 
 
 <!-- ------------------------------------------------------------------ -->
 
 
-### <a name="index-7.2">Is this magic?</a>
-Have you tried to remove the `%.o: %.c` rule? Is the Makefile still working? If you are confused about it, check the [Implicit Rules](#index-0) and [Builtin Variables](#index-0) sections.
+### <a name="index-7.2">Implicit Rules</a>
+Have you tried to remove the `%.o: %.c` rule and run `make`? You'll soon find, the Makefile is still working. But how? Well, its due to **Implicit Rules**.
+You can define your own implicit rules by using pattern rules (just like we did before).
+
+Implicit Rules, also use **Implicit Variables**, which you can check in the next section. Here's some of the implicit rules:
+
+<table align=center width=100%>
+	<thead>
+		<tr>
+			<td align=center><strong>Purpose</strong></td>
+			<td align=center><strong>Rule</strong></td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr align=center>
+			<td>Compiling C</td>
+			<td><code>$(CC) $(CPPFLAGS) $(CFLAGS) -c</code></td>
+		</tr>
+		<tr align=center>
+			<td>Compiling C++</td>
+			<td><code>$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c</code></td>
+		</tr>
+		<tr align=center>
+			<td>Generating .a+</td>
+			<td><code>$(AR) $(ARFLAGS) $@ $<</code></td>
+		</tr>
+	</tbody>
+</table>
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
 
 
 <!-- ------------------------------------------------------------------ -->
 
 
-### <a name="index-7.3">Relinking</a>
+### <a name="index-7.3">Implicit Variables</a>
+As told before, implicit rules rely on variables already known by the Makefile, setted with a default value: **Implicit Variables**. You can redefine the value for these variables. Even if you don't use them explicitly, these new values can be used by implicit rules. Here's a table of some of them:
+
+
+<table align=center width=100%>
+	<thead>
+		<tr>
+			<td align=center><strong>Name</strong></td>
+			<td align=center><strong>Default value</strong></td>
+			<td align=center><strong>Purpose</strong></td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr align=center>
+			<td><code>AR</code></td>
+			<td><code>ar</code></td>
+			<td>The command used to create archives, <code>.a</code> files</td>
+		</tr>
+		<tr align=center>
+			<td><code>ARFLAGS</code></td>
+			<td><code>-rv</code></td>
+			<td>Used flags when <code>AR</code> command is issued</td>
+		</tr>
+		<tr align=center>
+			<td><code>CC</code></td>
+			<td><code>cc</code></td>
+			<td>The default compiler to use when C compilation is required. The cc is not actually a compiler, but an alias to the default C compiler of your machine (either <code>gcc</code> or <code>clang</code>)</td>
+		</tr>
+		<tr align=center>
+			<td><code>CFLAGS</code></td>
+			<td><code></code></td>
+			<td>Used flags when <code>CC</code> command is issued</td>
+		</tr>
+		<tr align=center>
+			<td><code>CXX</code></td>
+			<td><code>g++</code></td>
+			<td>The default compiler to use when C compilation is required.</td>
+		</tr>
+		<tr align=center>
+			<td><code>CXXFLAGS</code></td>
+			<td><code></code></td>
+			<td>Used flags when <code>CC</code> command is issued</td>
+		</tr>
+		<tr align=center>
+			<td><code>RM</code></td>
+			<td><code>rm -f</code></td>
+			<td>The command to be used to permanently delete a file</td>
+		</tr>
+	</tbody>
+</table>
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+
+
+<!-- ------------------------------------------------------------------ -->
+
+
+### <a name="index-7.4">Relinking</a>
 To wrap this simple tutorial, I would like you to run `make` several times. Have you noticed how the `main.c` and `.o` files are getting linked together, even though they haven't changed? This is a phenomenon called **relinking**.
 
 Although it might not seem that important, considering a large scale project, relinking can cause unnecessary and larger compilation times. To avoid it, we can add as a dependency the executable file you are trying to create, like this:
@@ -433,28 +533,13 @@ This version does the same job as before. The main difference lies on the new de
 
 And there you have it! I hope this beginner's guide cleared a bit of your doubts. If you're not a beginner (or don't want to be one anymore), I advise you to check the contents up ahead. Many of those might be useful to change and upgrade your Makefiles!
 <!-- 
-
-## <a name="index-4">Implicit rules</a> 
-	Implicit rule for C:
-		$(CC) $(CPPFLAGS) $(CFLAGS) -c
-	Implicit rule for C++:
-		$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c
-
 ## <a name="index-4">Builtin target names</a> 
 .SILENT: silences all the commands printed on the output
 .PHONY: used to tell the Makefile to not confuse the names of the targets with filenames. For instance, having a file called `hello`, should not enter in conflict with the `hello` rule
 .DEFAULT_GOAL: used to define what is the primary target of the makefile. For instance, even if the clean rule is not the first, if defined in this macro, it will be executed when running solely 'make'.
-
-## <a name="index-4">Builtin variables</a>
-Some variables are already recognized by the Makefile when given a certain name. Those are the variables the Makefile will use to execute the implicit rules. Here are some useful variables:
-	AR("ar") - used to create archives, .a files
-	CC("cc") - the default compiler to use when compiling C programs
-	CXX("g++") - the default compiler to use when compiling C++ programs
-	ARFLAGS("-rv") - flags to work with AR
-	CFLAGS("") - extra flags to work with CC
-	CXXFLAGS("") - extra flags to work with CXX
 	
 
+## <a name="index-4">The ifdef, ifndef, ifeq, ifneq directives</a>
 
 ## <a name="index-4">Typical errors</a>
 
