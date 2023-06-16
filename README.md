@@ -10,7 +10,7 @@ An introduction to the basics of the make utility.
 	<li><a href="#index-3">Rules</a></li>
 	<li><a href="#index-4">A simple Makefile</a></li>
 	<li><a href="#index-5">Variables</a></li>
-	<li><a href="#index-7">Automatic Variables</a></li>
+	<li><a href="#index-6">Automatic Variables</a></li>
 	<li><a href="#index-7">Towards a more flexible Makefile</a></li>
 	<ul>
 		<li><a href="#index-7.1">Removing more redundancy</a></li>
@@ -294,34 +294,32 @@ Automatic variables are special variables used by the Makefile to dynamically co
 
 Below, is a table of some of the most useful ones:
 
-<div align=center width>
-	<table width=100%>
-		<thead>
-			<tr>
-				<td align=center><strong>Variables</strong></td>
-				<td align=center><strong>Description</strong></td>
-			<tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td align=center><code>$@</code></td>
-				<td>The name of a target rule</td>
-			<tr>
-			<tr>
-				<td align=center><code>$<</code></td>
-				<td>The name of the first pre-requisit</td>
-			<tr>
-			<tr>
-				<td align=center><code>$^</code></td>
-				<td>The name of all pre-requisits, separated by spaces</td>
-			<tr>
-			<tr>
-				<td align=center><code>$*</code></td>
-				<td>The stem that matched the pattern of a rule</td>
-			<tr>
-		</tbody>
-	</table>
-</div>
+<table width=100%>
+	<thead>
+		<tr>
+			<td align=center><strong>Variables</strong></td>
+			<td align=center><strong>Description</strong></td>
+		<tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td align=center><code>$@</code></td>
+			<td>The name of a target rule</td>
+		<tr>
+		<tr>
+			<td align=center><code>$<</code></td>
+			<td>The name of the first pre-requisit</td>
+		<tr>
+		<tr>
+			<td align=center><code>$^</code></td>
+			<td>The name of all pre-requisits, separated by spaces</td>
+		<tr>
+		<tr>
+			<td align=center><code>$*</code></td>
+			<td>The stem that matched the pattern of a rule</td>
+		<tr>
+	</tbody>
+</table>
 
 ```Makefile
 all: lib.a this.example
