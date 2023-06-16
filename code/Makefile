@@ -13,8 +13,11 @@
 # re: fclean all
 
 OBJS := hello.o highfive.o bye.o
+NAME := a.out
 
-all: $(OBJS)
+all: $(NAME)
+
+$(NAME): $(OBJS)
 	cc main.c $(OBJS)
 
 clean:

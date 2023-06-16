@@ -4,21 +4,36 @@ An introduction to the basics of the make utility.
 
 ## <a name="index-0">Index</a>
 
-- [What is make?](#index-1)
-- [An introduction to Makefiles](#index-2)
-- [Rules](#index-3)
-- [A simple Makefile](#index-4)
-- [Variables](#index-5)
-- ...
+<ul>
+	<li><a href="#index-1">What is make?</a></li>
+	<li><a href="#index-2">An introduction to Makefiles</a></li>
+	<li><a href="#index-3">Rules</a></li>
+	<li><a href="#index-4">A simple Makefile</a></li>
+	<li><a href="#index-5">Variables</a></li>
+	<li><a href="#index-7">Automatic Variables</a></li>
+	<li><a href="#index-7">Towards a more flexible Makefile</a></li>
+	<ul>
+		<li><a href="#index-7.1">Removing more redundancy</a></li>
+		<li><a href="#index-7.2">Is this Magic?</a></li>
+		<li><a href="#index-7.3">Relinking</a></li>
+	</ul>
+</ul>
+
+
+<!-- ------------------------------------------------------------------ -->
+
 
 ## <a name="index-1">What is make?</a>
-
 The make utility is an automatic tool capable of deciding which commands can / should be executed. Mostly, the make is used to automate the compilation process, preventing manual file-by-file compilation. This utility is used through a special file called `Makefile`.
 
 This tutorial will only display a Makefile with C files, but it can be used with any language.
 
+
+<!-- ------------------------------------------------------------------ -->
+
+
 ## <a name="index-2">An introduction to Makefiles</a>
-Typically, a Makefile is called to handle compilation and linkage of a project and its files.
+Typically, a Makefile is called to handle compilation and linkage of a project and its files. The Makefile uses the modification times of the files it uses to assert if any need to be remade or not.
 
 For instance, when compiling a `C` project, the final executable file, would be the zipped version of every `.o` file, which was in turn created from the `.c` files.
 
@@ -27,6 +42,10 @@ Let's create a simple project to work with. You can find this files in the [code
 	├── hello.c 
 	├── main.c
 	└── Makefile
+
+
+<!-- ------------------------------------------------------------------ -->
+
 
 ## <a name="index-3">Rules</a>
 Rules are the core of a Makefile. Rules define how, when and what files and commands are used to achieve the final executable.
@@ -82,6 +101,10 @@ re: fclean all
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
+
+<!-- ------------------------------------------------------------------ -->
+
+
 ## <a name="index-4">A simple Makefile</a>
 The Makefile bellow is capable of compiling our example project. 
 
@@ -123,6 +146,10 @@ You should see something like this on the terminal:
 	cc main.c hello.o
 
 This is great! The compilation worked out and finally we can execute our program and print "Hello World!"! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
+
+
+<!-- ------------------------------------------------------------------ -->
+
 
 ## <a name="index-5">Variables</a>
 Similar to programming languages, the Makefile syntax allows you to define variables. Variables can only be strings (a single one or a list of strings). Here are some examples:
@@ -206,28 +233,28 @@ all: hello.o bye.o highfive.o
 	cc main.c $(OBJS)
 ```
 
-**3.** In the first compilation, the `hello.o` file doesn't exist. The dependency must then be remade, which forces the .
+**3.** In the first compilation, the `hello.o` file doesn't exist. The dependency must then be remade, which forces the Makefile to look for a rule.
 
 ```Makefile
 %.o: %.c
 	cc -c $<
 ```
 
-The `%` can be used in several cases.For this one, its used to represent a **Regular Expression (REGEX)**. You can read it as "any dependency that ends on `.o` can be generated here and needs a corresponding `.c` dependency with the same prefix". For `hello.o` we have:
+The `%` can be used in several cases. For this one, its used to represent a **Regular Expression (REGEX)**. You can read it as "any dependency that ends on `.o` can be generated here and needs a corresponding `.c` dependency with the same prefix". For `hello.o` we have:
 
 ```Makefile
 hello.o: hello.c
 	cc -c $< # The $< expands to the first dependency of this rule (hello.c)
 ```
 
-The same goes for other dependencies having a `.o` suffix. The `$<` is an **Automatic Variable** (learn more about Automatic variables [here](#index-4)), used to handle variable dependency strings. Final expansion:
+The same goes for other dependencies having a `.o` suffix. The `$<` is an **Automatic Variable**. We'll talk more about Automatic Variables up ahead.Specifically this one is used to handle variable dependency strings, since the value of the dependency is not always the same. Final expansion:
 
 ```Makefile
 hello.o: hello.c
 	cc -c hello.c
 ```
 
-**4.** Finally, after all dependencies are fulfilled, the `all` rule can execute its recipe. The `OBJS` variable is expanded again to its values
+**4.** Finally, after all dependencies are generated following the same pattern as before, the `all` rule can execute its recipe. The `OBJS` variable is expanded again to its values
 
 ```Makefile
 all: hello.o bye.o highfive.o
@@ -258,12 +285,48 @@ re: fclean all
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
-## <a name="index-6">Towards a more flexible Makefile</a>
+
+<!-- ------------------------------------------------------------------ -->
+
+
+## <a name="index-6">Automatic variables</a>
+Automatic variables are special variables used by the Makefile to dynamically compute values. In other words, you should use those, when a rule does not always have the same dependency or target name, like in the example above.
+
+Below, is a table of some of the most useful ones:
+
+| Variable | Description |
+|----------|-------------|
+|`$@`|The name of a target rule|
+|`$<`|The name of the first pre-requisit|
+|`$^`|The name of all pre-requisits, separated by spaces|
+|`$*`|The stem that matched the pattern of a rule|
+
+```Makefile
+lib.a: hello.o bye.o highfive.o
+	echo $@ # Prints "lib.a"
+	echo $< # Prints "hello.o"
+	echo $^ # Prints "hello.o bye.o highfive.o"
+
+%.example:
+	echo $* # Prints "this", since it matched the prefix pattern
+
+all: lib.a this.example
+```
+
+
+<!-- ------------------------------------------------------------------ -->
+
+
+## <a name="index-7">Towards a more flexible Makefile</a>
+
+We are reaching the end of the tutorial! This section is all about polishing what we've developed so far. There will (much) more contents after this, but its up to move on. 
+
+### <a name="index-7.1">Removing more redundancy</a>
 Now that the basics are settled (at least they should be), let's have a look at some details. Noticed how the `rm -rf` and the `cc` commands are repeating? We can place them in variables:
 
 ```Makefile
-CC		:= cc
-RM		:= rm -rf
+CC      := cc
+RM      := rm -rf
 OBJS	:= hello.o bye.o highfive.o
 
 all: $(OBJS)
@@ -281,14 +344,14 @@ fclean: clean
 re: fclean all
 ```
 
-Suppose now, you need a more secure compilation, so you need compilation flags. You also want to name your executable `final`. For both cases we can define variables to avoid unecessary repetition. The `-o` flag is part of the `cc` compiler, which allows you to specify which name the executable will have.
+After a few hours, you realised your code is not that clean and you need a more secure compilation (compilation flags). You also want to name your executable `project`. For both cases we can define variables to avoid unecessary repetition.
 Here are the new changes:
 
 ```Makefile
-CC		:= cc
+CC      := cc
 CFLAGS	:= -Wall -Werror -Wextra
-RM		:= rm -rf
-NAME	:= final
+RM      := rm -rf
+NAME	:= project
 OBJS	:= hello.o bye.o highfive.o
 
 all: $(OBJS)
@@ -304,13 +367,35 @@ fclean: clean
 
 ```
 
-> **Note**: the CC and CFLAGS names are not randomly chosen...
+> **Note**: The `-o` flag is part of the `cc` compiler, which allows you to specify which name the executable will have.
 
-Have you tried to remove the `%.o: %.c` rule? Is the Makefile still working? If you are confused about it, check the [Implicit Rules](#index-0) and [Builtin Variables](#index-0) section.
+> **Note**: the `CC` and `CFLAGS` names are not randomly chosen...
 
+### <a name="index-7.2">Is this magic?</a>
+Have you tried to remove the `%.o: %.c` rule? Is the Makefile still working? If you are confused about it, check the [Implicit Rules](#index-0) and [Builtin Variables](#index-0) sections.
 
+### <a name="index-7.3">Relinking</a>
+To wrap this simple tutorial, I would like you to run `make` several times. Have you noticed how the `main.c` and `.o` files are getting linked together, even though they haven't changed? This is a phenomenon called **relinking**.
 
+Although it might not seem that important, considering a large scale project, relinking can cause unnecessary and larger compilation times. To avoid it, we can add as a dependency the executable file you are trying to create, like this:
 
+```Makefile
+...
+
+NAME := project
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) main.c $(OBJS) -o $(NAME)
+
+...
+```
+
+This version does the same job as before. The main difference lies on the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second compilation, since the `project` file was created before, the dependency is fulfilled and the Makefile directly executes the `all` recipe. Since it's empty, you'll get this message:
+
+	make: Nothing to be done for 'all'.
+
+And there you have it! I hope this beginner's guide cleared a bit of your doubts. If you're not a beginner (or don't want to be one anymore), I advise you to check the contents up ahead. Many of those might be useful to change and upgrade your Makefiles!
 <!-- 
 
 ## <a name="index-4">Implicit rules</a> 
@@ -318,9 +403,6 @@ Have you tried to remove the `%.o: %.c` rule? Is the Makefile still working? If 
 		$(CC) $(CPPFLAGS) $(CFLAGS) -c
 	Implicit rule for C++:
 		$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c
-
-## <a name="index-4">Relinking</a>
-Relinking is mentioned whenever your makefile compiles your files, over and over again, even though no modifications were performed.
 
 ## <a name="index-4">Builtin target names</a> 
 .SILENT: silences all the commands printed on the output
@@ -336,10 +418,7 @@ Some variables are already recognized by the Makefile when given a certain name.
 	CFLAGS("") - extra flags to work with CC
 	CXXFLAGS("") - extra flags to work with CXX
 	
-## <a name="index-4">Automatic variables</a>
-	$@ - The target name
-	$< - The name of the first pre requisite
-	$^ - The name of all the pre requisites, separated by spaces
+
 
 ## <a name="index-4">Typical errors</a>
 
@@ -358,6 +437,11 @@ Some variables are already recognized by the Makefile when given a certain name.
 ## <a name="index-4">Command line variables</a>
 
 ## <a name="index-4">The vpath directive and project organization</a>
+
+## <a name="index-4">Questions</a>
+
+- In this Makefile, what does the $(SRCS:.c=.o) do?
+
 -->
 
 <div align=center>
