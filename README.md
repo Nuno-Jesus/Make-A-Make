@@ -6,31 +6,49 @@ This README was developed mainly to help 42 students to clear the fog around Mak
 It starts with a beginners guide, followed up by some medium-advanced concepts.
 
 ## <a name="index-0">Index</a>
-
 <ul>
-	<li><a href="#index-1">What is make?</a></li>
-	<li><a href="#index-2">An introduction to Makefiles</a></li>
-	<li><a href="#index-3">Rules</a></li>
-	<li><a href="#index-4">A simple Makefile</a></li>
-	<li><a href="#index-5">Variables</a></li>
-	<li><a href="#index-6">Automatic Variables</a></li>
-	<li><a href="#index-7">Towards a more flexible Makefile</a></li>
+	<li>Beginner's guide</li>
 	<ul>
-		<li><a href="#index-7.1">Removing more redundancy</a></li>
-		<li><a href="#index-7.2">Implicit Rules</a></li>
-		<li><a href="#index-7.3">Implicit Variables</a></li>
-		<li><a href="#index-7.4">Relinking</a></li>
+		<li><a href="#index-1">What is make?</a></li>
+		<li><a href="#index-2">An introduction to Makefiles</a></li>
+		<li><a href="#index-3">Rules</a></li>
+		<li><a href="#index-4">A simple Makefile</a></li>
+		<li><a href="#index-5">Variables</a></li>
+		<li><a href="#index-6">Automatic Variables</a></li>
+		<li><a href="#index-7">Towards a more flexible Makefile</a></li>
+		<ul>
+			<li><a href="#index-7.1">Removing more redundancy</a></li>
+			<li><a href="#index-7.2">Implicit Rules</a></li>
+			<li><a href="#index-7.3">Implicit Variables</a></li>
+			<li><a href="#index-7.4">Relinking</a></li>
+		</ul>
 	</ul>
+	<li>Advanced topics</li>
+	<ul>
+		<li><a href="#builtin-targets">Builtin Targets</a></li>
+		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
+		<li><a href="#functions">Functions</a></li>
+		<li><a href="#command-line">Command line variables</a></li>
+		<li><a href="#vpath">The vpath directive</a></li>
+	</ul>
+	<li>Tips and tricks</li>
+	<ul>
+		<li><a href="#flags">Useful flags</a></li>
+		<li><a href="#organize-project">Organize your project with vpath</a></li>
+		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
+		<li><a href="#general-tips">General tips</a></li>
+	</ul>
+	<li>Questions</li>
 </ul>
 
 
 <!-- ------------------------------------------------------------------ -->
 
 
-## <a name="index-1">An introduction to Makefiles</a>
-The make utility is an automatic tool capable of deciding which commands can / should be executed. Mostly, the make is used to automate the compilation process, preventing manual file-by-file compilation. This utility is used through a special file called `Makefile`.
+## <a name="index-1">What is make?</a>
+The `make` utility is an automatic tool capable of deciding which commands can / should be executed. The `make` utility is mostly used to automate the compilation process, preventing manual file-by-file compilation. This utility is used through a special file called `Makefile`.
 
-This tutorial will only display a Makefile with C files, but it can be used with any language.
+For the purposes of this guide, we'll only dispose of a C project.
 
 
 <!-- ------------------------------------------------------------------ -->
@@ -415,10 +433,10 @@ fclean: clean
 
 
 ### <a name="index-7.2">Implicit Rules</a>
-Have you tried to remove the `%.o: %.c` rule and run `make`? You'll soon find, the Makefile is still working. But how? Well, its due to **Implicit Rules**.
+Have you tried to remove the `%.o: %.c` rule and run `make`? You'll soon find, the Makefile is still working. But how? Makefile has its own default rules defined for specific cases, like the ones you'll see below.
 You can define your own implicit rules by using pattern rules (just like we did before).
 
-Implicit Rules, also use **Implicit Variables**, which you can check in the next section. Here's some of the implicit rules:
+**Implicit Rules**, also use **Implicit Variables**, which you can check in the next section. Here's some of the implicit rules:
 
 <table align=center width=100%>
 	<thead>
@@ -560,6 +578,15 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 ## <a name="index-4">The vpath directive and project organization</a>
 
 ## <a name="index-4">Questions</a>
+## <a name="index-4">General tips</a>
+- Group up common stuff: variables with variables, rules with rules. Mixing it up might turn your makefile confusing.
+- Comment your makefile and delimit different sections. If your Makefile is out of this world, you should comment it. Its good for you and the others.
+- Want to silent commands, but not all of them? Write a '@' before each command to silent it.
+- You can append strings to variables by using the '+=' operator
+- As I said before, Makefiles have a wide use case range. You can create rules to avoid writing repeating and large commands, like valgrind.
+- Compiling a Makefile with another Makefile? Don't use make directly. Instead use $(MAKE), which expands to the same value. Might seem pointless, but some flags might depend on in. The $(MAKE) variables tells the Makefile we are calling another Makefile.
+- Using the '\' operator at the end of the line forces the Makefile to consider the next line as a continuation of the first. Essentially a one line only.
+- Avoid repetition. Use functions when you can
 
 - In this Makefile, what does the $(SRCS:.c=.o) do?
 
