@@ -294,23 +294,45 @@ Automatic variables are special variables used by the Makefile to dynamically co
 
 Below, is a table of some of the most useful ones:
 
-| Variable | Description |
-|----------|-------------|
-|`$@`|The name of a target rule|
-|`$<`|The name of the first pre-requisit|
-|`$^`|The name of all pre-requisits, separated by spaces|
-|`$*`|The stem that matched the pattern of a rule|
+<div align=center width>
+	<table>
+		<thead>
+			<tr>
+				<td align=center>Variables</td>
+				<td align=center>Description</td>
+			<tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td align=center><code>$@</code></td>
+				<td>The name of a target rule</td>
+			<tr>
+			<tr>
+				<td align=center><code>$<</code></td>
+				<td>The name of the first pre-requisit</td>
+			<tr>
+			<tr>
+				<td align=center><code>$^</code></td>
+				<td>The name of all pre-requisits, separated by spaces</td>
+			<tr>
+			<tr>
+				<td align=center><code>$*</code></td>
+				<td>The stem that matched the pattern of a rule</td>
+			<tr>
+		</tbody>
+	</table>
+</div>
 
 ```Makefile
+all: lib.a this.example
+
 lib.a: hello.o bye.o highfive.o
 	echo $@ # Prints "lib.a"
 	echo $< # Prints "hello.o"
 	echo $^ # Prints "hello.o bye.o highfive.o"
 
 %.example:
-	echo $* # Prints "this", since it matched the prefix pattern
-
-all: lib.a this.example
+	echo $* # Prints "this"
 ```
 
 
@@ -319,7 +341,11 @@ all: lib.a this.example
 
 ## <a name="index-7">Towards a more flexible Makefile</a>
 
-We are reaching the end of the tutorial! This section is all about polishing what we've developed so far. There will (much) more contents after this, but its up to move on. 
+We are reaching the end of the tutorial! This section is all about polishing what we've developed so far. There will (much) more contents after this section, but its up to you to go further. 
+
+
+<!-- ------------------------------------------------------------------ -->
+
 
 ### <a name="index-7.1">Removing more redundancy</a>
 Now that the basics are settled (at least they should be), let's have a look at some details. Noticed how the `rm -rf` and the `cc` commands are repeating? We can place them in variables:
@@ -367,12 +393,20 @@ fclean: clean
 
 ```
 
-> **Note**: The `-o` flag is part of the `cc` compiler, which allows you to specify which name the executable will have.
+> **Note**: The `-o` flag signals the compiler, to specify the name the executable will have.
 
 > **Note**: the `CC` and `CFLAGS` names are not randomly chosen...
 
+
+<!-- ------------------------------------------------------------------ -->
+
+
 ### <a name="index-7.2">Is this magic?</a>
 Have you tried to remove the `%.o: %.c` rule? Is the Makefile still working? If you are confused about it, check the [Implicit Rules](#index-0) and [Builtin Variables](#index-0) sections.
+
+
+<!-- ------------------------------------------------------------------ -->
+
 
 ### <a name="index-7.3">Relinking</a>
 To wrap this simple tutorial, I would like you to run `make` several times. Have you noticed how the `main.c` and `.o` files are getting linked together, even though they haven't changed? This is a phenomenon called **relinking**.
