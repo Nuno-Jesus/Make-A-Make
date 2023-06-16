@@ -294,7 +294,7 @@ Automatic variables are special variables used by the Makefile to dynamically co
 
 Below, is a table of some of the most useful ones:
 
-<table width=100%>
+<table align=center width=100%>
 	<thead>
 		<tr>
 			<td align=center><strong>Variables</strong></td>
@@ -320,7 +320,7 @@ Below, is a table of some of the most useful ones:
 		<tr>
 	</tbody>
 </table>
-
+	
 ```Makefile
 all: lib.a this.example
 
@@ -332,6 +332,10 @@ lib.a: hello.o bye.o highfive.o
 %.example:
 	echo $* # Prints "this"
 ```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
 
 
 <!-- ------------------------------------------------------------------ -->
