@@ -128,7 +128,7 @@ re: fclean all
 
 
 ## <a name="index-4">4. A simple Makefile</a>
-The Makefile below is capable of compiling our example project. 
+The Makefile below is capable of compiling our example project. You can find it in the [code/example-1](/code/example-1/) folder.
 
 ```Makefile
 hello.o: hello.c
@@ -208,7 +208,7 @@ Let's add a few files to our project:
 	├── main.c
 	└── Makefile
 
-A naive solution would be to create more rules:
+A naive solution would be to create more rules. You can find the code in the [code/example-2](/code/example-2/) folder:
 
 ```Makefile
 all: hello.o bye.o highfive.o
@@ -229,7 +229,7 @@ This would be the new dependency graph:
 	<image src=images/graph_2.png>
 </div>
 
-But this is ugly and unnecessary since the pattern is always the same. Let us use the newly learn variables to clean this up!
+But this is ugly and unnecessary since the pattern is always the same. Let us use the newly learn variables to clean this up! You can find the code in the [code/example-3](/code/example-3/) folder:
 
 ```Makefile
 OBJS := hello.o bye.o highfive.o # Dependency list of the 'all' rule
@@ -239,6 +239,11 @@ all: $(OBJS)
 
 %.o: %.c
 	cc -c $<
+
+clean:
+	rm -rf $(OBJS)
+
+...
 ```
 
 Ok, pause. I know this is a lot to take in. Let's look into the details.When running `make`:
@@ -347,6 +352,7 @@ Below, is a table of some of the most useful ones:
 	</table>
 </div>
 
+You can find the code in the [code/example-4](/code/example-4/) folder:
 ```Makefile
 all: lib.a this.example
 
@@ -354,6 +360,7 @@ lib.a: hello.o bye.o highfive.o
 	echo $@ # Prints "lib.a"
 	echo $< # Prints "hello.o"
 	echo $^ # Prints "hello.o bye.o highfive.o"
+	$(AR) lib.a $^
 
 %.example:
 	echo $* # Prints "this"
@@ -401,7 +408,7 @@ fclean: clean
 re: fclean all
 ```
 
-After a few hours, you realised your code is not that clean and you need a more secure compilation (compilation flags). You also want to name your executable `project`. For both cases we can define variables to avoid unecessary repetition.
+After a few hours, you realised your code is not that clean and you need a more secure compilation (compilation flags). You also want to name your executable `project`. For both cases we can define variables to avoid unecessary repetition. You can find the code in the [code/example-5](/code/example-5/) folder.
 Here are the new changes:
 
 ```Makefile
@@ -484,37 +491,37 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 		</tr>
 	</thead>
 	<tbody>
-		<tr align=center>
+		<tr>
 			<td><code>AR</code></td>
 			<td><code>ar</code></td>
 			<td>The command used to create archives, <code>.a</code> files</td>
 		</tr>
-		<tr align=center>
+		<tr>
 			<td><code>ARFLAGS</code></td>
 			<td><code>-rv</code></td>
 			<td>Used flags when <code>AR</code> command is issued</td>
 		</tr>
-		<tr align=center>
+		<tr>
 			<td><code>CC</code></td>
 			<td><code>cc</code></td>
 			<td>The default compiler to use when C compilation is required. The cc is not actually a compiler, but an alias to the default C compiler of your machine (either <code>gcc</code> or <code>clang</code>)</td>
 		</tr>
-		<tr align=center>
+		<tr>
 			<td><code>CFLAGS</code></td>
 			<td><code></code></td>
 			<td>Used flags when <code>CC</code> command is issued</td>
 		</tr>
-		<tr align=center>
+		<tr>
 			<td><code>CXX</code></td>
 			<td><code>g++</code></td>
 			<td>The default compiler to use when C compilation is required.</td>
 		</tr>
-		<tr align=center>
+		<tr>
 			<td><code>CXXFLAGS</code></td>
 			<td><code></code></td>
 			<td>Used flags when <code>CC</code> command is issued</td>
 		</tr>
-		<tr align=center>
+		<tr>
 			<td><code>RM</code></td>
 			<td><code>rm -f</code></td>
 			<td>The command to be used to permanently delete a file</td>
@@ -546,7 +553,7 @@ $(NAME): $(OBJS)
 
 ...
 ```
-
+You can find the code in the [code/example-6](/code/example-6/) folder.
 This version does the same job as before. The main difference lies on the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second compilation, since the `project` file was created before, the dependency is fulfilled and the Makefile directly executes the `all` recipe. Since it's empty, you'll get this message:
 
 	make: Nothing to be done for 'all'.
