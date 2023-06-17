@@ -8,19 +8,19 @@ It starts with a beginners guide, followed up by some medium-advanced concepts.
 ## <a name="index-0">Index</a>
 <ul>
 	<li>Beginner's guide</li>
-	<ul>
-		<li><a href="#index-1">What is make?</a></li>
-		<li><a href="#index-2">An introduction to Makefiles</a></li>
-		<li><a href="#index-3">Rules</a></li>
-		<li><a href="#index-4">A simple Makefile</a></li>
-		<li><a href="#index-5">Variables</a></li>
-		<li><a href="#index-6">Automatic Variables</a></li>
-		<li><a href="#index-7">Towards a more flexible Makefile</a></li>
-		<ul>
-			<li><a href="#index-7.1">Removing more redundancy</a></li>
-			<li><a href="#index-7.2">Implicit Rules</a></li>
-			<li><a href="#index-7.3">Implicit Variables</a></li>
-			<li><a href="#index-7.4">Relinking</a></li>
+	<ul style="list-style-type:disc">
+		<li><a href="#index-1">1. What is make?</a></li>
+		<li><a href="#index-2">2. An introduction to Makefiles</a></li>
+		<li><a href="#index-3">3. Rules</a></li>
+		<li><a href="#index-4">4. A simple Makefile</a></li>
+		<li><a href="#index-5">5. Variables</a></li>
+		<li><a href="#index-6">6. Automatic Variables</a></li>
+		<li><a href="#index-7">7. Towards a more flexible Makefile</a></li>
+		<ul style="list-style-type:disc">
+			<li><a href="#index-7.1">7.1. Removing more redundancy</a></li>
+			<li><a href="#index-7.2">7.2. Implicit Rules</a></li>
+			<li><a href="#index-7.3">7.3. Implicit Variables</a></li>
+			<li><a href="#index-7.4">7.4. Relinking</a></li>
 		</ul>
 	</ul>
 	<!-- <li>Advanced topics</li>
@@ -45,7 +45,7 @@ It starts with a beginners guide, followed up by some medium-advanced concepts.
 <!-- ------------------------------------------------------------------ -->
 
 
-## <a name="index-1">What is make?</a>
+## <a name="index-1">1. What is make?</a>
 The `make` utility is an automatic tool capable of deciding which commands can / should be executed. The `make` utility is mostly used to automate the compilation process, preventing manual file-by-file compilation. This utility is used through a special file called `Makefile`.
 
 For the purposes of this guide, we'll only dispose of a C project.
@@ -54,7 +54,7 @@ For the purposes of this guide, we'll only dispose of a C project.
 <!-- ------------------------------------------------------------------ -->
 
 
-## <a name="index-2">An introduction to Makefiles</a>
+## <a name="index-2">2. An introduction to Makefiles</a>
 Typically, a Makefile is called to handle compilation and linkage of a project and its files. The Makefile uses the modification times of the files it uses to assert if any need to be remade or not.
 
 For instance, when compiling a `C` project, the final executable file, would be the zipped version of every `.o` file, which was in turn created from the `.c` files.
@@ -69,7 +69,7 @@ Let's create a simple project to work with. You can find this files in the [code
 <!-- ------------------------------------------------------------------ -->
 
 
-## <a name="index-3">Rules</a>
+## <a name="index-3">3. Rules</a>
 Rules are the core of a Makefile. Rules define how, when and what files and commands are used to achieve the final executable.
 
 A rule has the following syntax:
@@ -127,8 +127,8 @@ re: fclean all
 <!-- ------------------------------------------------------------------ -->
 
 
-## <a name="index-4">A simple Makefile</a>
-The Makefile bellow is capable of compiling our example project. 
+## <a name="index-4">4. A simple Makefile</a>
+The Makefile below is capable of compiling our example project. 
 
 ```Makefile
 hello.o: hello.c
@@ -155,7 +155,7 @@ In the terminal, run:
 
 	make <target>
 
-...where `<target>` is the name of the rule you want to run. In this case, we need both `main.c` and `hello.c` file to be compiled, so you can run:
+...where `<target>` is a list of targets you want to run. In this case, we need both `main.c` and `hello.c` file to be compiled, so you can run:
 
 	make all
 
@@ -167,19 +167,23 @@ You should see something like this on the terminal:
 	cc -c hello.c
 	cc main.c hello.o
 
-This is great! The compilation worked out and finally we can execute our program and print "Hello World!"! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
+This is great! The compilation worked out and finally we can execute our program and use our hello function! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
 
 
 <!-- ------------------------------------------------------------------ -->
 
 
-## <a name="index-5">Variables</a>
-Similar to programming languages, the Makefile syntax allows you to define variables. Variables can only be strings (a single one or a list of strings). Here are some examples:
+## <a name="index-5">5. Variables</a>
+Similar to programming languages, the Makefile syntax allows you to define variables. 
+
+Variables allow you to focus your changes on one place, preventing error-prone implementations and repeated values across your Makefile.
+
+Variables can only be strings (a single one or a list of strings). Here are some examples:
 
 ```Makefile
 FIRST_NAMES := Nuno Miguel 				
-LAST_NAMES := Carvalho de Jesus
-FULL_NAME := $(FIRST_NAMES) $(LAST_NAMES) # Nuno Miguel Carvalho de Jesus
+LAST_NAMES  := Carvalho de Jesus
+FULL_NAME   := $(FIRST_NAMES) $(LAST_NAMES) # Nuno Miguel Carvalho de Jesus
 ```
 
 > **Note**: typically you should use the ':=' operator but '=' also works. 
@@ -196,10 +200,10 @@ or
 
 	${FIRST_NAME}
 
-Let's expand our project and add some more files:
+Let's add a few files to our project:
 
-	├── hello.c 
 	├── bye.c 
+	├── hello.c 
 	├── highfive.c 
 	├── main.c
 	└── Makefile
@@ -207,6 +211,9 @@ Let's expand our project and add some more files:
 A naive solution would be to create more rules:
 
 ```Makefile
+all: hello.o bye.o highfive.o
+	cc main.c hello.o bye.o highfive.o
+
 hello.o: hello.c
 	cc -c hello.c
 
@@ -215,9 +222,6 @@ bye.o: bye.c
 
 highfive.o: highfive.c
 	cc -c highfive.c
-
-all: hello.o bye.o highfive.o
-	cc main.c hello.o bye.o highfive.o
 ```
 
 This would be the new dependency graph:
@@ -236,8 +240,6 @@ all: $(OBJS)
 %.o: %.c
 	cc -c $<
 ```
-
-Variables allow you to focus your changes on one place, preventing error-prone implementations and repeated values across your Makefile.
 
 Ok, pause. I know this is a lot to take in. Let's look into the details.When running `make`:
 
@@ -311,7 +313,7 @@ re: fclean all
 <!-- ------------------------------------------------------------------ -->
 
 
-## <a name="index-6">Automatic variables</a>
+## <a name="index-6">6. Automatic variables</a>
 Automatic variables are special variables used by the Makefile to dynamically compute values. In other words, you should use those, when a rule does not always have the same dependency or target name, like in the example above.
 
 Below, is a table of some of the most useful ones:
@@ -365,7 +367,7 @@ lib.a: hello.o bye.o highfive.o
 <!-- ------------------------------------------------------------------ -->
 
 
-## <a name="index-7">Towards a more flexible Makefile</a>
+## <a name="index-7">7. Towards a more flexible Makefile</a>
 
 We are reaching the end of the tutorial! This section is all about polishing what we've developed so far. There will (much) more contents after this section, but its up to you to go further. 
 
@@ -376,7 +378,7 @@ We are reaching the end of the tutorial! This section is all about polishing wha
 <!-- ------------------------------------------------------------------ -->
 
 
-### <a name="index-7.1">Removing more redundancy</a>
+### <a name="index-7.1">7.1. Removing more redundancy</a>
 Now that the basics are settled (at least they should be), let's have a look at some details. Noticed how the `rm -rf` and the `cc` commands are repeating? We can place them in variables:
 
 ```Makefile
@@ -432,7 +434,7 @@ fclean: clean
 <!-- ------------------------------------------------------------------ -->
 
 
-### <a name="index-7.2">Implicit Rules</a>
+### <a name="index-7.2">7.2. Implicit Rules</a>
 Have you tried to remove the `%.o: %.c` rule and run `make`? You'll soon find, the Makefile is still working. But how? Makefile has its own default rules defined for specific cases, like the ones you'll see below.
 You can define your own implicit rules by using pattern rules (just like we did before).
 
@@ -455,7 +457,7 @@ You can define your own implicit rules by using pattern rules (just like we did 
 			<td><code>$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c</code></td>
 		</tr>
 		<tr align=center>
-			<td>Generating .a+</td>
+			<td>Generating .a</td>
 			<td><code>$(AR) $(ARFLAGS) $@ $<</code></td>
 		</tr>
 	</tbody>
@@ -469,7 +471,7 @@ You can define your own implicit rules by using pattern rules (just like we did 
 <!-- ------------------------------------------------------------------ -->
 
 
-### <a name="index-7.3">Implicit Variables</a>
+### <a name="index-7.3">7.3. Implicit Variables</a>
 As told before, implicit rules rely on variables already known by the Makefile, setted with a default value: **Implicit Variables**. You can redefine the value for these variables. Even if you don't use them explicitly, these new values can be used by implicit rules. Here's a table of some of them:
 
 
@@ -528,7 +530,7 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 <!-- ------------------------------------------------------------------ -->
 
 
-### <a name="index-7.4">Relinking</a>
+### <a name="index-7.4">7.4. Relinking</a>
 To wrap this simple tutorial, I would like you to run `make` several times. Have you noticed how the `main.c` and `.o` files are getting linked together, even though they haven't changed? This is a phenomenon called **relinking**.
 
 Although it might not seem that important, considering a large scale project, relinking can cause unnecessary and larger compilation times. To avoid it, we can add as a dependency the executable file you are trying to create, like this:
