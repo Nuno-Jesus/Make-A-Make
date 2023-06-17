@@ -39,11 +39,11 @@ For the purposes of this guide, we'll only dispose of a C project.
 
 
 ## <a name="index-2">2. An introduction to Makefiles</a>
-Typically, a Makefile is called to handle compilation and linkage of a project and its files. The Makefile uses the modification times of the files it uses to assert if any need to be remade or not.
+Typically, a Makefile is called to handle compilation and linkage of a project and its files. The Makefile uses the modification times of participating files to assert if re-compilation is needed or not.
 
 For instance, when compiling a `C` project, the final executable file, would be the zipped version of every `.o` file, which was in turn created from the `.c` files.
 
-Let's create a simple project to work with. You can find this files in the [code](/code) folder.
+Let's create a simple project to work with. You can find this files in the [code/example-1](/code/example-1/) folder.
 
 	├── hello.c 
 	├── main.c
@@ -66,9 +66,9 @@ target: pre-requisit-1 pre-requisit-2 pre-requisit-3 ...
 	...
 ```
 
-- A `target` is the name of a rule. Its, usually, also the name of a file, but not always.
+- A `target` is the name of a rule. Usually, also the name of a file, but not always.
 
-- A rule can have dependencies, some stuff to be fulfilled before execution, named `pre-requisits`. A pre-requisit **can be either a file or another rule**. In the last case, the dependency rule is executed first. If the pre-requisit doesn't match neither a file or a rule's name, the Makefile halts and prints an error.
+- A rule can have dependencies, some stuff to be fulfilled before execution, named `pre-requisits`. A pre-requisit **can be either a file or another rule**. In the last case, the dependency rule is executed first. If the pre-requisit doesn't match neither a file or a target's name, the Makefile halts and prints an error.
 
 - Finally, after all pre-requisits are fulfilled, the rule can execute its `recipe`, a collection of `commands`. A rule can also have an empty recipe.
 
@@ -76,13 +76,14 @@ Each command should be indented with a **tab**, otherwise an error like this mig
 
 	Makefile:38: *** missing separator.  Stop.
 
-Here's an example of a perfectly valid rule that attempts to generate a `hello.o` file from a `hello.c` file:
+Here's an example of a rule that attempts to generate a `hello.o` file from a `hello.c` file:
 
 ```Makefile
 hello.o: hello.c
 	clang -c hello.c
 ```
 
+As said before, there are some rules that don't need dependencies.
 The `clean` rule is used to clean temporary files. Those would be the object files in a C project:
 
 ```Makefile
@@ -151,16 +152,18 @@ You should see something like this on the terminal:
 	cc -c hello.c
 	cc main.c hello.o
 
-This is great! The compilation worked out and finally we can execute our program and use our hello function! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
+This is great! The compilation worked out and finally we can execute our program and use our `hello` function! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
 
 
 <!-- ------------------------------------------------------------------ -->
 
 
 ## <a name="index-5">5. Variables</a>
-Similar to programming languages, the Makefile syntax allows you to define variables. 
+Similar to programming languages, the Makefile syntax allows you to define variables.
 
-Variables allow you to focus your changes on one place, preventing error-prone implementations and repeated values across your Makefile.
+Variables are useful because:
+- allows you to focus your changes on one place;
+- prevents the repetition of values across the Makefile (which are much more error-prone)
 
 Variables can only be strings (a single one or a list of strings). Here are some examples:
 
@@ -172,9 +175,7 @@ FULL_NAME   := $(FIRST_NAMES) $(LAST_NAMES) # Nuno Miguel Carvalho de Jesus
 
 > **Note**: typically you should use the ':=' operator but '=' also works. 
 
-> **Note**: the naming convention for variables is uppercase, to distinguish from Makefile rules. 
-
-> **Note**: When more than one string is specified in a variable, it isn't considered as a string with spaces, but a list of strings.
+> **Note**: the naming convention for variables is uppercase, to distinguish from Makefile rules.
 
 You can use variables in rules and other variables as well. To access their values, you must use:
 
@@ -246,7 +247,7 @@ all: hello.o bye.o highfive.o
 	cc main.c $(OBJS)
 ```
 
-**3.** In the first compilation, the `hello.o` file doesn't exist. The dependency must then be remade, which forces the Makefile to look for a rule.
+**3.** In the first compilation, the `hello.o` file doesn't exist. The dependency must then be remade, which forces the Makefile to look for a rule:
 
 ```Makefile
 %.o: %.c
@@ -260,14 +261,14 @@ hello.o: hello.c
 	cc -c $< # The $< expands to the first dependency of this rule (hello.c)
 ```
 
-The same goes for other dependencies having a `.o` suffix. The `$<` is an **Automatic Variable**. We'll talk more about Automatic Variables up ahead.Specifically this one is used to handle variable dependency strings, since the value of the dependency is not always the same. Final expansion:
+The same goes for other dependencies having a `.o` suffix. The `$<` is an **Automatic Variable**. We'll talk more about Automatic Variables up ahead. Specifically this one is used to handle strings with variable values, since the value of the dependency is not always the same. Final expansion:
 
 ```Makefile
 hello.o: hello.c
 	cc -c hello.c
 ```
 
-**4.** Finally, after all dependencies are generated following the same pattern as before, the `all` rule can execute its recipe. The `OBJS` variable is expanded again to its values
+**4.** Finally, after all dependencies are generated following the same pattern as before, the `all` rule can execute its recipe. The `OBJS` variable is expanded again to its values:
 
 ```Makefile
 all: hello.o bye.o highfive.o
@@ -303,7 +304,7 @@ re: fclean all
 
 
 ## <a name="index-6">6. Automatic variables</a>
-Automatic variables are special variables used by the Makefile to dynamically compute values. In other words, you should use those, when a rule does not always have the same dependency or target name, like in the example above.
+Automatic variables are special variables used by the Makefile to dynamically compute values. In other words, you can use those, when a rule does not always have the same dependency or target name, like in the example above.
 
 Below, is a table of some of the most useful ones:
 
@@ -426,7 +427,7 @@ fclean: clean
 
 
 ### <a name="index-7.2">7.2. Implicit Rules</a>
-Have you tried to remove the `%.o: %.c` rule and run `make`? You'll soon find, the Makefile is still working. But how? Makefile has its own default rules defined for specific cases, like the ones you'll see below.
+Have you tried to remove the `%.o: %.c` rule and run `make`? You'll soon find the Makefile is still working. But how? Makefile has its own default rules defined for specific cases, like the ones you'll see below.
 You can define your own implicit rules by using pattern rules (just like we did before).
 
 **Implicit Rules**, also use **Implicit Variables**, which you can check in the next section. Here's some of the implicit rules:
@@ -506,6 +507,11 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 			<td>Used flags when <code>CC</code> command is issued</td>
 		</tr>
 		<tr>
+			<td><code>CPPFLAGS</code></td>
+			<td><code></code></td>
+			<td>Extra flags used when <code>CC or CXX</code> commands are issued. <code>CPPFLAGS</code> and <code>CFLAGS</code> might appear the same, but this one was designed to contain include flags to help the compiler to locate missing header files. But you are free to override this as you want.</td>
+		</tr>
+		<tr>
 			<td><code>RM</code></td>
 			<td><code>rm -f</code></td>
 			<td>The command to be used to permanently delete a file</td>
@@ -538,7 +544,7 @@ $(NAME): $(OBJS)
 ...
 ```
 You can find the code in the [code/example-6](/code/example-6/) folder.
-This version does the same job as before. The main difference lies on the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second compilation, since the `project` file was created before, the dependency is fulfilled and the Makefile directly executes the `all` recipe. Since it's empty, you'll get this message:
+This version does the same job as before. The main difference lies on the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second run however, since the `project` file was created before, the dependency is fulfilled and the Makefile directly attempts to executes the `all` recipe. Since it's empty and no other recipes were run, you'll get this message:
 
 	make: Nothing to be done for 'all'.
 
@@ -548,3 +554,8 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
+
+## <a name="index-8">Advanced Topics</a>
+> Still in development...
+## 📞 **Contact me**
+Feel free to ask me any questions through Slack (**ncarvalh**).
