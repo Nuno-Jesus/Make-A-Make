@@ -105,6 +105,8 @@ re: fclean
 	$(MAKE) all
 ```
 
+> **Note**: $(MAKE) is a variable which expands to `make`. We'll see more about variables up ahead.
+
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
@@ -519,6 +521,11 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 			<td><code>RM</code></td>
 			<td><code>rm -f</code></td>
 			<td>The command to be used to permanently delete a file</td>
+		</tr>
+		<tr>
+			<td><code>MAKE</code></td>
+			<td><code>make</code></td>
+			<td>Useful when multi-jobs of makefile come into play. This will be explained later in the detail in an upcoming section, but keep in the mind this is the best way of calling make targets inside the Makefile</td>
 		</tr>
 	</tbody>
 </table>
