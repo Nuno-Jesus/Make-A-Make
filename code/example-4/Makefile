@@ -18,6 +18,7 @@ clean:
 fclean: clean
 	rm -rf lib.a
 
-re: fclean all
+re: fclean
+	$(MAKE) all
 
 .SILENT:

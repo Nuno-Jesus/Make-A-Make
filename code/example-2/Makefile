@@ -16,4 +16,5 @@ clean:
 fclean: clean
 	rm -rf a.out
 
-re: fclean all
+re: fclean
+	$(MAKE) all

@@ -101,7 +101,8 @@ fclean: clean
 Finally, if you're lazy like me and need to re-compile everything, you might want to create a rule to clean and re-compile:
 
 ```Makefile
-re: fclean all
+re: fclean
+	$(MAKE) all
 ```
 
 <div align=center>
@@ -128,7 +129,8 @@ clean:
 fclean: clean
 	rm -rf a.out
 
-re: fclean all
+re: fclean
+	$(MAKE) all
 ```
 
 Here's an image to display the dependencies in a more organized way:
@@ -292,7 +294,8 @@ clean:
 fclean: clean
 	rm -rf a.out
 
-re: fclean all
+re: fclean
+	$(MAKE) all
 ```
 
 <div align=center>
@@ -390,7 +393,8 @@ clean:
 fclean: clean
 	$(RM) a.out
 
-re: fclean all
+re: fclean
+	$(MAKE) all
 ```
 
 After a few hours, you realised your code is not that clean and you need a more secure compilation (compilation flags). You also want to name your executable `project`. For both cases we can define variables to avoid unecessary repetition. You can find the code in the [code/example-5](/code/example-5/) folder.
