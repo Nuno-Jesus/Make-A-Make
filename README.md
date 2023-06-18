@@ -331,7 +331,7 @@ Below, is a table of some of the most useful ones:
 			</tr>
 			<tr>
 				<td align=center><code>$*</code></td>
-				<td>The stem that matched the pattern of a rule</td>
+				<td>The current target name with its suffix deleted</td>
 			</tr>
 		</tbody>
 	</table>
