@@ -1,4 +1,5 @@
-OBJS := hello.o bye.o highfive.o # Dependency list of the 'all' rule
+OBJS = hello.o bye.o highfive.o # Dependency list of the 'all' rule
+NEW = $(OBJS) new
 
 all: $(OBJS)
 	cc main.c $(OBJS)

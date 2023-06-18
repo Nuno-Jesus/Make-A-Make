@@ -172,12 +172,10 @@ Variables are useful because:
 Variables can only be strings (a single one or a list of strings). Here are some examples:
 
 ```Makefile
-FIRST_NAMES := Nuno Miguel 				
-LAST_NAMES  := Carvalho de Jesus
-FULL_NAME   := $(FIRST_NAMES) $(LAST_NAMES) # Nuno Miguel Carvalho de Jesus
+FIRST_NAMES = Nuno Miguel 				
+LAST_NAMES  = Carvalho de Jesus
+FULL_NAME   = $(FIRST_NAMES) $(LAST_NAMES) # Nuno Miguel Carvalho de Jesus
 ```
-
-> **Note**: typically you should use the ':=' operator but '=' also works. 
 
 > **Note**: the naming convention for variables is uppercase, to distinguish from Makefile rules.
 
@@ -221,7 +219,7 @@ This would be the new dependency graph:
 But this is ugly and unnecessary since the pattern is always the same. Let us use the newly learn variables to clean this up! You can find the code in the [code/example-3](/code/example-3/) folder:
 
 ```Makefile
-OBJS := hello.o bye.o highfive.o # Dependency list of the 'all' rule
+OBJS = hello.o bye.o highfive.o # Dependency list of the 'all' rule
 
 all: $(OBJS)
 	cc main.c $(OBJS)
@@ -234,6 +232,8 @@ clean:
 
 ...
 ```
+
+> **Note**: have you have ever run `make -p > logs` ? Neither did I, but it's pretty useful! Detailed explanation on this in an upcoming section.
 
 Ok, pause. I know this is a lot to take in. Let's look into the details.When running `make`:
 
@@ -282,7 +282,7 @@ all: hello.o bye.o highfive.o
 Here's what we have so far:
 
 ```Makefile
-OBJS := hello.o bye.o highfive.o # Dependency list of the 'all' rule
+OBJS = hello.o bye.o highfive.o # Dependency list of the 'all' rule
 
 all: $(OBJS)
 	cc main.c $(OBJS)
@@ -379,9 +379,9 @@ We are reaching the end of the tutorial! This section is all about polishing wha
 Now that the basics are settled (at least they should be), let's have a look at some details. Noticed how the `rm -rf` and the `cc` commands are repeating? We can place them in variables:
 
 ```Makefile
-CC      := cc
-RM      := rm -rf
-OBJS	:= hello.o bye.o highfive.o
+CC      = cc
+RM      = rm -rf
+OBJS	= hello.o bye.o highfive.o
 
 all: $(OBJS)
 	$(CC) main.c $(OBJS)
@@ -403,11 +403,11 @@ After a few hours, you realised your code is not that clean and you need a more 
 Here are the new changes:
 
 ```Makefile
-CC      := cc
-CFLAGS	:= -Wall -Werror -Wextra
-RM      := rm -rf
-NAME	:= project
-OBJS	:= hello.o bye.o highfive.o
+CC      = cc
+CFLAGS	= -Wall -Werror -Wextra
+RM      = rm -rf
+NAME	= project
+OBJS	= hello.o bye.o highfive.o
 
 all: $(OBJS)
 	$(CC) $(CFLAGS) main.c $(OBJS) -o $(NAME)
@@ -546,7 +546,7 @@ Although it might not seem that important, considering a large scale project, re
 ```Makefile
 ...
 
-NAME := project
+NAME = project
 all: $(NAME)
 
 $(NAME): $(OBJS)

@@ -1,8 +1,8 @@
-CC      := cc
-CFLAGS	:= -Wall -Werror -Wextra
-RM      := rm -rf
-NAME	:= project
-OBJS	:= hello.o bye.o highfive.o
+CC      = cc
+CFLAGS	= -Wall -Werror -Wextra
+RM      = rm -rf
+NAME	= project
+OBJS	= hello.o bye.o highfive.o
 
 all: $(NAME)
 
