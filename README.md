@@ -13,6 +13,7 @@ It starts with a beginners guide, followed up by some medium-advanced concepts.
 		<li><a href="#index-2">2. An introduction to Makefiles</a></li>
 		<li><a href="#index-3">3. Rules</a></li>
 		<li><a href="#index-4">4. A simple Makefile</a></li>
+		<li><a href="#index-4.1">4.1 Dependencies and rule processing</a></li>
 		<li><a href="#index-5">5. Variables</a></li>
 		<li><a href="#index-6">6. Automatic Variables</a></li>
 		<li><a href="#index-7">7. Towards a more flexible Makefile</a></li>
@@ -68,7 +69,7 @@ target: pre-requisit-1 pre-requisit-2 pre-requisit-3 ...
 
 - A `target` is the name of a rule. Usually, also the name of a file, but not always.
 
-- A rule can have dependencies, some stuff to be fulfilled before execution, named `pre-requisits`. A pre-requisit **can be either a file or another rule**. In the last case, the dependency rule is executed first. If the pre-requisit doesn't match neither a file or a target's name, the Makefile halts and prints an error.
+- A rule can rely on dependencies that must be fulfilled before execution. These are called `pre-requisits`. Details of pre-requisits parsing and their will be detailed in 4.1 section. 
 
 - Finally, after all pre-requisits are fulfilled, the rule can execute its `recipe`, a collection of `commands`. A rule can also have an empty recipe.
 
@@ -157,6 +158,43 @@ You should see something like this on the terminal:
 	cc main.c hello.o
 
 This is great! The compilation worked out and finally we can execute our program and use our `hello` function! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
+
+
+<!-- ------------------------------------------------------------------ -->
+
+
+## <a name="index-4.1">4.1. Dependencies and rules processing</a>
+Consider a portion of the previous Makefile:
+
+```Makefile
+all: hello.o
+	cc main.c hello.o
+
+hello.o: hello.c
+	cc -c hello.c
+```
+
+The `make` command will read the current Makefile and process the first rule. Before executing `all` it must process `hello.o` since it is a dependency.
+
+The recompilation of the `hello.o` must be done if either `hello.o` does not exist or `hello.c` was changed since the last `hello.o` file was created. In the first time, there is no `hello.o` file, so it must be generated.
+
+Now suppose `hello.c` had recent changes. That means `hello.o` would have be recompiled. Therefore, the `all` target would have to be remade because `hello.o` is newer than the final executable.
+
+Here's a summary:
+
+- Is `hello.o` an existent file?
+	- **Yes**: Was `hello.c` modified since the last build?
+		- **Yes**: Remake `hello.o`
+		- **No**: Do nothing for `hello.o`
+	- **No**: Is there a rule to remake `hello.o`?
+		- **Yes**: Remake `hello.o`
+		- **No**: Error: no rule to make `hello.o`
+
+Execute `cc main.c hello.o`
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
 
 
 <!-- ------------------------------------------------------------------ -->
