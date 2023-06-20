@@ -3,7 +3,7 @@
 ## Description
 This README was developed mainly to help 42 students to clear the fog around Makefiles and how they work. But, it will be for sure helpful to anyone out there struggling as well. 
 
-It starts with a beginners guide, followed up by some medium-advanced concepts.
+It starts with a beginner's guide, followed up by some medium-advanced concepts.
 
 ## <a name="index-0">Index</a>
 <ul>
@@ -33,23 +33,24 @@ It starts with a beginners guide, followed up by some medium-advanced concepts.
 ## <a name="index-1">1. What is make?</a>
 The `make` utility is an automatic tool capable of deciding which commands can / should be executed. The `make` utility is mostly used to automate the compilation process, preventing manual file-by-file compilation. This utility is used through a special file called `Makefile`.
 
-For the purposes of this guide, we'll only dispose of a C project.
+For this guide, we'll only dispose of a C project.
 
 
 <!-- ------------------------------------------------------------------ -->
 
 
 ## <a name="index-2">2. An introduction to Makefiles</a>
-Typically, a Makefile is called to handle compilation and linkage of a project and its files. The Makefile uses the modification times of participating files to assert if re-compilation is needed or not.
+Typically, a Makefile is called to handle the compilation and linking of a project and its files. The Makefile uses the modification times of participating files to assert if re-compilation is needed or not.
 
 For instance, when compiling a `C` project, the final executable file, would be the zipped version of every `.o` file, which was in turn created from the `.c` files.
 
-Let's create a simple project to work with. You can find this files in the [code/example-1](/code/example-1/) folder.
+Let's create a simple project to work with.
 
 	├── hello.c 
 	├── main.c
 	└── Makefile
 
+You can find these files in the [code/example-1](/code/example-1/) folder.
 
 <!-- ------------------------------------------------------------------ -->
 
@@ -60,7 +61,7 @@ Rules are the core of a Makefile. Rules define how, when and what files and comm
 A rule has the following syntax:
 
 ```Makefile
-target: pre-requisit-1 pre-requisit-2 pre-requisit-3 ...
+target: prerequisite-1 prerequisite-2 prerequisite-3 ...
 	command-1
 	command-2
 	command-3
@@ -69,11 +70,11 @@ target: pre-requisit-1 pre-requisit-2 pre-requisit-3 ...
 
 - A `target` is the name of a rule. Usually, also the name of a file, but not always.
 
-- A rule can rely on dependencies that must be fulfilled before execution. These are called `pre-requisits`. Details of pre-requisits parsing and their will be detailed in 4.1 section. 
+- A rule can rely on dependencies that must be fulfilled before execution. These are called `prerequisites`. Details of prerequisite parsing will be detailed in 4.1 section. 
 
-- Finally, after all pre-requisits are fulfilled, the rule can execute its `recipe`, a collection of `commands`. A rule can also have an empty recipe.
+- Finally, after the prerequisites are fulfilled, the rule can execute its `recipe`, a collection of `commands`. A rule can also have an empty recipe.
 
-Each command should be indented with a **tab**, otherwise an error like this might show up:
+Each command should be indented with a **tab** otherwise, an error like this might show up:
 
 	Makefile:38: *** missing separator.  Stop.
 
@@ -84,7 +85,7 @@ hello.o: hello.c
 	clang -c hello.c
 ```
 
-As said before, there are some rules that don't need dependencies.
+As told before, some rules don't need dependencies.
 The `clean` rule is used to clean temporary files. Those would be the object files in a C project:
 
 ```Makefile
@@ -157,7 +158,7 @@ You should see something like this on the terminal:
 	cc -c hello.c
 	cc main.c hello.o
 
-This is great! The compilation worked out and finally we can execute our program and use our `hello` function! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
+This is great! The compilation worked out and finally, we can execute our program and use our `hello` function! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
 
 
 <!-- ------------------------------------------------------------------ -->
@@ -178,7 +179,7 @@ The `make` command will read the current Makefile and process the first rule. Be
 
 The recompilation of the `hello.o` must be done if either `hello.o` does not exist or `hello.c` was changed since the last `hello.o` file was created. In the first time, there is no `hello.o` file, so it must be generated.
 
-Now suppose `hello.c` had recent changes. That means `hello.o` would have be recompiled. Therefore, the `all` target would have to be remade because `hello.o` is newer than the final executable.
+Now suppose `hello.c` had recent changes. That means `hello.o` would have to be recompiled. Therefore, the `all` target would have to be remade because `hello.o` is newer than the final executable.
 
 Here's a summary:
 
@@ -299,21 +300,21 @@ all: hello.o bye.o highfive.o
 	cc -c $<
 ```
 
-The `%` can be used in several cases. For this one, its used to represent a **Regular Expression (REGEX)**. You can read it as "any dependency that ends on `.o` can be generated here and needs a corresponding `.c` dependency with the same prefix". For `hello.o` we have:
+The `%` can be used in several cases. For this one, it's used to represent a **Regular Expression (REGEX)**. You can read it as "any dependency that ends on `.o` can be generated here and needs a corresponding `.c` dependency with the same prefix". For `hello.o` we have:
 
 ```Makefile
 hello.o: hello.c
 	cc -c $< # The $< expands to the first dependency of this rule (hello.c)
 ```
 
-The same goes for other dependencies having a `.o` suffix. The `$<` is an **Automatic Variable**. We'll talk more about Automatic Variables up ahead. Specifically this one is used to handle strings with variable values, since the value of the dependency is not always the same. Final expansion:
+The same goes for other dependencies having a `.o` suffix. The `$<` is an **Automatic Variable**. We'll talk more about Automatic Variables up ahead. Specifically, this one is used to handle strings with variable values, since the value of the dependency is not always the same. Final expansion:
 
 ```Makefile
 hello.o: hello.c
 	cc -c hello.c
 ```
 
-**4.** Finally, after all dependencies are generated following the same pattern as before, the `all` rule can execute its recipe. The `OBJS` variable is expanded again to its values:
+**4.** Finally, after all dependencies are generated following the same pattern as before, the `all` rule can execute the recipe. The `OBJS` variable is expanded again to its values:
 
 ```Makefile
 all: hello.o bye.o highfive.o
@@ -369,11 +370,11 @@ Below, is a table of some of the most useful ones:
 			</tr>
 			<tr>
 				<td align=center><code>$<</code></td>
-				<td>The name of the first pre-requisit</td>
+				<td>The name of the first prerequisite</td>
 			</tr>
 			<tr>
 				<td align=center><code>$^</code></td>
-				<td>The name of all pre-requisits, separated by spaces</td>
+				<td>The name of all prerequisites, separated by spaces</td>
 			</tr>
 			<tr>
 				<td align=center><code>$*</code></td>
@@ -407,7 +408,7 @@ lib.a: hello.o bye.o highfive.o
 
 ## <a name="index-7">7. Towards a more flexible Makefile</a>
 
-We are reaching the end of the tutorial! This section is all about polishing what we've developed so far. There will (much) more contents after this section, but its up to you to go further. 
+We are reaching the end of the tutorial! This section is all about polishing what we've developed so far. There will be (much) more content after this section, but it's up to you to go further. 
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
@@ -440,7 +441,7 @@ re: fclean
 	$(MAKE) all
 ```
 
-After a few hours, you realised your code is not that clean and you need a more secure compilation (compilation flags). You also want to name your executable `project`. For both cases we can define variables to avoid unecessary repetition. You can find the code in the [code/example-5](/code/example-5/) folder.
+After a few hours, you realized your code is not that clean and you need a more secure compilation (compilation flags). You also want to name your executable `project`. For both situations, we can define variables to avoid unnecessary repetition. You can find the code in the [code/example-5](/code/example-5/) folder.
 Here are the new changes:
 
 ```Makefile
@@ -477,7 +478,7 @@ fclean: clean
 Have you tried to remove the `%.o: %.c` rule and run `make`? You'll soon find the Makefile is still working. But how? Makefile has its own default rules defined for specific cases, like the ones you'll see below.
 You can define your own implicit rules by using pattern rules (just like we did before).
 
-**Implicit Rules**, also use **Implicit Variables**, which you can check in the next section. Here's some of the implicit rules:
+**Implicit Rules**, also use **Implicit Variables**, which you can check in the next section. Here are some of the implicit rules:
 
 <table align=center width=100%>
 	<thead>
@@ -511,7 +512,7 @@ You can define your own implicit rules by using pattern rules (just like we did 
 
 
 ### <a name="index-7.3">7.3. Implicit Variables</a>
-As told before, implicit rules rely on variables already known by the Makefile, setted with a default value: **Implicit Variables**. You can redefine the value for these variables. Even if you don't use them explicitly, these new values can be used by implicit rules. Here's a table of some of them:
+As told before, implicit rules rely on variables already known by the Makefile, set with a default value: **Implicit Variables**. You can redefine the value for these variables. Even if you don't use them explicitly, these new values can be used by implicit rules. Here's a table of some of them:
 
 
 <table align=center width=100%>
@@ -536,7 +537,7 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 		<tr>
 			<td><code>CC</code></td>
 			<td><code>cc</code></td>
-			<td>The default compiler to use when C compilation is required. The cc is not actually a compiler, but an alias to the default C compiler of your machine (either <code>gcc</code> or <code>clang</code>)</td>
+			<td>The default compiler to use when C compilation is required. The cc is not a compiler, but rather an alias to the default C compiler of your machine (either <code>gcc</code> or <code>clang</code>)</td>
 		</tr>
 		<tr>
 			<td><code>CFLAGS</code></td>
@@ -566,7 +567,7 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 		<tr>
 			<td><code>MAKE</code></td>
 			<td><code>make</code></td>
-			<td>Useful when multi-jobs of makefile come into play. This will be explained later in the detail in an upcoming section, but keep in the mind this is the best way of calling make targets inside the Makefile</td>
+			<td>Useful when multi-jobs of makefile come into play. This will be explained later in detail in an upcoming section, but keep in mind this is the best way of calling make targets inside the Makefile</td>
 		</tr>
 	</tbody>
 </table>
@@ -580,9 +581,9 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 
 
 ### <a name="index-7.4">7.4. Relinking</a>
-To wrap this simple tutorial, I would like you to run `make` several times. Have you noticed how the `main.c` and `.o` files are getting linked together, even though they haven't changed? This is a phenomenon called **relinking**.
+To wrap up this simple tutorial, I would like you to run `make` several times. Have you noticed how the `main.c` and `.o` files are getting linked together, even though they haven't changed? This is a phenomenon called **relinking**.
 
-Although it might not seem that important, considering a large scale project, relinking can cause unnecessary and larger compilation times. To avoid it, we can add as a dependency the executable file you are trying to create, like this:
+Although it might not seem that important, considering a large-scale project, relinking can cause unnecessary and larger compilation times. To avoid it, we can add as a dependency the executable file you are trying to create, like this:
 
 ```Makefile
 ...
@@ -596,7 +597,7 @@ $(NAME): $(OBJS)
 ...
 ```
 You can find the code in the [code/example-6](/code/example-6/) folder.
-This version does the same job as before. The main difference lies on the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second run however, since the `project` file was created before, the dependency is fulfilled and the Makefile directly attempts to executes the `all` recipe. Since it's empty and no other recipes were run, you'll get this message:
+This version does the same job as before. The main difference lies in the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second run, however, since the `project` file was created before, the dependency is fulfilled and the Makefile directly attempts to execute the `all` recipe. Since it's empty and no other recipes were run, you'll get this message:
 
 	make: Nothing to be done for 'all'.
 
