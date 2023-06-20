@@ -736,3 +736,12 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 -->
+
+## <a name="errors">Typical errors</a>
+> Still in development...
+
+## <a name="flags">Useful flags</a>
+> Coming soon...
+
+## <a name="tips">General tips</a>
+> Still in development...
