@@ -23,6 +23,22 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 			<li><a href="#index-7.3">7.3. Implicit Variables</a></li>
 			<li><a href="#index-7.4">7.4. Relinking</a></li>
 		</ul>
+		<li>Advanced topics</li>
+		<ul>
+			<li><a href="#builtin-targets">Builtin Targets</a></li>
+			<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
+			<li><a href="#functions">Functions</a></li>
+			<li><a href="#command-line">Command line variables</a></li>
+			<li><a href="#vpath">The vpath directive</a></li>
+		</ul>
+		<li>Tips and tricks</li>
+		<ul>
+			<li><a href="#organize-project">Organize your project with vpath</a></li>
+			<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
+			<li><a href="#general-tips">General tips</a></li>
+		</ul>
+		<li><a href="#flags">Useful flags</a></li>
+		<li><a href="#errors">Typical errors</a></li>
 	</ul>
 </ul>
 
@@ -616,22 +632,6 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 
 <!--
 
-<li>Advanced topics</li>
-	<ul>
-		<li><a href="#builtin-targets">Builtin Targets</a></li>
-		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
-		<li><a href="#functions">Functions</a></li>
-		<li><a href="#command-line">Command line variables</a></li>
-		<li><a href="#vpath">The vpath directive</a></li>
-	</ul>
-	<li>Tips and tricks</li>
-	<ul>
-		<li><a href="#flags">Useful flags</a></li>
-		<li><a href="#organize-project">Organize your project with vpath</a></li>
-		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
-		<li><a href="#general-tips">General tips</a></li>
-	</ul>
-	<li>Questions</li>
 ## <a name="index-4">Builtin target names</a> 
 .SILENT: silences all the commands printed on the output
 .PHONY: used to tell the Makefile to not confuse the names of the targets with filenames. For instance, having a file called `hello`, should not enter in conflict with the `hello` rule
@@ -737,11 +737,11 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 </div>
 -->
 
-## <a name="errors">Typical errors</a>
+## <a name="tips"> General tips</a>
 > Still in development...
 
-## <a name="flags">Useful flags</a>
+## <a name="flags"> Useful flags</a>
 > Coming soon...
 
-## <a name="tips">General tips</a>
+## <a name="errors"> Typical errors</a>
 > Still in development...
