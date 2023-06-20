@@ -182,15 +182,18 @@ Now suppose `hello.c` had recent changes. That means `hello.o` would have be rec
 
 Here's a summary:
 
-- Is `hello.o` an existent file?
-	- **Yes**: Was `hello.c` modified since the last build?
-		- **Yes**: Remake `hello.o`
-		- **No**: Do nothing for `hello.o`
-	- **No**: Is there a rule to remake `hello.o`?
-		- **Yes**: Remake `hello.o`
-		- **No**: Error: no rule to make `hello.o`
+	Is hello.o an existent file?
+		Yes: Was hello.c modified since the last build?
+			Yes: Remake hello.o
+			No: Do nothing for hello.o
+		No: Is there a rule to remake hello.o?
+			Yes: Remake hello.o
+			No: Error: no rule to make hello.o
+	Execute cc main.c hello.o
 
-Execute `cc main.c hello.o`
+<div align=center>
+	<image src=images/graph_3.png>
+</div>
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
@@ -606,5 +609,129 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 
 ## <a name="index-8">Advanced Topics</a>
 > Still in development...
+
 ## 📞 **Contact me**
 Feel free to ask me any questions through Slack (**ncarvalh**).
+
+<!--
+
+<li>Advanced topics</li>
+	<ul>
+		<li><a href="#builtin-targets">Builtin Targets</a></li>
+		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
+		<li><a href="#functions">Functions</a></li>
+		<li><a href="#command-line">Command line variables</a></li>
+		<li><a href="#vpath">The vpath directive</a></li>
+	</ul>
+	<li>Tips and tricks</li>
+	<ul>
+		<li><a href="#flags">Useful flags</a></li>
+		<li><a href="#organize-project">Organize your project with vpath</a></li>
+		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
+		<li><a href="#general-tips">General tips</a></li>
+	</ul>
+	<li>Questions</li>
+## <a name="index-4">Builtin target names</a> 
+.SILENT: silences all the commands printed on the output
+.PHONY: used to tell the Makefile to not confuse the names of the targets with filenames. For instance, having a file called `hello`, should not enter in conflict with the `hello` rule
+.DEFAULT_GOAL: used to define what is the primary target of the makefile. For instance, even if the clean rule is not the first, if defined in this macro, it will be executed when running solely 'make'.
+	
+
+## <a name="index-4">The ifdef, ifndef, ifeq, ifneq directives</a>
+
+## <a name="index-4">Typical errors</a>
+
+## <a name="index-4">Useful flags</a>
+-C <directory> Call another makefile located at <dir>
+-k Continue as much as possible after an error occurred.
+-s Turns off printing of the makefile actions in the terminal
+-r Tells the makefile to ignore any builtin rules
+-j<number of threads> Allows parallel computation of makefile actions. Needs $(MAKE) to work properly.
+-n Displays the commands the makefile would run without actually running them
+--debug Displays the thinking process of the makefile before executing any targets
+--no-print-directory Disables message printing of whenever the makefile enters or exits a directory
+
+## <a name="index-4">Makefile functions</a>
+
+## <a name="index-4">Command line variables</a>
+
+## <a name="index-4">The vpath directive and project organization</a>
+
+## <a name="index-4">Questions</a>
+## <a name="index-4">General tips</a>
+- Group up common stuff: variables with variables, rules with rules. Mixing it up might turn your makefile confusing.
+- Comment your makefile and delimit different sections. If your Makefile is out of this world, you should comment it. Its good for you and the others.
+- Want to silent commands, but not all of them? Write a '@' before each command to silent it.
+- You can append strings to variables by using the '+=' operator
+- As I said before, Makefiles have a wide use case range. You can create rules to avoid writing repeating and large commands, like valgrind.
+- Compiling a Makefile with another Makefile? Don't use make directly. Instead use $(MAKE), which expands to the same value. Might seem pointless, but some flags might depend on in. The $(MAKE) variables tells the Makefile we are calling another Makefile.
+- Using the '\' operator at the end of the line forces the Makefile to consider the next line as a continuation of the first. Essentially a one line only.
+- Avoid repetition. Use functions when you can
+
+- In this Makefile, what does the $(SRCS:.c=.o) do?
+
+
+## <a name="index-4">Glossary</a>
+
+<details>
+	<summary>A</summary>
+	<ul>
+		<li><strong>Automatic Variable</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>D</summary>
+	<ul>
+		<li><strong>Dependency</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>E</summary>
+	<ul>
+		<li><strong>Expansion</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>F</summary>
+	<ul>
+		<li><strong>Flag</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>P</summary>
+	<ul>
+		<li><strong>Pre-requisit</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>R</summary>
+	<ul>
+		<li><strong>Recipe</strong> - </li>
+	</ul>
+	<ul>
+		<li><strong>Regular Expression</strong> - </li>
+	</ul>
+	<ul>
+		<li><strong>Re-linking</strong> - </li>
+	</ul>
+	<ul>
+		<li><strong>Rule</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>T</summary>
+	<ul>
+		<li><strong>Target</strong> - </li>
+	</ul>
+</details>
+<details>
+	<summary>V</summary>
+	<ul>
+		<li><strong>Variable</strong> - </li>
+	</ul>
+</details>
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+-->
