@@ -739,93 +739,50 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 > Still in development...
 
 ## <a name="flags"> Useful flags</a>
+
 - `-C <dir>`: used to recursively call another Makefile `<dir>`. The syntax is as follows: `make <target> -C <dir>`. You can find an example of this in the [code/example-7](/code/example-7).
 
-<!-- A table with two columns displaying an example and the output -->
-<table>
-	<tr>
-		<th>Example</th>
-		<th>Output</th>
-	</tr>
-	<tr>
-		<td>
-<pre>
+```Makefile
 all:
 	$(MAKE) -C hello/
 	$(CC) main.c hello/hello.c
-</pre>
-		</td>
-		<td>
-<pre>
-make -C hello/
-make[1]: Entering directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
-cc -Wall -Werror -Wextra -c hello.c -o hello.o
-make[1]: Leaving directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
-cc -Wall -Werror -Wextra main.c hello/hello.c -o project
-</pre>
-		</td>
-	</tr>
-	<tr align=center>
-		<td colspan=2>When the <code>make -C</code> command is issued, it forces a directory change towards the sub-Makefile directory. After the sub-Makefile is done executing, the directory is changed back to continue execution.</td>
-	</tr>
-</table>
+```
 
+```shell
+➜  example-6 git:(advanced-topics) ✗ make  
+make -C hello/
+make[1]: Entering directory '/nfs/homes/ncarvalh/...'
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+make[1]: Leaving directory '/nfs/homes/ncarvalh/...'
+cc -Wall -Werror -Wextra main.c hello/hello.c -o project
+➜  example-6 git:(advanced-topics) ✗
+```
+
+When the <code>make -C</code> command is issued, it forces a directory change towards the sub-Makefile directory. After the sub-Makefile is done executing, the directory is changed back to continue execution.
 
 - `-k` Continue as much as possible after an error occurred. Even though the error occurred, the Makefile will continue to execute the other targets. This is useful when you want to know all the errors that occurred in the Makefile. You can find an example of this in the [code/example-8](/code/example-8).
 
-<table>
-	<tr>
-		<th>Example</th>
-		<th>Output</th>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make
-</pre>
-		</td>
-		<td>
-<pre>
+```shell
+➜  example-6 git:(advanced-topics) ✗ make  
 cc -Wall -Werror -Wextra -c hello.c
 make: *** No rule to make target 'bye.o', needed by 'project'.  Stop.
-</pre>
-		</td>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make -k
-</pre>
-		</td>
-		<td>
-<pre>
+➜  example-6 git:(advanced-topics) ✗  
+```
+```shell
+➜  example-6 git:(advanced-topics) ✗ make -k  
 cc -Wall -Werror -Wextra -c hello.c
 make: *** No rule to make target 'bye.o', needed by 'project'.
 make: *** No rule to make target 'highfive.o', needed by 'project'.
 make: Target 'all' not remade because of errors.
-</pre>
-		</td>
-	</tr>
-	<tr align=center>
-		<td colspan=2>Even though <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails.</td>
-	</tr>
-</table>
+➜  example-6 git:(advanced-topics) ✗
+```  
+
+Even though <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails.
 
 - `-p` Dumps all known rules (both explicit and implicit) and variables to the current Makefile. The output is quite extensive, so I'll only display a small portion of it. 
 
-<table>
-	<tr>
-		<th>Example</th>
-		<th>Output</th>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make -p
-</pre>
-		</td>
-		<td>
-<pre>
+```shell
+➜  example-6 git:(advanced-topics) ✗ make -p
 ...
 # environment
 DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/101153/bus
@@ -834,88 +791,43 @@ CC = cc
 # Makefile (from 'Makefile', line 5)
 OBJS = hello.o bye.o highfive.o
 ...
-</pre>
-		</td>
-	</tr>
-</table>
+➜  example-6 git:(advanced-topics) ✗
+```
 
 - `-s` Turns off printing of Makefile commands and actions in the terminal
-<table>
-	<tr>
-		<th>Example</th>
-		<th>Output</th>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make
-</pre>
-		</td>
-		<td>
-<pre>
+
+```shell
 ➜  example-6 git:(advanced-topics) ✗ make       
 cc -Wall -Werror -Wextra -c hello.c
 cc -Wall -Werror -Wextra -c bye.c
 cc -Wall -Werror -Wextra -c highfive.c
 cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o -o project
 ➜  example-6 git:(advanced-topics) ✗
-</pre>
-		</td>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make -s
-</pre>
-		</td>
-		<td>
-<pre>
+```
+
+```shell
 ➜  example-6 git:(advanced-topics) ✗ make -s
 ➜  example-6 git:(advanced-topics) ✗
-</pre>
-		</td>
-	</tr>
-	<tr align=center>
-		<td colspan=2>The Makefile is executed without logging every action done so far.</td>
-	</tr>
-</table>
+```
+
+The Makefile is executed without logging every action done so far.
 
 - `-r` Tells the Makefile to ignore any built-in rules. You can find an example of this in the [code/example-9](/code/example-9). In this example, we simply omit the rule for compiling C files.
 
-<table>
-	<tr>
-		<th>Example</th>
-		<th>Output</th>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make
-</pre>
-		</td>
-		<td>
-<pre>
+```shell
+➜  example-6 git:(advanced-topics) ✗ make       
 cc -Wall -Werror -Wextra   -c -o hello.o hello.c
 cc -Wall -Werror -Wextra main.c hello.o -o project
-</pre>
-		</td>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make -r
-</pre>
-		</td>
-		<td>
-<pre>
+➜  example-6 git:(advanced-topics) ✗       
+```
+
+```shell
+➜  example-6 git:(advanced-topics) ✗ make -r       
 make: *** No rule to make target 'hello.o', needed by 'project'.  Stop.
-</pre>
-		</td>
-	</tr>
-	<tr align=center>
-		<td colspan=2>Because we removed the explicit rule for compiling C files, the Makefile is forced to use its implicit rule. However, using the <code>-r</code> the implicit rule is canceled, so the Makefile has no way of generating a <code>.o</code> file.</td>
-	</tr>
-</table>
+➜  example-6 git:(advanced-topics) ✗       
+```
+
+Because we removed the explicit rule for compiling C files, the Makefile is forced to use its implicit rule. However, using the <code>-r</code> the implicit rule is canceled, so the Makefile has no way of generating a <code>.o</code> file.
 
 - `-j [number of threads]` Takes advantage of threads to speed up the Makefile execution. The number of threads is usually the number of cores your machine has. The number of threads is optional. You can find an example of this in the [code/example-10](/code/example-10).
 
@@ -939,19 +851,9 @@ you could use the `.NOTPARALLEL` special target, which disables parallel executi
 fclean: clean all
 ```
 
-<table>
-	<tr>
-		<th>Example</th>
-		<th>Output</th>
-	</tr>
-	<tr>
-		<td>
-<pre>
-time make
-</pre>
-		</td>
-		<td>
-<pre>
+```shell
+➜  example-6 git:(advanced-topics) ✗ time make    
+
 cc -Wall -Werror -Wextra -c hello.c
 cc -Wall -Werror -Wextra -c bye.c
 cc -Wall -Werror -Wextra -c highfive.c
@@ -961,17 +863,11 @@ cc -Wall -Werror -Wextra -c handshake.c
 cc -Wall -Werror -Wextra -c wave.c
 cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o kiss.o handshake.o wave.o -o project
 make  0.10s user 0.06s system 84% cpu 0.185 total
-</pre>
-		</td>
-	</tr>
-	<tr>
-		<td>
-<pre>
-time make -j
-</pre>
-		</td>
-		<td>
-<pre>
+➜  example-6 git:(advanced-topics) ✗
+```
+
+```shell
+➜  example-6 git:(advanced-topics) ✗ time make -j  
 cc -Wall -Werror -Wextra -c hello.c
 cc -Wall -Werror -Wextra -c bye.c
 cc -Wall -Werror -Wextra -c highfive.c
@@ -981,45 +877,25 @@ cc -Wall -Werror -Wextra -c handshake.c
 cc -Wall -Werror -Wextra -c wave.c
 cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o kiss.o handshake.o wave.o -o project
 make -j  0.12s user 0.06s system 235% cpu 0.076 total
-</pre>
-		</td>
-	</tr>
-	<tr align=center>
-		<td colspan=2>The <code>time</code> command is only used to read the CPU load and execution time.</td>
-	</tr>
-</table>
+➜  example-6 git:(advanced-topics) ✗
+```
+
+The <code>time</code> command is only used to read the CPU load and execution time.
 
 > **Note:** When recursively calling make, the parallel compilation is imposed in the sub-Makefiles unless you call the make command with $(MAKE). 
 
 - `-n` Displays the commands the Makefile would run without actually executing it.
 - `--debug` Executes and displays how dependencies are resolved.
 
-<table>
-	<tr>
-		<th>Example</th>
-		<th>Output</th>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make
-</pre>
-		</td>
-		<td>
-<pre>
+```shell
+➜  example-6 git:(advanced-topics) ✗ make
 cc -Wall -Werror -Wextra   -c -o hello.o hello.c
 cc -Wall -Werror -Wextra main.c hello.o -o project
-</pre>
-		</td>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make --debug
-</pre>
-		</td>
-		<td>
-<pre>
+➜  example-6 git:(advanced-topics) ✗
+```
+
+```shell
+➜  example-6 git:(advanced-topics) ✗ make --debug
 ...
 Reading makefiles...
 Updating makefiles....
@@ -1035,50 +911,29 @@ cc -Wall -Werror -Wextra main.c hello.o -o project
   Successfully remade target file 'project'.
 Must remake target 'all'.
 Successfully remade target file 'all'.
-</pre>
-		</td>
-	</tr>
-</table>
+➜  example-6 git:(advanced-topics) ✗
+```
 
 - `--no-print-directory` Disables message printing whenever the Makefile enters or exits a directory.
 
 
-<table>
-	<tr>
-		<th>Example</th>
-		<th>Output</th>
-	</tr>
-	<tr>
-		<td>
-<pre>
-		   make
-</pre>
-		</td>
-		<td>
-<pre>
+```shell
+➜  example-6 git:(advanced-topics) ✗ make
 make -C hello/
 make[1]: Entering directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
 cc -Wall -Werror -Wextra -c hello.c -o hello.o
 make[1]: Leaving directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
 cc main.c hello/hello.c
-</pre>
-		</td>
-	</tr>
-	<tr>
-		<td>
-<pre>
-make --no-print-directory
-</pre>
-		</td>
-		<td>
-<pre>
+➜  example-6 git:(advanced-topics) ✗
+```
+
+```shell
+➜  example-6 git:(advanced-topics) ✗ make --no-print-directory
 make -C hello/
 cc -Wall -Werror -Wextra -c hello.c -o hello.o
 cc main.c hello/hello.c
-</pre>
-		</td>
-	</tr>
-</table>
+➜  example-6 git:(advanced-topics) ✗
+```
 
 ## <a name="errors"> Typical errors</a>
 > Still in development...
