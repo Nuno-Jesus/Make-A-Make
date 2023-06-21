@@ -765,7 +765,7 @@ cc -Wall -Werror -Wextra main.c hello/hello.c -o project
 </pre>
 		</td>
 	</tr>
-	<tr>
+	<tr align=center>
 		<td colspan=2>When the <code>make -C</code> command is issued, it forces a directory change towards the sub-Makefile directory. After the sub-Makefile is done executing, the directory is changed back to continue execution.</td>
 	</tr>
 </table>
@@ -806,7 +806,7 @@ make: Target 'all' not remade because of errors.
 </pre>
 		</td>
 	</tr>
-	<tr>
+	<tr align=center>
 		<td colspan=2>Even though the <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails.</td>
 	</tr>
 </table>
@@ -849,7 +849,47 @@ CPP = $(CC) -E
 	</tr>
 </table>
 
-- `-s` Turns off printing of the makefile actions in the terminal
+- `-s` Turns off printing of makefile commands and actions in the terminal
+<table>
+	<tr>
+		<th>Example</th>
+		<th>Output</th>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make
+</pre>
+		</td>
+		<td>
+<pre>
+➜  example-6 git:(advanced-topics) ✗ make       
+cc -Wall -Werror -Wextra -c hello.c
+cc -Wall -Werror -Wextra -c bye.c
+cc -Wall -Werror -Wextra -c highfive.c
+cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o -o project
+➜  example-6 git:(advanced-topics) ✗
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make -s
+</pre>
+		</td>
+		<td>
+<pre>
+➜  example-6 git:(advanced-topics) ✗ make -s
+➜  example-6 git:(advanced-topics) ✗
+</pre>
+		</td>
+	</tr>
+	<tr align=center>
+		<td colspan=2>The makefile is executed without logging every action done so far.</td>
+	</tr>
+</table>
+
 - `-r` Tells the makefile to ignore any builtin rules
 - `-j [number of threads]` Allows parallel computation of makefile actions. Needs $(MAKE) to work properly.
 - `-n` Displays the commands the makefile would run without actually running them
