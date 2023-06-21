@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   hello.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarvalh <ncarvalh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/01 21:43:38 by ncarvalh          #+#    #+#             */
-/*   Updated: 2023/06/21 21:48:23 by ncarvalh         ###   ########.fr       */
+/*   Created: 2023/06/01 21:44:01 by ncarvalh          #+#    #+#             */
+/*   Updated: 2023/06/15 17:52:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
-void hello(void);
-void bye(void);
-void highfive(void);
-
-int main()
+void hello(void)
 {
-	hello();
-	highfive();
-	bye();
-	return 0;
+	printf("Hello!\n");
 }

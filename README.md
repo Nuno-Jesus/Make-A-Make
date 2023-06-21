@@ -584,7 +584,7 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 		<tr>
 			<td><code>MAKE</code></td>
 			<td><code>make</code></td>
-			<td>Useful when multi-jobs of makefile come into play. This will be explained later in detail in an upcoming section, but keep in mind this is the best way of calling make targets inside the Makefile</td>
+			<td>Useful when multi-jobs of Makefile come into play. This will be explained later in detail in an upcoming section, but keep in mind this is the best way of calling make targets inside the Makefile</td>
 		</tr>
 	</tbody>
 </table>
@@ -633,22 +633,22 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 ## <a name="index-4">Builtin target names</a> 
 .SILENT: silences all the commands printed on the output
 .PHONY: used to tell the Makefile to not confuse the names of the targets with filenames. For instance, having a file called `hello`, should not enter in conflict with the `hello` rule
-.DEFAULT_GOAL: used to define what is the primary target of the makefile. For instance, even if the clean rule is not the first, if defined in this macro, it will be executed when running solely 'make'.
-	
+.DEFAULT_GOAL: used to define what is the primary target of the Makefile. For instance, even if the clean rule is not the first, if defined in this macro, it will be executed when running solely 'make'.
+.NOT_PARALLEL: executes the Makefile in a single thread, even if the -j flag is used. If dependencies are specified, only those targets are executed sequentially.
 
 ## <a name="index-4">The ifdef, ifndef, ifeq, ifneq directives</a>
 
 ## <a name="index-4">Typical errors</a>
 
 ## <a name="index-4">Useful flags</a>
--C <directory> Call another makefile located at <dir>
+-C <directory> Call another Makefile located at <dir>
 -k Continue as much as possible after an error occurred.
--s Turns off printing of the makefile actions in the terminal
--r Tells the makefile to ignore any builtin rules
--j<number of threads> Allows parallel computation of makefile actions. Needs $(MAKE) to work properly.
--n Displays the commands the makefile would run without actually running them
---debug Displays the thinking process of the makefile before executing any targets
---no-print-directory Disables message printing of whenever the makefile enters or exits a directory
+-s Turns off printing of the Makefile actions in the terminal
+-r Tells the Makefile to ignore any builtin rules
+-j<number of threads> Allows parallel computation of Makefile actions. Needs $(MAKE) to work properly.
+-n Displays the commands the Makefile would run without actually running them
+--debug Displays the thinking process of the Makefile before executing any targets
+--no-print-directory Disables message printing of whenever the Makefile enters or exits a directory
 
 ## <a name="index-4">Makefile functions</a>
 
@@ -658,8 +658,8 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 
 ## <a name="index-4">Questions</a>
 ## <a name="index-4">General tips</a>
-- Group up common stuff: variables with variables, rules with rules. Mixing it up might turn your makefile confusing.
-- Comment your makefile and delimit different sections. If your Makefile is out of this world, you should comment it. Its good for you and the others.
+- Group up common stuff: variables with variables, rules with rules. Mixing it up might turn your Makefile confusing.
+- Comment your Makefile and delimit different sections. If your Makefile is out of this world, you should comment it. Its good for you and the others.
 - Want to silent commands, but not all of them? Write a '@' before each command to silent it.
 - You can append strings to variables by using the '+=' operator
 - As I said before, Makefiles have a wide use case range. You can create rules to avoid writing repeating and large commands, like valgrind.
@@ -739,7 +739,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 > Still in development...
 
 ## <a name="flags"> Useful flags</a>
-- `-C <dir>`: used to recursively call another makefile `<dir>`. The syntax is as follows: `make <target> -C <dir>`. You can find an example of this in the [code/example-7](/code/example-7).
+- `-C <dir>`: used to recursively call another Makefile `<dir>`. The syntax is as follows: `make <target> -C <dir>`. You can find an example of this in the [code/example-7](/code/example-7).
 
 <!-- A table with two columns displaying an example and the output -->
 <table>
@@ -771,7 +771,7 @@ cc -Wall -Werror -Wextra main.c hello/hello.c -o project
 </table>
 
 
-- `-k` Continue as much as possible after an error occurred. Even though the error occurred, the makefile will continue to execute the other targets. This is useful when you want to know all the errors that occurred in the makefile. You can find an example of this in the [code/example-8](/code/example-8).
+- `-k` Continue as much as possible after an error occurred. Even though the error occurred, the Makefile will continue to execute the other targets. This is useful when you want to know all the errors that occurred in the Makefile. You can find an example of this in the [code/example-8](/code/example-8).
 
 <table>
 	<tr>
@@ -829,9 +829,9 @@ make -p
 ...
 # environment
 DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/101153/bus
-# makefile (from 'Makefile', line 1)
+# Makefile (from 'Makefile', line 1)
 CC = cc
-# makefile (from 'Makefile', line 5)
+# Makefile (from 'Makefile', line 5)
 OBJS = hello.o bye.o highfive.o
 ...
 </pre>
@@ -839,7 +839,7 @@ OBJS = hello.o bye.o highfive.o
 	</tr>
 </table>
 
-- `-s` Turns off printing of makefile commands and actions in the terminal
+- `-s` Turns off printing of Makefile commands and actions in the terminal
 <table>
 	<tr>
 		<th>Example</th>
@@ -876,15 +876,209 @@ make -s
 		</td>
 	</tr>
 	<tr align=center>
-		<td colspan=2>The makefile is executed without logging every action done so far.</td>
+		<td colspan=2>The Makefile is executed without logging every action done so far.</td>
 	</tr>
 </table>
 
-- `-r` Tells the makefile to ignore any builtin rules
-- `-j [number of threads]` Allows parallel computation of makefile actions. Needs $(MAKE) to work properly.
-- `-n` Displays the commands the makefile would run without actually running them
-- `--debug` Displays the thinking process of the makefile before executing any targets
-- `--no-print-directory` Disables message printing whenever the makefile enters or exits a directory
+- `-r` Tells the Makefile to ignore any built-in rules. You can find an example of this in the [code/example-9](/code/example-9). In this example, we simply omit the rule for compiling C files.
+
+<table>
+	<tr>
+		<th>Example</th>
+		<th>Output</th>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make
+</pre>
+		</td>
+		<td>
+<pre>
+cc -Wall -Werror -Wextra   -c -o hello.o hello.c
+cc -Wall -Werror -Wextra main.c hello.o -o project
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make -r
+</pre>
+		</td>
+		<td>
+<pre>
+make: *** No rule to make target 'hello.o', needed by 'project'.  Stop.
+</pre>
+		</td>
+	</tr>
+	<tr align=center>
+		<td colspan=2>Because we removed the explicit rule for compiling C files, the Makefile is forced to use its implicit rule. However, using the <code>-r</code> the implicit rule is canceled, so the Makefile has no way of generating a <code>.o</code> file.</td>
+	</tr>
+</table>
+
+- `-j [number of threads]` Takes advantage of threads to speed up the Makefile execution. The number of threads is usually the number of cores your machine has. The number of threads is optional. You can find an example of this in the [code/example-10](/code/example-10).
+
+When using the `-j` flag, the Makefile will execute the targets in parallel, which doesn't guarantee the order of execution. So a rule designed like this...
+
+```make
+fclean: clean all
+```
+
+... would perform `clean` and `all` at the same time, which is not what you want and can cause weird outputs. You can either re-write it...
+
+```make
+fclean: clean
+	$(MAKE) all
+```
+
+you could use the `.NOTPARALLEL` special target, which disables parallel execution of targets and their dependencies.
+
+```make
+.NOTPARALLEL: fclean
+fclean: clean all
+```
+
+<table>
+	<tr>
+		<th>Example</th>
+		<th>Output</th>
+	</tr>
+	<tr>
+		<td>
+<pre>
+time make
+</pre>
+		</td>
+		<td>
+<pre>
+cc -Wall -Werror -Wextra -c hello.c
+cc -Wall -Werror -Wextra -c bye.c
+cc -Wall -Werror -Wextra -c highfive.c
+cc -Wall -Werror -Wextra -c hug.c
+cc -Wall -Werror -Wextra -c kiss.c
+cc -Wall -Werror -Wextra -c handshake.c
+cc -Wall -Werror -Wextra -c wave.c
+cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o kiss.o handshake.o wave.o -o project
+make  0.10s user 0.06s system 84% cpu 0.185 total
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<pre>
+time make -j
+</pre>
+		</td>
+		<td>
+<pre>
+cc -Wall -Werror -Wextra -c hello.c
+cc -Wall -Werror -Wextra -c bye.c
+cc -Wall -Werror -Wextra -c highfive.c
+cc -Wall -Werror -Wextra -c hug.c
+cc -Wall -Werror -Wextra -c kiss.c
+cc -Wall -Werror -Wextra -c handshake.c
+cc -Wall -Werror -Wextra -c wave.c
+cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o kiss.o handshake.o wave.o -o project
+make -j  0.12s user 0.06s system 235% cpu 0.076 total
+</pre>
+		</td>
+	</tr>
+	<tr align=center>
+		<td colspan=2>The <code>time</code> command is only used to read the CPU load and execution time.</td>
+	</tr>
+</table>
+
+> **Note:** When recursively calling make, the parallel compilation is imposed in the sub-Makefiles unless you call the make command with $(MAKE). 
+
+- `-n` Displays the commands the Makefile would run without actually executing it.
+- `--debug` Executes and displays how dependencies are resolved.
+
+<table>
+	<tr>
+		<th>Example</th>
+		<th>Output</th>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make
+</pre>
+		</td>
+		<td>
+<pre>
+cc -Wall -Werror -Wextra   -c -o hello.o hello.c
+cc -Wall -Werror -Wextra main.c hello.o -o project
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make --debug
+</pre>
+		</td>
+		<td>
+<pre>
+...
+Reading makefiles...
+Updating makefiles....
+Updating goal targets....
+ File 'all' does not exist.
+   File 'project' does not exist.
+     File 'hello.o' does not exist.
+    Must remake target 'hello.o'.
+cc -Wall -Werror -Wextra   -c -o hello.o hello.c
+    Successfully remade target file 'hello.o'.
+  Must remake target 'project'.
+cc -Wall -Werror -Wextra main.c hello.o -o project
+  Successfully remade target file 'project'.
+Must remake target 'all'.
+Successfully remade target file 'all'.
+</pre>
+		</td>
+	</tr>
+</table>
+
+- `--no-print-directory` Disables message printing whenever the Makefile enters or exits a directory.
+
+
+<table>
+	<tr>
+		<th>Example</th>
+		<th>Output</th>
+	</tr>
+	<tr>
+		<td>
+<pre>
+		   make
+</pre>
+		</td>
+		<td>
+<pre>
+make -C hello/
+make[1]: Entering directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+make[1]: Leaving directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
+cc main.c hello/hello.c
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make --no-print-directory
+</pre>
+		</td>
+		<td>
+<pre>
+make -C hello/
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+cc main.c hello/hello.c
+</pre>
+		</td>
+	</tr>
+</table>
 
 ## <a name="errors"> Typical errors</a>
 > Still in development...
