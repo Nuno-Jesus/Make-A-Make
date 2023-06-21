@@ -739,7 +739,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 > Still in development...
 
 ## <a name="flags"> Useful flags</a>
-- `-C <dir>`: used to recursively call another makefile `<dir>`. The syntax is as follows: `make <target> -C <dir>`. You can find an example of this in the [code/ example-7](/code/example-7).
+- `-C <dir>`: used to recursively call another makefile `<dir>`. The syntax is as follows: `make <target> -C <dir>`. You can find an example of this in the [code/example-7](/code/example-7).
 
 <!-- A table with two columns displaying an example and the output -->
 <table>
@@ -807,11 +807,11 @@ make: Target 'all' not remade because of errors.
 		</td>
 	</tr>
 	<tr align=center>
-		<td colspan=2>Even though the <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails.</td>
+		<td colspan=2>Even though <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails.</td>
 	</tr>
 </table>
 
-- `-p` Displays all known rules (both explicit and implicit) and variables to the current Makefile.
+- `-p` Dumps all known rules (both explicit and implicit) and variables to the current Makefile. The output is quite extensive, so I'll only display a small portion of it. 
 
 <table>
 	<tr>
@@ -828,21 +828,11 @@ make -p
 <pre>
 ...
 # environment
-VSCODE_INJECTION = 1
-# environment
-XDG_DATA_DIRS = /usr/share/gnome:/usr/share/ubuntu:/nfs/homes/ncarvalh/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
-# environment
 DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/101153/bus
 # makefile (from 'Makefile', line 1)
 CC = cc
 # makefile (from 'Makefile', line 5)
 OBJS = hello.o bye.o highfive.o
-# default
-CHECKOUT,v = +$(if $(wildcard $@),,$(CO) $(COFLAGS) $< $@)
-# environment
-TERMINATOR_UUID = urn:uuid:e4859a76-e335-4e1b-857f-c9d5ad3db53e
-# default
-CPP = $(CC) -E
 ...
 </pre>
 		</td>
