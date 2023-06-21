@@ -811,7 +811,44 @@ make: Target 'all' not remade because of errors.
 	</tr>
 </table>
 
-- `-p` Displays the entire database of the current Makefile, which contains all known rules (both explicit and implicit) and variables. 
+- `-p` Displays all known rules (both explicit and implicit) and variables to the current Makefile.
+
+<table>
+	<tr>
+		<th>Example</th>
+		<th>Output</th>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make -p
+</pre>
+		</td>
+		<td>
+<pre>
+...
+# environment
+VSCODE_INJECTION = 1
+# environment
+XDG_DATA_DIRS = /usr/share/gnome:/usr/share/ubuntu:/nfs/homes/ncarvalh/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/101153/bus
+# makefile (from 'Makefile', line 1)
+CC = cc
+# makefile (from 'Makefile', line 5)
+OBJS = hello.o bye.o highfive.o
+# default
+CHECKOUT,v = +$(if $(wildcard $@),,$(CO) $(COFLAGS) $< $@)
+# environment
+TERMINATOR_UUID = urn:uuid:e4859a76-e335-4e1b-857f-c9d5ad3db53e
+# default
+CPP = $(CC) -E
+...
+</pre>
+		</td>
+	</tr>
+</table>
+
 - `-s` Turns off printing of the makefile actions in the terminal
 - `-r` Tells the makefile to ignore any builtin rules
 - `-j [number of threads]` Allows parallel computation of makefile actions. Needs $(MAKE) to work properly.
