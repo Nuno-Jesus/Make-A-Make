@@ -739,7 +739,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 > Still in development...
 
 ## <a name="flags"> Useful flags</a>
-- `-C <dir>`: used to recursively call another makefile `<dir>`
+- `-C <dir>`: used to recursively call another makefile `<dir>`. The syntax is as follows: `make <target> -C <dir>`.
 
 <!-- A table with two columns displaying an example and the output -->
 <table>
