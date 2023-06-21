@@ -739,7 +739,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 > Still in development...
 
 ## <a name="flags"> Useful flags</a>
-- `-C <dir>`: used to recursively call another makefile `<dir>`. The syntax is as follows: `make <target> -C <dir>`.
+- `-C <dir>`: used to recursively call another makefile `<dir>`. The syntax is as follows: `make <target> -C <dir>`. You can find an example of this in the [code/ example-7](/code/example-7).
 
 <!-- A table with two columns displaying an example and the output -->
 <table>
@@ -766,19 +766,58 @@ cc -Wall -Werror -Wextra main.c hello/hello.c -o project
 		</td>
 	</tr>
 	<tr>
-		<td colspan=2>When the <code>make -C</code> command is issued, it forces a directory change towards the sub-Makefile directory. After the sub-Makefile is done executing, the directory is changed back to the original Makefile to continue execution.</td>
+		<td colspan=2>When the <code>make -C</code> command is issued, it forces a directory change towards the sub-Makefile directory. After the sub-Makefile is done executing, the directory is changed back to continue execution.</td>
 	</tr>
 </table>
 
 
-- `-k` Continue as much as possible after an error occurred.
+- `-k` Continue as much as possible after an error occurred. Even though the error occurred, the makefile will continue to execute the other targets. This is useful when you want to know all the errors that occurred in the makefile. You can find an example of this in the [code/example-8](/code/example-8).
+
+<table>
+	<tr>
+		<th>Example</th>
+		<th>Output</th>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make
+</pre>
+		</td>
+		<td>
+<pre>
+cc -Wall -Werror -Wextra -c hello.c
+make: *** No rule to make target 'bye.o', needed by 'project'.  Stop.
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<pre>
+make -k
+</pre>
+		</td>
+		<td>
+<pre>
+cc -Wall -Werror -Wextra -c hello.c
+make: *** No rule to make target 'bye.o', needed by 'project'.
+make: *** No rule to make target 'highfive.o', needed by 'project'.
+make: Target 'all' not remade because of errors.
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2>Even though the <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails.</td>
+	</tr>
+</table>
+
 - `-p` Displays the entire database of the current Makefile, which contains all known rules (both explicit and implicit) and variables. 
 - `-s` Turns off printing of the makefile actions in the terminal
 - `-r` Tells the makefile to ignore any builtin rules
 - `-j [number of threads]` Allows parallel computation of makefile actions. Needs $(MAKE) to work properly.
 - `-n` Displays the commands the makefile would run without actually running them
-`--debug` Displays the thinking process of the makefile before executing any targets
-`--no-print-directory` Disables message printing whenever the makefile enters or exits a directory
+- `--debug` Displays the thinking process of the makefile before executing any targets
+- `--no-print-directory` Disables message printing whenever the makefile enters or exits a directory
 
 ## <a name="errors"> Typical errors</a>
 > Still in development...
