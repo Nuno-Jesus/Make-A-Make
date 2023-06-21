@@ -23,23 +23,24 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 			<li><a href="#index-7.3">7.3. Implicit Variables</a></li>
 			<li><a href="#index-7.4">7.4. Relinking</a></li>
 		</ul>
-		<li>Advanced topics</li>
-		<ul>
-			<li><a href="#builtin-targets">Builtin Targets</a></li>
-			<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
-			<li><a href="#functions">Functions</a></li>
-			<li><a href="#command-line">Command line variables</a></li>
-			<li><a href="#vpath">The vpath directive</a></li>
-		</ul>
-		<li>Tips and tricks</li>
-		<ul>
-			<li><a href="#organize-project">Organize your project with vpath</a></li>
-			<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
-			<li><a href="#general-tips">General tips</a></li>
-		</ul>
-		<li><a href="#flags">Useful flags</a></li>
-		<li><a href="#errors">Typical errors</a></li>
 	</ul>
+	<li>Advanced topics</li>
+	<ul>
+		<li><a href="#builtin-targets">Builtin Targets</a></li>
+		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
+		<li><a href="#functions">Functions</a></li>
+		<li><a href="#command-line">Command line variables</a></li>
+		<li><a href="#vpath">The vpath directive</a></li>
+	</ul>
+	<li>Tips and tricks</li>
+	<ul>
+		<li><a href="#organize-project">Organize your project with vpath</a></li>
+		<li><a href="#variable-operators">Other variable related operators</a></li>
+		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
+		<li><a href="#general-tips">General tips</a></li>
+	</ul>
+	<li><a href="#flags">Useful flags</a></li>
+	<li><a href="#errors">Typical errors</a></li>
 </ul>
 
 
@@ -627,9 +628,6 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 ## <a name="index-8">Advanced Topics</a>
 > Still in development...
 
-## 📞 **Contact me**
-Feel free to ask me any questions through Slack (**ncarvalh**).
-
 <!--
 
 ## <a name="index-4">Builtin target names</a> 
@@ -741,7 +739,49 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 > Still in development...
 
 ## <a name="flags"> Useful flags</a>
-> Coming soon...
+- `-C <dir>`: used to recursively call another makefile `<dir>`
+
+<!-- A table with two columns displaying an example and the output -->
+<table>
+	<tr>
+		<th>Example</th>
+		<th>Output</th>
+	</tr>
+	<tr>
+		<td>
+<pre>
+all:
+	$(MAKE) -C hello/
+	$(CC) main.c hello/hello.c
+</pre>
+		</td>
+		<td>
+<pre>
+make -C hello/
+make[1]: Entering directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+make[1]: Leaving directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
+cc -Wall -Werror -Wextra main.c hello/hello.c -o project
+</pre>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2>When the <code>make -C</code> command is issued, it forces a directory change towards the sub-Makefile directory. After the sub-Makefile is done executing, the directory is changed back to the original Makefile to continue execution.</td>
+	</tr>
+</table>
+
+
+- `-k` Continue as much as possible after an error occurred.
+- `-p` Displays the entire database of the current Makefile, which contains all known rules (both explicit and implicit) and variables. 
+- `-s` Turns off printing of the makefile actions in the terminal
+- `-r` Tells the makefile to ignore any builtin rules
+- `-j [number of threads]` Allows parallel computation of makefile actions. Needs $(MAKE) to work properly.
+- `-n` Displays the commands the makefile would run without actually running them
+`--debug` Displays the thinking process of the makefile before executing any targets
+`--no-print-directory` Disables message printing whenever the makefile enters or exits a directory
 
 ## <a name="errors"> Typical errors</a>
 > Still in development...
+
+## 📞 **Contact me**
+Feel free to ask me any questions through Slack (**ncarvalh**).
