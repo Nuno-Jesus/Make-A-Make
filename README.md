@@ -633,7 +633,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 
 I don't think those topics fit either in the beginner's guide or in the advanced topics. However, I think they are useful to know and can be used to improve your Makefiles.
 
-### <a href="#special-targets">Special Targets</a>
+### <a name="special-targets"> Special Targets</a>
 There are a few special targets that can be used in a Makefile. These targets are not files but, rather commands that can be executed by the Makefile. Please note that these are not all the targets, but rather only the ones I use the most/are more useful.
 
 - `.SILENT` - Disables the default logging of Make actions in the terminal. If used with prerequisites, only those targets are executed silently.
