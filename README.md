@@ -628,6 +628,210 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 ## <a name="index-8">Advanced Topics</a>
 > Still in development...
 
+## <a name="tips"> General tips</a>
+> Still in development...
+
+## <a name="flags"> Useful flags</a>
+
+- `-C <dir>` - used to recursively call another Makefile `<dir>`. The syntax is as follows: `make [target] -C <dir>`. The `target` field can be omitted You can find an example of this in the [code/example-7](/code/example-7).
+
+```Makefile
+all:
+	$(MAKE) -C hello/
+	$(CC) main.c hello/hello.c
+```
+
+```shell
+➜  example-7 git:(master) ✗ make  
+make -C hello/
+make[1]: Entering directory '/nfs/homes/ncarvalh/...'
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+make[1]: Leaving directory '/nfs/homes/ncarvalh/...'
+cc -Wall -Werror -Wextra main.c hello/hello.c -o project
+➜  example-7 git:(master) ✗
+```
+
+When <code>make -C</code> is issued, it forces a directory change towards the sub-Make directory. After the sub-Make is done executing, the directory is changed back to the original Make to continue execution.
+
+- `-k` - Usually, when an error happens, the Make aborts execution immediately. Using this flag, the Make is forced to attempt executing further targets. If you need an error list, this flag is for you. You can find an example of this in the [code/example-8](/code/example-8).
+
+```shell
+➜  example-8 git:(master) ✗ make  
+cc -Wall -Werror -Wextra -c hello.c
+make: *** No rule to make target 'bye.o', needed by 'project'.  Stop.
+➜  example-8 git:(master) ✗  
+```
+```shell
+➜  example-8 git:(master) ✗ make -k  
+cc -Wall -Werror -Wextra -c hello.c
+make: *** No rule to make target 'bye.o', needed by 'project'.
+make: *** No rule to make target 'highfive.o', needed by 'project'.
+make: Target 'all' not remade because of errors.
+➜  example-8 git:(master) ✗
+```  
+
+Even though <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails, not aborting execution though.
+
+- `-p` - Dumps the whole database of known variables and rules (both explicit and implicit). The output is quite extensive, so I'll only display a small portion of it. For demonstration purposes, we're re-using the [code/example-6](/code/example-6) folder.
+
+```shell
+➜  example-6 git:(master) ✗ make -p
+...
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/101153/bus
+# Makefile (from 'Makefile', line 1)
+CC = cc
+# Makefile (from 'Makefile', line 5)
+OBJS = hello.o bye.o highfive.o
+...
+➜  example-6 git:(master) ✗
+```
+
+- `-s` - Disables the default logging of Make actions in the terminal. For demonstration purposes, we're re-using the [code/example-6](/code/example-6) folder.
+
+```shell
+➜  example-6 git:(master) ✗ make       
+cc -Wall -Werror -Wextra -c hello.c
+cc -Wall -Werror -Wextra -c bye.c
+cc -Wall -Werror -Wextra -c highfive.c
+cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o -o project
+➜  example-6 git:(master) ✗
+```
+
+```shell
+➜  example-6 git:(master) ✗ make -s
+➜  example-6 git:(master) ✗
+```
+
+- `-r` - Tells the Makefile to ignore any built-in rules. In the example below, we simply omit the rule for compiling C files. You can find an example of this in the [code/example-9](/code/example-9). 
+
+```shell
+➜  example-9 git:(master) ✗ make       
+cc -Wall -Werror -Wextra   -c -o hello.o hello.c
+cc -Wall -Werror -Wextra main.c hello.o -o project
+➜  example-9 git:(master) ✗       
+```
+
+```shell
+➜  example-9 git:(master) ✗ make -r       
+make: *** No rule to make target 'hello.o', needed by 'project'.  Stop.
+➜  example-9 git:(master) ✗       
+```
+
+Because we removed the explicit rule for compiling C files, the compilation must be done using an implicit rule. However, using the <code>-r</code>, all implicit rules are not considered, so there's no way of generating <code>hello.o</code>.
+
+- `-j [number of threads]` - Takes advantage of threads to speed up the Makefile execution. The number of threads is optional. You can find an example of this in the [code/example-10](/code/example-10).
+
+When using the `-j` flag, the Makefile will execute the targets in parallel, which doesn't guarantee the order of execution. So a rule designed like this...
+
+```make
+fclean: clean all
+```
+
+... would perform `clean` and `all` at the same time, which can cause weird outputs. You can either re-write it...
+
+```make
+fclean: clean
+	$(MAKE) all
+```
+
+... or use the `.NOTPARALLEL` special target, which disables parallel execution of targets and their dependencies.
+
+```make
+.NOTPARALLEL: fclean
+fclean: clean all
+```
+
+```shell
+➜  example-10 git:(master) ✗ time make    
+cc -Wall -Werror -Wextra -c hello.c
+cc -Wall -Werror -Wextra -c bye.c
+cc -Wall -Werror -Wextra -c highfive.c
+cc -Wall -Werror -Wextra -c hug.c
+cc -Wall -Werror -Wextra -c kiss.c
+cc -Wall -Werror -Wextra -c handshake.c
+cc -Wall -Werror -Wextra -c wave.c
+cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o ...
+make  0.10s user 0.06s system 84% cpu 0.185 total
+➜  example-10 git:(master) ✗
+```
+
+```shell
+➜  example-10 git:(master) ✗ time make -j  
+cc -Wall -Werror -Wextra -c hello.c
+cc -Wall -Werror -Wextra -c bye.c
+cc -Wall -Werror -Wextra -c highfive.c
+cc -Wall -Werror -Wextra -c hug.c
+cc -Wall -Werror -Wextra -c kiss.c
+cc -Wall -Werror -Wextra -c handshake.c
+cc -Wall -Werror -Wextra -c wave.c
+cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o ...
+make -j  0.12s user 0.06s system 235% cpu 0.076 total
+➜  example-10 git:(master) ✗
+```
+
+The <code>time</code> command is only used to read the CPU load and execution time.
+
+> **Note:** When recursively calling make, the parallel computation is not imposed in sub-Makes unless you use the $(MAKE) variable. You also don't need to use the <code>-j</code> flag in the sub-Make, since you would launch N threads to each of the other previous N threads, which is not what you want.
+
+- `-n` - Displays the commands the Makefile would run without actually executing it.
+
+- `--debug` - Executes and displays how dependencies are resolved. For demonstration purposes, we're re-using the [code/example-9](/code/example-9) folder.
+
+```shell
+➜  example-9 git:(master) ✗ make
+cc -Wall -Werror -Wextra   -c -o hello.o hello.c
+cc -Wall -Werror -Wextra main.c hello.o -o project
+➜  example-9 git:(master) ✗
+```
+
+```shell
+➜  example-9 git:(master) ✗ make --debug
+...
+Reading makefiles...
+Updating makefiles....
+Updating goal targets....
+ File 'all' does not exist.
+   File 'project' does not exist.
+     File 'hello.o' does not exist.
+    Must remake target 'hello.o'.
+cc -Wall -Werror -Wextra   -c -o hello.o hello.c
+    Successfully remade target file 'hello.o'.
+  Must remake target 'project'.
+cc -Wall -Werror -Wextra main.c hello.o -o project
+  Successfully remade target file 'project'.
+Must remake target 'all'.
+Successfully remade target file 'all'.
+➜  example-9 git:(master) ✗
+```
+
+- `--no-print-directory` Disables message printing whenever the Makefile enters or exits a directory. For demonstration purposes, we're re-using the [code/example-7](/code/example-7) folder.
+
+
+```shell
+➜  example-7 git:(master) ✗ make
+make -C hello/
+make[1]: Entering directory '/nfs/homes/ncarvalh/...'
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+make[1]: Leaving directory '/nfs/homes/ncarvalh/...'
+cc main.c hello/hello.c
+➜  example-7 git:(master) ✗
+```
+
+```shell
+➜  example-7 git:(master) ✗ make --no-print-directory
+make -C hello/
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+cc main.c hello/hello.c
+➜  example-7 git:(master) ✗
+```
+
+## <a name="errors"> Typical errors</a>
+> Still in development...
+
+## 📞 **Contact me**
+Feel free to ask me any questions through Slack (**ncarvalh**).
+
 <!--
 
 ## <a name="index-4">Builtin target names</a> 
@@ -734,209 +938,3 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 -->
-
-## <a name="tips"> General tips</a>
-> Still in development...
-
-## <a name="flags"> Useful flags</a>
-
-- `-C <dir>`: used to recursively call another Makefile `<dir>`. The syntax is as follows: `make <target> -C <dir>`. You can find an example of this in the [code/example-7](/code/example-7).
-
-```Makefile
-all:
-	$(MAKE) -C hello/
-	$(CC) main.c hello/hello.c
-```
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make  
-make -C hello/
-make[1]: Entering directory '/nfs/homes/ncarvalh/...'
-cc -Wall -Werror -Wextra -c hello.c -o hello.o
-make[1]: Leaving directory '/nfs/homes/ncarvalh/...'
-cc -Wall -Werror -Wextra main.c hello/hello.c -o project
-➜  example-6 git:(advanced-topics) ✗
-```
-
-When the <code>make -C</code> command is issued, it forces a directory change towards the sub-Makefile directory. After the sub-Makefile is done executing, the directory is changed back to continue execution.
-
-- `-k` Continue as much as possible after an error occurred. Even though the error occurred, the Makefile will continue to execute the other targets. This is useful when you want to know all the errors that occurred in the Makefile. You can find an example of this in the [code/example-8](/code/example-8).
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make  
-cc -Wall -Werror -Wextra -c hello.c
-make: *** No rule to make target 'bye.o', needed by 'project'.  Stop.
-➜  example-6 git:(advanced-topics) ✗  
-```
-```shell
-➜  example-6 git:(advanced-topics) ✗ make -k  
-cc -Wall -Werror -Wextra -c hello.c
-make: *** No rule to make target 'bye.o', needed by 'project'.
-make: *** No rule to make target 'highfive.o', needed by 'project'.
-make: Target 'all' not remade because of errors.
-➜  example-6 git:(advanced-topics) ✗
-```  
-
-Even though <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails.
-
-- `-p` Dumps all known rules (both explicit and implicit) and variables to the current Makefile. The output is quite extensive, so I'll only display a small portion of it. 
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make -p
-...
-# environment
-DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/101153/bus
-# Makefile (from 'Makefile', line 1)
-CC = cc
-# Makefile (from 'Makefile', line 5)
-OBJS = hello.o bye.o highfive.o
-...
-➜  example-6 git:(advanced-topics) ✗
-```
-
-- `-s` Turns off printing of Makefile commands and actions in the terminal
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make       
-cc -Wall -Werror -Wextra -c hello.c
-cc -Wall -Werror -Wextra -c bye.c
-cc -Wall -Werror -Wextra -c highfive.c
-cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o -o project
-➜  example-6 git:(advanced-topics) ✗
-```
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make -s
-➜  example-6 git:(advanced-topics) ✗
-```
-
-The Makefile is executed without logging every action done so far.
-
-- `-r` Tells the Makefile to ignore any built-in rules. You can find an example of this in the [code/example-9](/code/example-9). In this example, we simply omit the rule for compiling C files.
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make       
-cc -Wall -Werror -Wextra   -c -o hello.o hello.c
-cc -Wall -Werror -Wextra main.c hello.o -o project
-➜  example-6 git:(advanced-topics) ✗       
-```
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make -r       
-make: *** No rule to make target 'hello.o', needed by 'project'.  Stop.
-➜  example-6 git:(advanced-topics) ✗       
-```
-
-Because we removed the explicit rule for compiling C files, the Makefile is forced to use its implicit rule. However, using the <code>-r</code> the implicit rule is canceled, so the Makefile has no way of generating a <code>.o</code> file.
-
-- `-j [number of threads]` Takes advantage of threads to speed up the Makefile execution. The number of threads is usually the number of cores your machine has. The number of threads is optional. You can find an example of this in the [code/example-10](/code/example-10).
-
-When using the `-j` flag, the Makefile will execute the targets in parallel, which doesn't guarantee the order of execution. So a rule designed like this...
-
-```make
-fclean: clean all
-```
-
-... would perform `clean` and `all` at the same time, which is not what you want and can cause weird outputs. You can either re-write it...
-
-```make
-fclean: clean
-	$(MAKE) all
-```
-
-you could use the `.NOTPARALLEL` special target, which disables parallel execution of targets and their dependencies.
-
-```make
-.NOTPARALLEL: fclean
-fclean: clean all
-```
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ time make    
-
-cc -Wall -Werror -Wextra -c hello.c
-cc -Wall -Werror -Wextra -c bye.c
-cc -Wall -Werror -Wextra -c highfive.c
-cc -Wall -Werror -Wextra -c hug.c
-cc -Wall -Werror -Wextra -c kiss.c
-cc -Wall -Werror -Wextra -c handshake.c
-cc -Wall -Werror -Wextra -c wave.c
-cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o kiss.o handshake.o wave.o -o project
-make  0.10s user 0.06s system 84% cpu 0.185 total
-➜  example-6 git:(advanced-topics) ✗
-```
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ time make -j  
-cc -Wall -Werror -Wextra -c hello.c
-cc -Wall -Werror -Wextra -c bye.c
-cc -Wall -Werror -Wextra -c highfive.c
-cc -Wall -Werror -Wextra -c hug.c
-cc -Wall -Werror -Wextra -c kiss.c
-cc -Wall -Werror -Wextra -c handshake.c
-cc -Wall -Werror -Wextra -c wave.c
-cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o kiss.o handshake.o wave.o -o project
-make -j  0.12s user 0.06s system 235% cpu 0.076 total
-➜  example-6 git:(advanced-topics) ✗
-```
-
-The <code>time</code> command is only used to read the CPU load and execution time.
-
-> **Note:** When recursively calling make, the parallel compilation is imposed in the sub-Makefiles unless you call the make command with $(MAKE). 
-
-- `-n` Displays the commands the Makefile would run without actually executing it.
-- `--debug` Executes and displays how dependencies are resolved.
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make
-cc -Wall -Werror -Wextra   -c -o hello.o hello.c
-cc -Wall -Werror -Wextra main.c hello.o -o project
-➜  example-6 git:(advanced-topics) ✗
-```
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make --debug
-...
-Reading makefiles...
-Updating makefiles....
-Updating goal targets....
- File 'all' does not exist.
-   File 'project' does not exist.
-     File 'hello.o' does not exist.
-    Must remake target 'hello.o'.
-cc -Wall -Werror -Wextra   -c -o hello.o hello.c
-    Successfully remade target file 'hello.o'.
-  Must remake target 'project'.
-cc -Wall -Werror -Wextra main.c hello.o -o project
-  Successfully remade target file 'project'.
-Must remake target 'all'.
-Successfully remade target file 'all'.
-➜  example-6 git:(advanced-topics) ✗
-```
-
-- `--no-print-directory` Disables message printing whenever the Makefile enters or exits a directory.
-
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make
-make -C hello/
-make[1]: Entering directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
-cc -Wall -Werror -Wextra -c hello.c -o hello.o
-make[1]: Leaving directory '/nfs/homes/ncarvalh/Programming/make-a-make/code/example-7/hello'
-cc main.c hello/hello.c
-➜  example-6 git:(advanced-topics) ✗
-```
-
-```shell
-➜  example-6 git:(advanced-topics) ✗ make --no-print-directory
-make -C hello/
-cc -Wall -Werror -Wextra -c hello.c -o hello.o
-cc main.c hello/hello.c
-➜  example-6 git:(advanced-topics) ✗
-```
-
-## <a name="errors"> Typical errors</a>
-> Still in development...
-
-## 📞 **Contact me**
-Feel free to ask me any questions through Slack (**ncarvalh**).
