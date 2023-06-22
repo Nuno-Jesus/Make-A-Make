@@ -846,7 +846,7 @@ make -j  0.12s user 0.06s system 235% cpu 0.076 total
 
 The <code>time</code> command is only used to read the CPU load and execution time.
 
-> **Note:** When recursively calling make, the parallel computation is not imposed in sub-Makes unless you use the $(MAKE) variable. You also don't need to use the <code>-j</code> flag in the sub-Make, since you would launch N threads to each of the other previous N threads, which is not what you want.
+> **Note:** When recursively calling make, the parallel computation is not imposed in sub-Makes unless you use the `$(MAKE)` variable. You also don't need to use the <code>-j</code> flag in the sub-Make, since you would launch N threads to each of the other previous N threads, which is not what you want.
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
