@@ -917,7 +917,6 @@ cc main.c hello/hello.c
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
-<br>
 
 ### <a name="errors"> Typical errors</a>
 > Still in development...
@@ -925,7 +924,6 @@ cc main.c hello/hello.c
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
-<br>
 
 ## 📞 **Contact me**
 Feel free to ask me any questions through Slack (**ncarvalh**).
