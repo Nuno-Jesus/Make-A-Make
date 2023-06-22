@@ -24,6 +24,26 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 			<li><a href="#index-7.4">7.4. Relinking</a></li>
 		</ul>
 	</ul>
+	<!-- <li>Advanced topics</li>
+	<ul>
+		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
+		<li><a href="#functions">Functions</a></li>
+		<li><a href="#command-line">Command line variables</a></li>
+		<li><a href="#vpath">The vpath directive</a></li>
+	</ul>
+	<li>Tips and tricks</li>
+	<ul>
+		<li><a href="#organize-project">Organize your project with vpath</a></li>
+		<li><a href="#variable-operators">Other variable related operators</a></li>
+		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
+		<li><a href="#general-tips">General tips</a></li>
+	</ul> -->
+	<li>Useful topics</li>
+	<ul style="list-style-type:disc">
+		<li><a href="#special-targets">Special Targets</a></li>
+		<li><a href="#flags">Makefile flags</a></li>
+		<li><a href="#errors">Typical errors</a></li>
+	</ul>
 </ul>
 
 
@@ -567,7 +587,7 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 		<tr>
 			<td><code>MAKE</code></td>
 			<td><code>make</code></td>
-			<td>Useful when multi-jobs of makefile come into play. This will be explained later in detail in an upcoming section, but keep in mind this is the best way of calling make targets inside the Makefile</td>
+			<td>Useful when multi-jobs of Makefile come into play. This will be explained later in detail in an upcoming section, but keep in mind this is the best way of calling make targets inside the Makefile</td>
 		</tr>
 	</tbody>
 </table>
@@ -599,7 +619,7 @@ $(NAME): $(OBJS)
 You can find the code in the [code/example-6](/code/example-6/) folder.
 This version does the same job as before. The main difference lies in the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second run, however, since the `project` file was created before, the dependency is fulfilled and the Makefile directly attempts to execute the `all` recipe. Since it's empty and no other recipes were run, you'll get this message:
 
-	make: Nothing to be done for 'all'.
+	make: Nothinsub-Makeg to be done for 'all'.
 
 And there you have it! I hope this beginner's guide cleared a bit of your doubts. If you're not a beginner (or don't want to be one anymore), I advise you to check the contents up ahead. Many of those might be useful to change and upgrade your Makefiles!
 
@@ -608,49 +628,327 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
-## <a name="index-8">Advanced Topics</a>
+
+## Useful Topics
+
+I don't think those topics fit either in the beginner's guide or in the advanced topics. However, I think they are useful to know and can be used to improve your Makefiles.
+
+### <a name="special-targets"> Special Targets</a>
+There are a few special targets that can be used in a Makefile. These targets are not files but, rather commands that can be executed by the Makefile. Please note that these are not all the targets, but rather only the ones I use the most/are more useful.
+
+- `.SILENT` - Disables the default logging of Make actions in the terminal. If used with prerequisites, only those targets are executed silently.
+
+```Makefile
+.SILENT: all
+```
+
+Otherwise, if used without prerequisites, all targets are executed silently.
+
+```Makefile
+.SILENT:
+```
+
+- `.PHONY` - used to tell the Makefile to not confuse the names of the targets with filenames. For instance, if `clean` is considered phony...
+
+```Makefile
+.PHONY: clean
+```
+
+...the Make will always execute the `clean` rule, even if a file named `clean` exists.
+
+- `.DEFAULT_GOAL` - used to define what is the primary target of the Makefile. If not specified, the first target is chosen by default.
+
+```Makefile
+.DEFAULT_GOAL: clean
+```
+
+The example above would set the clean target to execute by default when running `make`.
+
+- `.NOTPARALLEL` - executes the Makefile in a single thread, even if the -j flag is used. If used with prerequisites, only those targets are executed sequentially.
+
+```Makefile
+.NOTPARALLEL: fclean
+```
+
+Otherwise, if used without prerequisites, all targets are executed sequentially.
+
+```Makefile
+.NOTPARALLEL:
+```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+
+### <a name="flags"> Makefile flags</a>
+
+- `-C <dir>` - used to recursively call another Makefile `<dir>`. The syntax is as follows: `make [target] -C <dir>`. The `target` field can be omitted You can find an example of this in the [code/example-7](/code/example-7).
+
+```Makefile
+all:
+	$(MAKE) -C hello/
+	$(CC) main.c hello/hello.c
+```
+
+```shell
+➜  example-7 git:(master) ✗ make  
+make -C hello/
+make[1]: Entering directory '/nfs/homes/ncarvalh/...'
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+make[1]: Leaving directory '/nfs/homes/ncarvalh/...'
+cc -Wall -Werror -Wextra main.c hello/hello.c -o project
+➜  example-7 git:(master) ✗
+```
+
+When <code>make -C</code> is issued, it forces a directory change towards the sub-Make directory. After the sub-Make is done executing, the directory is changed back to the original Make to continue execution.
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
+- `-k` - Usually, when an error happens, the Make aborts execution immediately. Using this flag, the Make is forced to attempt executing further targets. If you need an error list, this flag is for you. You can find an example of this in the [code/example-8](/code/example-8).
+
+```shell
+➜  example-8 git:(master) ✗ make  
+cc -Wall -Werror -Wextra -c hello.c
+make: *** No rule to make target 'bye.o', needed by 'project'.  Stop.
+➜  example-8 git:(master) ✗  
+```
+```shell
+➜  example-8 git:(master) ✗ make -k  
+cc -Wall -Werror -Wextra -c hello.c
+make: *** No rule to make target 'bye.o', needed by 'project'.
+make: *** No rule to make target 'highfive.o', needed by 'project'.
+make: Target 'all' not remade because of errors.
+➜  example-8 git:(master) ✗
+```
+
+Even though <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails, not aborting execution though.
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
+- `-p` - Dumps the whole database of known variables and rules (both explicit and implicit). The output is quite extensive, so I'll only display a small portion of it. For demonstration purposes, we're re-using the [code/example-6](/code/example-6) folder.
+
+```shell
+➜  example-6 git:(master) ✗ make -p
+...
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/101153/bus
+# Makefile (from 'Makefile', line 1)
+CC = cc
+# Makefile (from 'Makefile', line 5)
+OBJS = hello.o bye.o highfive.o
+...
+➜  example-6 git:(master) ✗
+```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
+- `-s` - Disables the default logging of Make actions in the terminal. Works just like the `.SILENT` special target/ For demonstration purposes, we're re-using the [code/example-6](/code/example-6) folder.
+
+```shell
+➜  example-6 git:(master) ✗ make       
+cc -Wall -Werror -Wextra -c hello.c
+cc -Wall -Werror -Wextra -c bye.c
+cc -Wall -Werror -Wextra -c highfive.c
+cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o -o project
+➜  example-6 git:(master) ✗
+```
+
+```shell
+➜  example-6 git:(master) ✗ make -s
+➜  example-6 git:(master) ✗
+```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
+- `-r` - Tells the Makefile to ignore any built-in rules. In the example below, we simply omit the rule for compiling C files. You can find an example of this in the [code/example-9](/code/example-9). 
+
+```shell
+➜  example-9 git:(master) ✗ make       
+cc -Wall -Werror -Wextra   -c -o hello.o hello.c
+cc -Wall -Werror -Wextra main.c hello.o -o project
+➜  example-9 git:(master) ✗       
+```
+
+```shell
+➜  example-9 git:(master) ✗ make -r       
+make: *** No rule to make target 'hello.o', needed by 'project'.  Stop.
+➜  example-9 git:(master) ✗       
+```
+
+Because we removed the explicit rule for compiling C files, the compilation must be done using an implicit rule. However, using the <code>-r</code>, all implicit rules are not considered, so there's no way of generating <code>hello.o</code>.
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
+- `-j [number of threads]` - Takes advantage of threads to speed up the Makefile execution. The number of threads is optional. You can find an example of this in the [code/example-10](/code/example-10).
+
+When using the `-j` flag, the Makefile will execute the targets in parallel, which doesn't guarantee the order of execution. So a rule designed like this...
+
+```make
+fclean: clean all
+```
+
+... would perform `clean` and `all` at the same time, which can cause weird outputs. You can either re-write it...
+
+```make
+fclean: clean
+	$(MAKE) all
+```
+
+... or use the `.NOTPARALLEL` special target, which disables parallel execution of targets and their dependencies.
+
+```make
+.NOTPARALLEL: fclean
+fclean: clean all
+```
+
+```shell
+➜  example-10 git:(master) ✗ time make    
+cc -Wall -Werror -Wextra -c hello.c
+cc -Wall -Werror -Wextra -c bye.c
+cc -Wall -Werror -Wextra -c highfive.c
+cc -Wall -Werror -Wextra -c hug.c
+cc -Wall -Werror -Wextra -c kiss.c
+cc -Wall -Werror -Wextra -c handshake.c
+cc -Wall -Werror -Wextra -c wave.c
+cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o ...
+make  0.10s user 0.06s system 84% cpu 0.185 total
+➜  example-10 git:(master) ✗
+```
+
+```shell
+➜  example-10 git:(master) ✗ time make -j  
+cc -Wall -Werror -Wextra -c hello.c
+cc -Wall -Werror -Wextra -c bye.c
+cc -Wall -Werror -Wextra -c highfive.c
+cc -Wall -Werror -Wextra -c hug.c
+cc -Wall -Werror -Wextra -c kiss.c
+cc -Wall -Werror -Wextra -c handshake.c
+cc -Wall -Werror -Wextra -c wave.c
+cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o hug.o ...
+make -j  0.12s user 0.06s system 235% cpu 0.076 total
+➜  example-10 git:(master) ✗
+```
+
+The <code>time</code> command is only used to read the CPU load and execution time.
+
+> **Note:** When recursively calling make, the parallel computation is not imposed in sub-Makes unless you use the `$(MAKE)` variable. You also don't need to use the <code>-j</code> flag in the sub-Make, since you would launch N threads to each of the other previous N threads, which is not what you want.
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
+- `-n` - Displays the commands the Makefile would run without actually executing it.
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
+- `--debug` - Executes and displays how dependencies are resolved. For demonstration purposes, we're re-using the [code/example-9](/code/example-9) folder.
+
+```shell
+➜  example-9 git:(master) ✗ make
+cc -Wall -Werror -Wextra   -c -o hello.o hello.c
+cc -Wall -Werror -Wextra main.c hello.o -o project
+➜  example-9 git:(master) ✗
+```
+
+```shell
+➜  example-9 git:(master) ✗ make --debug
+...
+Reading makefiles...
+Updating makefiles....
+Updating goal targets....
+ File 'all' does not exist.
+   File 'project' does not exist.
+     File 'hello.o' does not exist.
+    Must remake target 'hello.o'.
+cc -Wall -Werror -Wextra   -c -o hello.o hello.c
+    Successfully remade target file 'hello.o'.
+  Must remake target 'project'.
+cc -Wall -Werror -Wextra main.c hello.o -o project
+  Successfully remade target file 'project'.
+Must remake target 'all'.
+Successfully remade target file 'all'.
+➜  example-9 git:(master) ✗
+```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
+- `--no-print-directory` Disables message printing whenever the Makefile enters or exits a directory. For demonstration purposes, we're re-using the [code/example-7](/code/example-7) folder.
+
+```shell
+➜  example-7 git:(master) ✗ make
+make -C hello/
+make[1]: Entering directory '/nfs/homes/ncarvalh/...'
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+make[1]: Leaving directory '/nfs/homes/ncarvalh/...'
+cc main.c hello/hello.c
+➜  example-7 git:(master) ✗
+```
+
+```shell
+➜  example-7 git:(master) ✗ make --no-print-directory
+make -C hello/
+cc -Wall -Werror -Wextra -c hello.c -o hello.o
+cc main.c hello/hello.c
+➜  example-7 git:(master) ✗
+```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+
+### <a name="errors"> Typical errors</a>
 > Still in development...
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
 
 ## 📞 **Contact me**
 Feel free to ask me any questions through Slack (**ncarvalh**).
 
 <!--
 
-<li>Advanced topics</li>
-	<ul>
-		<li><a href="#builtin-targets">Builtin Targets</a></li>
-		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
-		<li><a href="#functions">Functions</a></li>
-		<li><a href="#command-line">Command line variables</a></li>
-		<li><a href="#vpath">The vpath directive</a></li>
-	</ul>
-	<li>Tips and tricks</li>
-	<ul>
-		<li><a href="#flags">Useful flags</a></li>
-		<li><a href="#organize-project">Organize your project with vpath</a></li>
-		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
-		<li><a href="#general-tips">General tips</a></li>
-	</ul>
-	<li>Questions</li>
 ## <a name="index-4">Builtin target names</a> 
 .SILENT: silences all the commands printed on the output
 .PHONY: used to tell the Makefile to not confuse the names of the targets with filenames. For instance, having a file called `hello`, should not enter in conflict with the `hello` rule
-.DEFAULT_GOAL: used to define what is the primary target of the makefile. For instance, even if the clean rule is not the first, if defined in this macro, it will be executed when running solely 'make'.
-	
+.DEFAULT_GOAL: used to define what is the primary target of the Makefile. For instance, even if the clean rule is not the first, if defined in this macro, it will be executed when running solely 'make'.
+.NOTPARALLEL: executes the Makefile in a single thread, even if the -j flag is used. If dependencies are specified, only those targets are executed sequentially.
 
 ## <a name="index-4">The ifdef, ifndef, ifeq, ifneq directives</a>
 
 ## <a name="index-4">Typical errors</a>
 
 ## <a name="index-4">Useful flags</a>
--C <directory> Call another makefile located at <dir>
+-C <directory> Call another Makefile located at <dir>
 -k Continue as much as possible after an error occurred.
--s Turns off printing of the makefile actions in the terminal
--r Tells the makefile to ignore any builtin rules
--j<number of threads> Allows parallel computation of makefile actions. Needs $(MAKE) to work properly.
--n Displays the commands the makefile would run without actually running them
---debug Displays the thinking process of the makefile before executing any targets
---no-print-directory Disables message printing of whenever the makefile enters or exits a directory
+-s Turns off printing of the Makefile actions in the terminal
+-r Tells the Makefile to ignore any builtin rules
+-j<number of threads> Allows parallel computation of Makefile actions. Needs $(MAKE) to work properly.
+-n Displays the commands the Makefile would run without actually running them
+--debug Displays the thinking process of the Makefile before executing any targets
+--no-print-directory Disables message printing of whenever the Makefile enters or exits a directory
 
 ## <a name="index-4">Makefile functions</a>
 
@@ -660,8 +958,8 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 
 ## <a name="index-4">Questions</a>
 ## <a name="index-4">General tips</a>
-- Group up common stuff: variables with variables, rules with rules. Mixing it up might turn your makefile confusing.
-- Comment your makefile and delimit different sections. If your Makefile is out of this world, you should comment it. Its good for you and the others.
+- Group up common stuff: variables with variables, rules with rules. Mixing it up might turn your Makefile confusing.
+- Comment your Makefile and delimit different sections. If your Makefile is out of this world, you should comment it. Its good for you and the others.
 - Want to silent commands, but not all of them? Write a '@' before each command to silent it.
 - You can append strings to variables by using the '+=' operator
 - As I said before, Makefiles have a wide use case range. You can create rules to avoid writing repeating and large commands, like valgrind.
@@ -736,12 +1034,3 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 -->
-
-## <a name="errors">Typical errors</a>
-> Still in development...
-
-## <a name="flags">Useful flags</a>
-> Coming soon...
-
-## <a name="tips">General tips</a>
-> Still in development...
