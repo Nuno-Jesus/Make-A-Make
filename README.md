@@ -40,8 +40,8 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 	</ul> -->
 	<li>Useful topics</li>
 	<ul style="list-style-type:disc">
+		<li><a href="#special-targets">Special Targets</a></li>
 		<li><a href="#flags">Makefile flags</a></li>
-		<li><a href="#builtin-targets">Builtin Targets</a></li>
 		<li><a href="#errors">Typical errors</a></li>
 	</ul>
 </ul>
@@ -619,7 +619,7 @@ $(NAME): $(OBJS)
 You can find the code in the [code/example-6](/code/example-6/) folder.
 This version does the same job as before. The main difference lies in the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second run, however, since the `project` file was created before, the dependency is fulfilled and the Makefile directly attempts to execute the `all` recipe. Since it's empty and no other recipes were run, you'll get this message:
 
-	make: Nothing to be done for 'all'.
+	make: Nothinsub-Makeg to be done for 'all'.
 
 And there you have it! I hope this beginner's guide cleared a bit of your doubts. If you're not a beginner (or don't want to be one anymore), I advise you to check the contents up ahead. Many of those might be useful to change and upgrade your Makefiles!
 
@@ -628,7 +628,59 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
-## <a name="flags"> Makefile flags</a>
+
+## Useful Topics
+
+I don't think those topics fit either in the beginner's guide or in the advanced topics. However, I think they are useful to know and can be used to improve your Makefiles.
+
+### <a href="#special-targets">Special Targets</a>
+There are a few special targets that can be used in a Makefile. These targets are not files but, rather commands that can be executed by the Makefile. Please note that these are not all the targets, but rather only the ones I use the most/are more useful.
+
+- `.SILENT` - Disables the default logging of Make actions in the terminal. If used with prerequisites, only those targets are executed silently.
+
+```Makefile
+.SILENT: all
+```
+
+Otherwise, if used without prerequisites, all targets are executed silently.
+
+```Makefile
+.SILENT:
+```
+
+- `.PHONY` - used to tell the Makefile to not confuse the names of the targets with filenames. For instance, if `clean` is considered phony...
+
+```Makefile
+.PHONY: clean
+```
+
+...the Make will always execute the `clean` rule, even if a file named `clean` exists.
+
+- `.DEFAULT_GOAL` - used to define what is the primary target of the Makefile. If not specified, the first target is chosen by default.
+
+```Makefile
+.DEFAULT_GOAL: clean
+```
+
+The example above would set the clean target to execute by default when running `make`.
+
+- `.NOTPARALLEL` - executes the Makefile in a single thread, even if the -j flag is used. If used with prerequisites, only those targets are executed sequentially.
+
+```Makefile
+.NOTPARALLEL: fclean
+```
+
+Otherwise, if used without prerequisites, all targets are executed sequentially.
+
+```Makefile
+.NOTPARALLEL:
+```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+
+### <a name="flags"> Makefile flags</a>
 
 - `-C <dir>` - used to recursively call another Makefile `<dir>`. The syntax is as follows: `make [target] -C <dir>`. The `target` field can be omitted You can find an example of this in the [code/example-7](/code/example-7).
 
@@ -699,7 +751,7 @@ OBJS = hello.o bye.o highfive.o
 </div>
 <br>
 
-- `-s` - Disables the default logging of Make actions in the terminal. For demonstration purposes, we're re-using the [code/example-6](/code/example-6) folder.
+- `-s` - Disables the default logging of Make actions in the terminal. Works just like the `.SILENT` special target/ For demonstration purposes, we're re-using the [code/example-6](/code/example-6) folder.
 
 ```shell
 ➜  example-6 git:(master) ✗ make       
@@ -867,8 +919,13 @@ cc main.c hello/hello.c
 </div>
 <br>
 
-## <a name="errors"> Typical errors</a>
+### <a name="errors"> Typical errors</a>
 > Still in development...
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
 
 ## 📞 **Contact me**
 Feel free to ask me any questions through Slack (**ncarvalh**).
