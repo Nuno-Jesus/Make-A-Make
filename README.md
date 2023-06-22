@@ -24,9 +24,8 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 			<li><a href="#index-7.4">7.4. Relinking</a></li>
 		</ul>
 	</ul>
-	<li>Advanced topics</li>
+	<!-- <li>Advanced topics</li>
 	<ul>
-		<li><a href="#builtin-targets">Builtin Targets</a></li>
 		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
 		<li><a href="#functions">Functions</a></li>
 		<li><a href="#command-line">Command line variables</a></li>
@@ -38,9 +37,13 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 		<li><a href="#variable-operators">Other variable related operators</a></li>
 		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
 		<li><a href="#general-tips">General tips</a></li>
+	</ul> -->
+	<li>Useful topics</li>
+	<ul style="list-style-type:disc">
+		<li><a href="#flags">Makefile flags</a></li>
+		<li><a href="#builtin-targets">Builtin Targets</a></li>
+		<li><a href="#errors">Typical errors</a></li>
 	</ul>
-	<li><a href="#flags">Useful flags</a></li>
-	<li><a href="#errors">Typical errors</a></li>
 </ul>
 
 
@@ -625,13 +628,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
-## <a name="index-8">Advanced Topics</a>
-> Still in development...
-
-## <a name="tips"> General tips</a>
-> Still in development...
-
-## <a name="flags"> Useful flags</a>
+## <a name="flags"> Makefile flags</a>
 
 - `-C <dir>` - used to recursively call another Makefile `<dir>`. The syntax is as follows: `make [target] -C <dir>`. The `target` field can be omitted You can find an example of this in the [code/example-7](/code/example-7).
 
@@ -653,6 +650,11 @@ cc -Wall -Werror -Wextra main.c hello/hello.c -o project
 
 When <code>make -C</code> is issued, it forces a directory change towards the sub-Make directory. After the sub-Make is done executing, the directory is changed back to the original Make to continue execution.
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
 - `-k` - Usually, when an error happens, the Make aborts execution immediately. Using this flag, the Make is forced to attempt executing further targets. If you need an error list, this flag is for you. You can find an example of this in the [code/example-8](/code/example-8).
 
 ```shell
@@ -668,9 +670,14 @@ make: *** No rule to make target 'bye.o', needed by 'project'.
 make: *** No rule to make target 'highfive.o', needed by 'project'.
 make: Target 'all' not remade because of errors.
 ➜  example-8 git:(master) ✗
-```  
+```
 
 Even though <code>bye.o</code> can not be remade, the Makefile attempts to fulfill the next pre-requisite, which also fails, not aborting execution though.
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
 
 - `-p` - Dumps the whole database of known variables and rules (both explicit and implicit). The output is quite extensive, so I'll only display a small portion of it. For demonstration purposes, we're re-using the [code/example-6](/code/example-6) folder.
 
@@ -686,6 +693,11 @@ OBJS = hello.o bye.o highfive.o
 ...
 ➜  example-6 git:(master) ✗
 ```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
 
 - `-s` - Disables the default logging of Make actions in the terminal. For demonstration purposes, we're re-using the [code/example-6](/code/example-6) folder.
 
@@ -703,6 +715,11 @@ cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o -o project
 ➜  example-6 git:(master) ✗
 ```
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
 - `-r` - Tells the Makefile to ignore any built-in rules. In the example below, we simply omit the rule for compiling C files. You can find an example of this in the [code/example-9](/code/example-9). 
 
 ```shell
@@ -719,6 +736,11 @@ make: *** No rule to make target 'hello.o', needed by 'project'.  Stop.
 ```
 
 Because we removed the explicit rule for compiling C files, the compilation must be done using an implicit rule. However, using the <code>-r</code>, all implicit rules are not considered, so there's no way of generating <code>hello.o</code>.
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
 
 - `-j [number of threads]` - Takes advantage of threads to speed up the Makefile execution. The number of threads is optional. You can find an example of this in the [code/example-10](/code/example-10).
 
@@ -774,7 +796,17 @@ The <code>time</code> command is only used to read the CPU load and execution ti
 
 > **Note:** When recursively calling make, the parallel computation is not imposed in sub-Makes unless you use the $(MAKE) variable. You also don't need to use the <code>-j</code> flag in the sub-Make, since you would launch N threads to each of the other previous N threads, which is not what you want.
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
 - `-n` - Displays the commands the Makefile would run without actually executing it.
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
 
 - `--debug` - Executes and displays how dependencies are resolved. For demonstration purposes, we're re-using the [code/example-9](/code/example-9) folder.
 
@@ -805,8 +837,12 @@ Successfully remade target file 'all'.
 ➜  example-9 git:(master) ✗
 ```
 
-- `--no-print-directory` Disables message printing whenever the Makefile enters or exits a directory. For demonstration purposes, we're re-using the [code/example-7](/code/example-7) folder.
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
 
+- `--no-print-directory` Disables message printing whenever the Makefile enters or exits a directory. For demonstration purposes, we're re-using the [code/example-7](/code/example-7) folder.
 
 ```shell
 ➜  example-7 git:(master) ✗ make
@@ -826,6 +862,11 @@ cc main.c hello/hello.c
 ➜  example-7 git:(master) ✗
 ```
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
 ## <a name="errors"> Typical errors</a>
 > Still in development...
 
@@ -838,7 +879,7 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 .SILENT: silences all the commands printed on the output
 .PHONY: used to tell the Makefile to not confuse the names of the targets with filenames. For instance, having a file called `hello`, should not enter in conflict with the `hello` rule
 .DEFAULT_GOAL: used to define what is the primary target of the Makefile. For instance, even if the clean rule is not the first, if defined in this macro, it will be executed when running solely 'make'.
-.NOT_PARALLEL: executes the Makefile in a single thread, even if the -j flag is used. If dependencies are specified, only those targets are executed sequentially.
+.NOTPARALLEL: executes the Makefile in a single thread, even if the -j flag is used. If dependencies are specified, only those targets are executed sequentially.
 
 ## <a name="index-4">The ifdef, ifndef, ifeq, ifneq directives</a>
 
