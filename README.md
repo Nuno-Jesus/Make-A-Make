@@ -619,7 +619,7 @@ $(NAME): $(OBJS)
 You can find the code in the [code/example-6](/code/example-6/) folder.
 This version does the same job as before. The main difference lies in the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second run, however, since the `project` file was created before, the dependency is fulfilled and the Makefile directly attempts to execute the `all` recipe. Since it's empty and no other recipes were run, you'll get this message:
 
-	make: Nothinsub-Makeg to be done for 'all'.
+	make: Nothing to be done for 'all'.
 
 And there you have it! I hope this beginner's guide cleared a bit of your doubts. If you're not a beginner (or don't want to be one anymore), I advise you to check the contents up ahead. Many of those might be useful to change and upgrade your Makefiles!
 
