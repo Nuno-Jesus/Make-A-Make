@@ -929,26 +929,9 @@ cc main.c hello/hello.c
 Feel free to ask me any questions through Slack (**ncarvalh**).
 
 <!--
-
-## <a name="index-4">Builtin target names</a> 
-.SILENT: silences all the commands printed on the output
-.PHONY: used to tell the Makefile to not confuse the names of the targets with filenames. For instance, having a file called `hello`, should not enter in conflict with the `hello` rule
-.DEFAULT_GOAL: used to define what is the primary target of the Makefile. For instance, even if the clean rule is not the first, if defined in this macro, it will be executed when running solely 'make'.
-.NOTPARALLEL: executes the Makefile in a single thread, even if the -j flag is used. If dependencies are specified, only those targets are executed sequentially.
-
 ## <a name="index-4">The ifdef, ifndef, ifeq, ifneq directives</a>
 
 ## <a name="index-4">Typical errors</a>
-
-## <a name="index-4">Useful flags</a>
--C <directory> Call another Makefile located at <dir>
--k Continue as much as possible after an error occurred.
--s Turns off printing of the Makefile actions in the terminal
--r Tells the Makefile to ignore any builtin rules
--j<number of threads> Allows parallel computation of Makefile actions. Needs $(MAKE) to work properly.
--n Displays the commands the Makefile would run without actually running them
---debug Displays the thinking process of the Makefile before executing any targets
---no-print-directory Disables message printing of whenever the Makefile enters or exits a directory
 
 ## <a name="index-4">Makefile functions</a>
 
