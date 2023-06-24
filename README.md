@@ -24,14 +24,14 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 			<li><a href="#index-7.4">7.4. Relinking</a></li>
 		</ul>
 	</ul>
-	<!-- <li>Advanced topics</li>
+	<li>Advanced topics</li>
 	<ul>
 		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
 		<li><a href="#functions">Functions</a></li>
 		<li><a href="#command-line">Command line variables</a></li>
 		<li><a href="#vpath">The vpath directive</a></li>
 	</ul>
-	<li>Tips and tricks</li>
+	<!-- <li>Tips and tricks</li>
 	<ul>
 		<li><a href="#organize-project">Organize your project with vpath</a></li>
 		<li><a href="#variable-operators">Other variable related operators</a></li>
@@ -127,7 +127,7 @@ re: fclean
 	$(MAKE) all
 ```
 
-> **Note**: $(MAKE) is a variable which expands to `make`. We'll see more about variables up ahead.
+> **Note**: `$(MAKE)` is a variable which expands to `make`. We'll see more about variables up ahead.
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
@@ -628,6 +628,8 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
+
+## Advanced Topics
 
 ## Useful Topics
 
