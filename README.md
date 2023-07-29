@@ -702,17 +702,31 @@ endif
 Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If all values are identical, the directive evaluates to true, false otherwise.
 
 For example:
+
+```Makefile
+VAR = Nuno
+
+all: 
+ifeq ($(VAR), 0)
+	@echo VAR=0.
+else ifeq ($(VAR), 1)
+	@echo VAR=1.
+else
+	@echo This not binary!
+endif
+```
 	
-<br>
-<br>
-	
-![ifeq example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/c2ae0d9a-bccc-4ff0-b50f-ccf8cfc5a9d2)
-<!-- IMAGE OF THE CODE IN MARKDOWN -->
+<!-- ![ifeq example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/c2ae0d9a-bccc-4ff0-b50f-ccf8cfc5a9d2)
+IMAGE OF THE CODE IN MARKDOWN -->
+
+<pre>
+VAR=0
+</pre>
 
 </details>
 
 <details open>
-	<summary>ifneq</summary>
+	<summary><h4>ifneq</h4></summary>
 
 <pre>
 ifneq (ARG1, ARG2)
@@ -722,35 +736,69 @@ endif
 Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If any of the inner values are diferent, the directive evaluates to true, false otherwise.
 
 For example:
-	
-<br>
 
-![ifneq example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/cff8f955-d411-4e9f-8187-6159ea6468b0)
+```Makefile
+VAR =
+
+all: 
+#Asserts if the variable is empty
+ifneq ($(VAR), 0)
+	@echo VAR=$(VAR).
+else
+	@echo VAR is empty.
+endif
+```
+
+<!-- ![ifneq example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/cff8f955-d411-4e9f-8187-6159ea6468b0) -->
 <!-- IMAGE OF THE CODE IN MARKDOWN -->
+
+<pre>
+VAR is empty.
+</pre>
 
 </details>
 
 <details open>
-	<summary>ifdef</summary>
+	<summary><h4>ifdef</h4></summary>
 
 <pre>
 ifdef VARIABLE-NAME
 	...
 endif
 </pre>
-Takes the name of a variable (not its value), altough it can receive a variable that expands to the name of another variable. If VARIABLE-NAME has an empty value, the conditional evaluates to true. Undefined variables have an empty value by default.
+
+Takes the name of a variable (not its value), altough it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` has an empty value, the conditional evaluates to true. Undefined variables have an empty value by default.
 
 For example:
-	
-<br>
 
-![ifdef example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/3be5e099-35ce-4a81-b51a-b8980b85d020)
+```Makefile
+VAR = Nuno
+
+all: 
+ifdef VAR
+	@echo VAR=$(VAR).
+else
+	@echo VAR is not defined.
+endif
+
+ifdef WHAT
+	@echo WHAT=$(WHAT).
+else
+	@echo WHAT is not defined.
+endif
+```
+<!-- ![ifdef example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/3be5e099-35ce-4a81-b51a-b8980b85d020) -->
 <!-- IMAGE OF THE CODE IN MARKDOWN -->
+
+<pre>
+VAR=Nuno
+WHAT is not defined.
+</pre>
 
 </details>
 
 <details open>
-	<summary>ifndef</summary>
+	<summary><h4>ifndef</h4></summary>
 <pre>
 ifndef VARIABLE-NAME
 	...
@@ -759,11 +807,22 @@ endif
 Takes the name of a variable (not its value), altough it can receive a variable that expands to the name of another variable. If VARIABLE-NAME has a non-empty value, the conditional evaluates to true.
 
 For example:
-	
-<br>
 
-![ifndef example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/ff6e563f-6110-4017-a482-aa2e465dda1b)
+```Makefile
+ifndef CFLAGS 
+	CFLAGS = -Wall -Werror -Wextra
+endif
+
+all:
+	@echo You are using CFLAGS=-Wall -Werror -Wextra
+```
+
+<!-- ![ifndef example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/ff6e563f-6110-4017-a482-aa2e465dda1b) -->
 <!-- IMAGE OF THE CODE IN MARKDOWN -->
+
+<pre>
+You are using CFLAGS=-Wall -Werror -Wextra
+</pre>
 	
 </details>
 
