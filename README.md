@@ -629,7 +629,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 </div>
 
 
-## Advanced Topics
+<!-- ## Advanced Topics -->
 
 ## Useful Topics
 
@@ -920,8 +920,42 @@ cc main.c hello/hello.c
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
-### <a name="errors"> Typical errors</a>
-> Still in development...
+### <a name="errors"> Good-to-know Errors</a>
+
+	Makefile: *** missing separator.  Stop.
+
+`make` is very strict when it comes to its syntax. Whether it's reading a rule, a variable assignment or a target, `make` looks for separators like `:`, `=` or tabulations. So probably you're missing one of those.
+
+	Makefile: *** missing separator (did you mean TAB instead of 8 spaces?).  Stop.
+
+This one is derived from the first. You can get this message if you're attempting to replace tabs with spaces.
+
+	make: *** No rule to make target X.  Stop.
+
+This is probably one of the most common errors. It means `make` was trying to build something called `X`, but couldn't find neither an explicit or implicit rule to do it. It can be caused due to a typo, wrong pattern matching rules (when using `%`), or missing files.
+
+	Makefile: *** recipe commences before first target.  Stop.
+
+This means that when `make` was trying to parse your Makefile, it found something that looks like a recipe but doesn't start with a target. Remember that rules must always have a target.
+
+	warning: overriding recipe for target 'X'
+
+Happens whenever you define 2 or more recipes for the same target. This will force `make` to override the previous recipes with the last one.
+
+	Circular X <- Y dependency dropped.
+
+This means `make` detected a loop when parsing pre-requisits of its rules. Supposing you have something like this...
+
+```Makefile
+	X: Y ...
+		...
+```
+
+... where `X` depends on `Y`. After tracing `Y` and its pre-requisits, the `make` reached a point where it found a target depending on `X`.
+
+	Unterminated variable reference. Stop.
+
+If you received this message, you're missing a parenthesis/brace when using a variable. Remember that the correct syntax to use a variables value is either `$(NAME)` or `${NAME}`.
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
