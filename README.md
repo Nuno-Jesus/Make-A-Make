@@ -701,11 +701,16 @@ endif
 </pre>
 Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If all values are identical, the directive evaluates to true, false otherwise.
 For example:
-
+	
+<br>
+<br>
+	
+![ifeq example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/c2ae0d9a-bccc-4ff0-b50f-ccf8cfc5a9d2)
 <!-- IMAGE OF THE CODE IN MARKDOWN -->
 
 
 </details>
+
 
 <details open>
 	<summary>ifneq</summary>
