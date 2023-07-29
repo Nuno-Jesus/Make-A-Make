@@ -25,11 +25,12 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 		</ul>
 	</ul>
 	<li>Advanced topics</li>
-	<ul>
-		<li><a href="#if-directives">The ifdef, ifndef, ifeq, ifneq directives</a></li>
-		<li><a href="#functions">Functions</a></li>
+	<ul style="list-style-type:disc">
+		<li><a href="#conditionals">Conditional Directives</a></li>
+		<!-- <li><a href="#functions">Functions</a></li>
 		<li><a href="#command-line">Command line variables</a></li>
-		<li><a href="#vpath">The vpath directive</a></li>
+		<li><a href="#command-line">Dinamically generate dependencies</a></li>
+		<li><a href="#vpath">The vpath directive</a></li> -->
 	</ul>
 	<!-- <li>Tips and tricks</li>
 	<ul>
@@ -41,13 +42,13 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 	<li>Useful topics</li>
 	<ul style="list-style-type:disc">
 		<li><a href="#special-targets">Special Targets</a></li>
-		<li><a href="#flags">Makefile flags</a></li>
-		<li><a href="#errors">Typical errors</a></li>
+		<li><a href="#flags">Makefile Flags</a></li>
+		<li><a href="#errors">Good-to-know Errors</a></li>
 	</ul>
 </ul>
 
 
-<!-- ------------------------------------------------------------------ -->
+------------------------------------------------------------------
 
 
 ## <a name="index-1">1. What is make?</a>
@@ -56,7 +57,7 @@ The `make` utility is an automatic tool capable of deciding which commands can /
 For this guide, we'll only dispose of a C project.
 
 
-<!-- ------------------------------------------------------------------ -->
+------------------------------------------------------------------
 
 
 ## <a name="index-2">2. An introduction to Makefiles</a>
@@ -72,7 +73,7 @@ Let's create a simple project to work with.
 
 You can find these files in the [code/start-example](/code/start-example/) folder.
 
-<!-- ------------------------------------------------------------------ -->
+------------------------------------------------------------------
 
 
 ## <a name="index-3">3. Rules</a>
@@ -134,7 +135,7 @@ re: fclean
 </div>
 
 
-<!-- ------------------------------------------------------------------ -->
+------------------------------------------------------------------
 
 
 ## <a name="index-4">4. A simple Makefile</a>
@@ -181,9 +182,6 @@ You should see something like this on the terminal:
 This is great! The compilation worked out and finally, we can execute our program and use our `hello` function! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
 
 
-<!-- ------------------------------------------------------------------ -->
-
-
 ## <a name="index-4.1">4.1. Dependencies and rules processing</a>
 Consider a portion of the previous Makefile:
 
@@ -221,7 +219,7 @@ Here's a summary:
 </div>
 
 
-<!-- ------------------------------------------------------------------ -->
+------------------------------------------------------------------
 
 
 ## <a name="index-5">5. Variables</a>
@@ -367,7 +365,7 @@ re: fclean
 </div>
 
 
-<!-- ------------------------------------------------------------------ -->
+------------------------------------------------------------------
 
 
 ## <a name="index-6">6. Automatic variables</a>
@@ -423,7 +421,7 @@ lib.a: hello.o bye.o highfive.o
 </div>
 
 
-<!-- ------------------------------------------------------------------ -->
+------------------------------------------------------------------
 
 
 ## <a name="index-7">7. Towards a more flexible Makefile</a>
@@ -433,9 +431,6 @@ We are reaching the end of the tutorial! This section is all about polishing wha
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
-
-<!-- ------------------------------------------------------------------ -->
-
 
 ### <a name="index-7.1">7.1. Removing more redundancy</a>
 Now that the basics are settled (at least they should be), let's have a look at some details. Noticed how the `rm -rf` and the `cc` commands are repeating? We can place them in variables:
@@ -491,9 +486,6 @@ fclean: clean
 </div>
 
 
-<!-- ------------------------------------------------------------------ -->
-
-
 ### <a name="index-7.2">7.2. Implicit Rules</a>
 Have you tried to remove the `%.o: %.c` rule and run `make`? You'll soon find the Makefile is still working. But how? Makefile has its own default rules defined for specific cases, like the ones you'll see below.
 You can define your own implicit rules by using pattern rules (just like we did before).
@@ -526,9 +518,6 @@ You can define your own implicit rules by using pattern rules (just like we did 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
-
-
-<!-- ------------------------------------------------------------------ -->
 
 
 ### <a name="index-7.3">7.3. Implicit Variables</a>
@@ -597,7 +586,7 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 </div>
 
 
-<!-- ------------------------------------------------------------------ -->
+------------------------------------------------------------------
 
 
 ### <a name="index-7.4">7.4. Relinking</a>
@@ -629,7 +618,77 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 </div>
 
 
-<!-- ## Advanced Topics -->
+------------------------------------------------------------------
+
+
+## Advanced Topics
+
+### <a name="conditionals">Conditional Directives</a>
+
+Conditionals are directives that `make` should obey or ignore, depending on variables values. Conditionals can use either the expanded values from variables, constant strings, or both.
+
+This is the general syntax for a conditional:
+
+```Makefile
+conditional-directive-one
+	text-if-one-is-true
+else conditional-directive-two
+	text-if-two-is-true
+...
+else
+	text-if-all-above-are-false
+endif
+```
+
+Consider the following example, saved on [code/11-conditionals-example](code/11-conditionals-example).
+
+```Makefile
+VAR1 = Nuno Miguel Carvalho de Jesus#The variable ends here
+VAR2 = Nuno Miguel Carvalho de Jesus #The variable ends here
+
+all:
+ifeq ($(VAR1), Nuno Miguel Carvalho de Jesus)
+	@echo "VAR1 contains my name"
+else
+	@echo "VAR1 does not contain my name"
+endif
+
+ifeq ($(VAR2), Nuno Miguel Carvalho de Jesus)
+	@echo "VAR2 contains my name"
+else
+	@echo "VAR2 does not contain my name"
+endif
+```
+
+> **Note**: The directives CANNOT be indented inside a recipe, otherwise `make` will consider those as commands and will attempt to execute them.
+
+We are currently making use of 3 directives:
+
+`ifeq` - compares the expanded value of the first field with the second one. If it evaluates to true, the nested block is added to the build.
+`else` - the lines below else are obeyed if the ifeq fails.
+`endif` - marks the end of the conditional.
+
+Output:
+```shell
+VAR1 contains my name
+VAR2 does not contain my name
+```
+
+Altough VAR1 and VAR2 contain pretty much the same, VAR2 ends in a space! It was more than enough to assert an inequality between the 2 values. Note that **trailing spaces are ignored, but leading spaces are not**.
+
+Conditionals determine which parts of the Makefile should be excluded or included before the building process begins. You can use conditionals to include/exclude commands of a recipe, change a variables value or even change which variables should be used in the build.
+
+Expansion of the values occurs as usual. Here's an animation that should help you get it right.
+
+<!-- POWERPOINT GIF OF THE CONDITIONALS DISAPPEARING AND LEAVING ONLY THE COMMANDS THEY SHOULD BE EXECUTING -->
+
+
+<!-- When used inside recipes they cannot be indented, otherwise 
+make will consider those as commands and try to execute them -->
+
+
+------------------------------------------------------------------
+
 
 ## Useful Topics
 
@@ -682,7 +741,11 @@ Otherwise, if used without prerequisites, all targets are executed sequentially.
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
-### <a name="flags"> Makefile flags</a>
+
+------------------------------------------------------------------
+
+
+### <a name="flags"> Makefile Flags</a>
 
 - `-C <dir>` - used to recursively call another Makefile `<dir>`. The syntax is as follows: `make [target] -C <dir>`. The `target` field can be omitted You can find an example of this in the [code/7-C-flag-example](/code/7-C-flag-example).
 
@@ -920,7 +983,11 @@ cc main.c hello/hello.c
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
 
-### <a name="errors"> Good-to-know Errors</a>
+
+------------------------------------------------------------------ 
+
+
+### <a name="errors">Good-to-know Errors</a>
 
 	Makefile: *** missing separator.  Stop.
 
@@ -957,9 +1024,17 @@ This means `make` detected a loop when parsing pre-requisits of its rules. Suppo
 
 If you received this message, you're missing a parenthesis/brace when using a variable. Remember that the correct syntax to use a variables value is either `$(NAME)` or `${NAME}`.
 
+	Makefile: *** missing 'endif'.  Stop.
+
+Self-explanatory, you forgot to add an `endif` directive to your conditional.
+
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
+
+
+------------------------------------------------------------------
+
 
 ## 📞 **Contact me**
 Feel free to ask me any questions through Slack (**ncarvalh**).
