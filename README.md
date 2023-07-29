@@ -640,29 +640,31 @@ else
 endif
 ```
 
-Conditionals either evaluate to true or false. In case a directive evaluates to false, the nested block inside is ignored. If followed by an `else` or `else if...` directive, those will be tried too.
+Conditionals either evaluate to true or false. In case a directive evaluates to false, the nested block inside is ignored. If followed by an `else` or `else if...` directive, those will be tried too. Otherwise, the nested block is executed.
+
+Also, conditionals must always end in an `endif` directive.
 
 Consider the following example, saved on [code/11-conditionals-example](code/11-conditionals-example).
 
 ```Makefile
-VAR1 = Nuno Miguel Carvalho de Jesus#The variable ends here
-VAR2 = Nuno Miguel Carvalho de Jesus #The variable ends here
+VAR1 = Nuno Jesus#The variable ends here
+VAR2 = Nuno Jesus #The variable ends here
 
 all:
-ifeq ($(VAR1), Nuno Miguel Carvalho de Jesus)
+ifeq ($(VAR1), Nuno Jesus)
 	@echo "VAR1 contains my name"
 else
 	@echo "VAR1 does not contain my name"
 endif
 
-ifeq ($(VAR2), Nuno Miguel Carvalho de Jesus)
+ifeq ($(VAR2), Nuno Jesus)
 	@echo "VAR2 contains my name"
 else
 	@echo "VAR2 does not contain my name"
 endif
 ```
 
-> **Warning**: The directives CANNOT be indented inside a recipe, otherwise `make` will consider those as commands and will attempt to execute them.
+> **Warning**: The directives **cannot** be indented inside a recipe, otherwise `make` will consider those as commands and will attempt to execute them.
 
 We are currently making use of 3 directives:
 
@@ -670,13 +672,15 @@ We are currently making use of 3 directives:
 `else` - if the `ifeq` directive evaluates to false, the lines below the `else` directive are obeyed.
 `endif` - marks the end of the conditional.
 
-Output:
+This outputs the following:
 ```shell
 VAR1 contains my name
 VAR2 does not contain my name
 ```
 
-Altough `VAR1` and `VAR2` are very similar, `VAR2` ends in a space! It was more than enough to assert an inequality between the 2 values. Note that **leading spaces are ignored, but trailing spaces are not**.
+Altough `VAR1` and `VAR2` are very similar, `VAR2` ends in a space! It was more than enough to assert an inequality between the 2 values. However, the first conditional evaluates to true, because all strings from VAR1 match the strings in the right field. Note that **leading whitespaces are ignored, but trailing spaces are not**.
+
+> **Note:** you can use the `strip` built-in makefile function to remove whitespaces.
 
 Conditionals determine which parts of the `Makefile` should be excluded or included before the building process begins. You can use conditionals to include/exclude commands of a recipe, change a variable's value or even change which variables should be used in the build.
 
@@ -686,9 +690,45 @@ Expansion of variables occurs as usual. Here's an animation that should help you
 
 > **Note:** quotes are only used to detail the extra space.
 
+There are 4 different conditional directives. Here's a list of all of them:
 
-<!-- When used inside recipes they cannot be indented, otherwise 
-make will consider those as commands and try to execute them -->
+<details open>
+	<summary><h4>ifeq</h4></summary>
+<pre>
+ifeq ($(ARG1), $(ARG2))
+	...
+endif
+</pre>
+Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If all values are identical, the directive evaluates to true, false otherwise.
+For example:
+
+<!-- IMAGE OF THE CODE IN MARKDOWN -->
+
+
+</details>
+
+<details open>
+	<summary>ifneq</summary>
+	
+</details>
+
+<details open>
+	<summary>ifdef</summary>
+	
+</details>
+
+<details open>
+	<summary>ifndef</summary>
+	
+</details>
+
+<!-- make evaluates conditionals when it reads a makefile. Consequently, you cannot use automatic variables in the tests of conditionals because they are not defined until recipes are run ( -->
+
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
 
 
 ------------------------------------------------------------------
