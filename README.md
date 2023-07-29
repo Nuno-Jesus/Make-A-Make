@@ -625,7 +625,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 
 ### <a name="conditionals">Conditional Directives</a>
 
-Conditionals are directives that `make` should obey or ignore, depending on variables values. Conditionals can use either the expanded values from variables, constant strings, or both.
+Conditionals are directives that `make` should obey or ignore, depending on string values. Conditionals can use either the expanded values from variables, constant strings, or both.
 
 This is the general syntax for a conditional:
 
@@ -665,7 +665,7 @@ endif
 We are currently making use of 3 directives:
 
 `ifeq` - compares the expanded value of the first field with the second one. If it evaluates to true, the nested block is added to the build.
-`else` - the lines below else are obeyed if the ifeq fails.
+`else` - if the `ifeq` directive evaluates to false, the lines below the `else` directive are obeyed.
 `endif` - marks the end of the conditional.
 
 Output:
@@ -674,11 +674,11 @@ VAR1 contains my name
 VAR2 does not contain my name
 ```
 
-Altough VAR1 and VAR2 contain pretty much the same, VAR2 ends in a space! It was more than enough to assert an inequality between the 2 values. Note that **trailing spaces are ignored, but leading spaces are not**.
+Altough `VAR1` and `VAR2` are very similar, `VAR2` ends in a space! It was more than enough to assert an inequality between the 2 values. Note that **leading spaces are ignored, but trailing spaces are not**.
 
-Conditionals determine which parts of the Makefile should be excluded or included before the building process begins. You can use conditionals to include/exclude commands of a recipe, change a variables value or even change which variables should be used in the build.
+Conditionals determine which parts of the `Makefile` should be excluded or included before the building process begins. You can use conditionals to include/exclude commands of a recipe, change a variable's value or even change which variables should be used in the build.
 
-Expansion of the values occurs as usual. Here's an animation that should help you get it right.
+Expansion of variables occurs as usual. Here's an animation that should help you get it right.
 
 <!-- POWERPOINT GIF OF THE CONDITIONALS DISAPPEARING AND LEAVING ONLY THE COMMANDS THEY SHOULD BE EXECUTING -->
 
