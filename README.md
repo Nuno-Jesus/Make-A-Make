@@ -692,7 +692,7 @@ Expansion of variables occurs as usual. Here's an animation that should help you
 
 There are 4 different conditional directives. Here's a list of all of them:
 
-<details open>
+<details>
 	<summary><h4>ifeq</h4></summary>
 <pre>
 ifeq (ARG1, ARG2)
@@ -722,12 +722,10 @@ IMAGE OF THE CODE IN MARKDOWN -->
 <pre>
 VAR=0
 </pre>
-
 </details>
 
-<details open>
+<details>
 	<summary><h4>ifneq</h4></summary>
-
 <pre>
 ifneq (ARG1, ARG2)
 	...
@@ -755,12 +753,10 @@ endif
 <pre>
 VAR is empty.
 </pre>
-
 </details>
 
-<details open>
+<details>
 	<summary><h4>ifdef</h4></summary>
-
 <pre>
 ifdef VARIABLE-NAME
 	...
@@ -794,10 +790,9 @@ endif
 VAR=Nuno
 WHAT is not defined.
 </pre>
-
 </details>
 
-<details open>
+<details>
 	<summary><h4>ifndef</h4></summary>
 <pre>
 ifndef VARIABLE-NAME
@@ -823,7 +818,6 @@ all:
 <pre>
 You are using CFLAGS=-Wall -Werror -Wextra
 </pre>
-	
 </details>
 
 <!-- make evaluates conditionals when it reads a makefile. Consequently, you cannot use automatic variables in the tests of conditionals because they are not defined until recipes are run ( -->
