@@ -709,20 +709,8 @@ For example:
 ![ifeq example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/c2ae0d9a-bccc-4ff0-b50f-ccf8cfc5a9d2)
 <!-- IMAGE OF THE CODE IN MARKDOWN -->
 
-
 </details>
 
-```Makefile
-VAR =
-
-all:
-# Asserts if the variable is empty
-ifneq ($(VAR),)
-	@echo VAR=$(VAR).
-else
-	@echo "VAR is empty."
-endif
-```
 <details open>
 	<summary>ifneq</summary>
 
@@ -736,29 +724,12 @@ Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If any 
 For example:
 	
 <br>
-<br>
-	
-<!-- IMAGE OF THE CODE IN MARKDOWN -->
 
+![ifneq example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/cff8f955-d411-4e9f-8187-6159ea6468b0)
+<!-- IMAGE OF THE CODE IN MARKDOWN -->
 
 </details>
 
-```Makefile
-VAR = Nuno
-
-all:
-ifdef VAR
-	@echo VAR=$(VAR).
-else
-	@echo "VAR is not defined."
-endif
-
-ifdef WHAT
-	@echo WHAT=$(WHAT).
-else
-	@echo "WHAT is not defined."
-endif
-```
 <details open>
 	<summary>ifdef</summary>
 
@@ -772,20 +743,12 @@ Takes the name of a variable (not its value), altough it can receive a variable 
 For example:
 	
 <br>
-<br>
-	
+
+![ifdef example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/3be5e099-35ce-4a81-b51a-b8980b85d020)
 <!-- IMAGE OF THE CODE IN MARKDOWN -->
 
 </details>
 
-```Makefile
-ifndef CFLAGS
-	CFLAGS = -Wall -Werror -Wextra
-endif
-
-all:
-	echo You are using CFLAGS="$(CFLAGS)"
-```
 <details open>
 	<summary>ifndef</summary>
 <pre>
@@ -798,8 +761,8 @@ Takes the name of a variable (not its value), altough it can receive a variable 
 For example:
 	
 <br>
-<br>
-	
+
+![ifndef example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/ff6e563f-6110-4017-a482-aa2e465dda1b)
 <!-- IMAGE OF THE CODE IN MARKDOWN -->
 	
 </details>
