@@ -695,11 +695,12 @@ There are 4 different conditional directives. Here's a list of all of them:
 <details open>
 	<summary><h4>ifeq</h4></summary>
 <pre>
-ifeq ($(ARG1), $(ARG2))
+ifeq (ARG1, ARG2)
 	...
 endif
 </pre>
 Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If all values are identical, the directive evaluates to true, false otherwise.
+
 For example:
 	
 <br>
@@ -711,19 +712,95 @@ For example:
 
 </details>
 
+```Makefile
+VAR =
 
+all:
+# Asserts if the variable is empty
+ifneq ($(VAR),)
+	@echo VAR=$(VAR).
+else
+	@echo "VAR is empty."
+endif
+```
 <details open>
 	<summary>ifneq</summary>
+
+<pre>
+ifneq (ARG1, ARG2)
+	...
+endif
+</pre>
+Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If any of the inner values are diferent, the directive evaluates to true, false otherwise.
+
+For example:
 	
+<br>
+<br>
+	
+<!-- IMAGE OF THE CODE IN MARKDOWN -->
+
+
 </details>
 
+```Makefile
+VAR = Nuno
+
+all:
+ifdef VAR
+	@echo VAR=$(VAR).
+else
+	@echo "VAR is not defined."
+endif
+
+ifdef WHAT
+	@echo WHAT=$(WHAT).
+else
+	@echo "WHAT is not defined."
+endif
+```
 <details open>
 	<summary>ifdef</summary>
+
+<pre>
+ifdef VARIABLE-NAME
+	...
+endif
+</pre>
+Takes the name of a variable (not its value), altough it can receive a variable that expands to the name of another variable. If VARIABLE-NAME has an empty value, the conditional evaluates to true. Undefined variables have an empty value by default.
+
+For example:
 	
+<br>
+<br>
+	
+<!-- IMAGE OF THE CODE IN MARKDOWN -->
+
 </details>
 
+```Makefile
+ifndef CFLAGS
+	CFLAGS = -Wall -Werror -Wextra
+endif
+
+all:
+	echo You are using CFLAGS="$(CFLAGS)"
+```
 <details open>
 	<summary>ifndef</summary>
+<pre>
+ifndef VARIABLE-NAME
+	...
+endif
+</pre>
+Takes the name of a variable (not its value), altough it can receive a variable that expands to the name of another variable. If VARIABLE-NAME has a non-empty value, the conditional evaluates to true.
+
+For example:
+	
+<br>
+<br>
+	
+<!-- IMAGE OF THE CODE IN MARKDOWN -->
 	
 </details>
 
