@@ -640,6 +640,8 @@ else
 endif
 ```
 
+Conditionals either evaluate to true or false. In case a directive evaluates to false, the nested block inside is ignored. If followed by an `else` or `else if...` directive, those will be tried too.
+
 Consider the following example, saved on [code/11-conditionals-example](code/11-conditionals-example).
 
 ```Makefile
@@ -660,7 +662,7 @@ else
 endif
 ```
 
-> **Note**: The directives CANNOT be indented inside a recipe, otherwise `make` will consider those as commands and will attempt to execute them.
+> **Warning**: The directives CANNOT be indented inside a recipe, otherwise `make` will consider those as commands and will attempt to execute them.
 
 We are currently making use of 3 directives:
 
@@ -681,7 +683,8 @@ Conditionals determine which parts of the `Makefile` should be excluded or inclu
 Expansion of variables occurs as usual. Here's an animation that should help you get it right.
 
 ![Conditionals](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/0c23ea0e-d3f3-4cc6-85fb-872fd86126b0)
-<!-- POWERPOINT GIF OF THE CONDITIONALS DISAPPEARING AND LEAVING ONLY THE COMMANDS THEY SHOULD BE EXECUTING -->
+
+> **Note:** quotes are only used to detail the extra space.
 
 
 <!-- When used inside recipes they cannot be indented, otherwise 
@@ -1000,7 +1003,7 @@ This one is derived from the first. You can get this message if you're attemptin
 
 	make: *** No rule to make target X.  Stop.
 
-This is probably one of the most common errors. It means `make` was trying to build something called `X`, but couldn't find neither an explicit or implicit rule to do it. It can be caused due to a typo, wrong pattern matching rules (when using `%`), or missing files.
+This is probably one of the most common errors. It means `make` was trying to build something called `X`, but couldn't find neither an explicit nor implicit rule to do it. It can be caused due to a typo, wrong pattern matching rules (when using `%`), or missing files.
 
 	Makefile: *** recipe commences before first target.  Stop.
 
@@ -1012,18 +1015,18 @@ Happens whenever you define 2 or more recipes for the same target. This will for
 
 	Circular X <- Y dependency dropped.
 
-This means `make` detected a loop when parsing pre-requisits of its rules. Supposing you have something like this...
+This means `make` detected a loop when parsing the prerequisites of its rules. Supposing you have something like this...
 
 ```Makefile
 	X: Y ...
 		...
 ```
 
-... where `X` depends on `Y`. After tracing `Y` and its pre-requisits, the `make` reached a point where it found a target depending on `X`.
+... where `X` depends on `Y`. After tracing `Y` and its prerequisites, the `make` reached a point where it found a target depending on `X`.
 
 	Unterminated variable reference. Stop.
 
-If you received this message, you're missing a parenthesis/brace when using a variable. Remember that the correct syntax to use a variables value is either `$(NAME)` or `${NAME}`.
+If you received this message, you're missing a parenthesis/brace when using a variable. Remember that the correct syntax to use a variable's value is either `$(NAME)` or `${NAME}`.
 
 	Makefile: *** missing 'endif'.  Stop.
 
