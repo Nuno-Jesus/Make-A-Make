@@ -680,6 +680,7 @@ Conditionals determine which parts of the `Makefile` should be excluded or inclu
 
 Expansion of variables occurs as usual. Here's an animation that should help you get it right.
 
+![Conditionals](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/0c23ea0e-d3f3-4cc6-85fb-872fd86126b0)
 <!-- POWERPOINT GIF OF THE CONDITIONALS DISAPPEARING AND LEAVING ONLY THE COMMANDS THEY SHOULD BE EXECUTING -->
 
 
