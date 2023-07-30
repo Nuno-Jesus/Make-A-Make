@@ -128,7 +128,8 @@ re: fclean
 	$(MAKE) all
 ```
 
-> **Note**: `$(MAKE)` is a variable which expands to `make`. We'll see more about variables up ahead.
+> **Note**
+> `$(MAKE)` is a variable which expands to `make`. We'll see more about variables up ahead.
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
@@ -237,7 +238,8 @@ LAST_NAMES  = Carvalho de Jesus
 FULL_NAME   = $(FIRST_NAMES) $(LAST_NAMES) # Nuno Miguel Carvalho de Jesus
 ```
 
-> **Note**: the naming convention for variables is uppercase, to distinguish from Makefile rules.
+> **Note**
+> The naming convention for variables is uppercase, to distinguish from Makefile rules.
 
 You can use variables in rules and other variables as well. To access their values, you must use:
 
@@ -293,7 +295,8 @@ clean:
 ...
 ```
 
-> **Note**: have you have ever run `make -p > logs` ? Neither did I, but it's pretty useful! Detailed explanation on this in an upcoming section.
+> **Note**
+> Have you have ever run `make -p > logs` ? Neither did I, but it's pretty useful! Detailed explanation on this in an upcoming section.
 
 Ok, pause. I know this is a lot to take in. Let's look into the details.When running `make`:
 
@@ -479,7 +482,8 @@ fclean: clean
 
 ```
 
-> **Note**: The `-o` flag signals the compiler, to specify the name the executable will have.
+> **Note**
+> The `-o` flag signals the compiler, to specify the name the executable will have.
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
@@ -664,7 +668,8 @@ else
 endif
 ```
 
-> **Warning**: The directives **cannot** be indented inside a recipe, otherwise `make` will consider those as commands and will attempt to execute them.
+> **Warning**
+> The directives **cannot** be indented inside a recipe, otherwise `make` will consider those as commands and will attempt to execute them.
 
 We are currently making use of 3 directives:
 
@@ -678,9 +683,10 @@ VAR1 contains my name
 VAR2 does not contain my name
 ```
 
-Altough `VAR1` and `VAR2` are very similar, `VAR2` ends in a space! It was more than enough to assert an inequality between the 2 values. However, the first conditional evaluates to true, because all strings from VAR1 match the strings in the right field. Note that **leading whitespaces are ignored, but trailing spaces are not**.
+Although `VAR1` and `VAR2` are very similar, `VAR2` ends in space! It was more than enough to assert an inequality between the 2 values. However, the first conditional evaluates to true, because all strings from VAR1 match the strings in the right field. Note that **leading whitespaces are ignored, but trailing spaces are not**.
 
-> **Note:** you can use the `strip` built-in makefile function to remove whitespaces.
+> **Note**
+> You can use the `strip` built-in makefile function to remove whitespaces.
 
 Conditionals determine which parts of the `Makefile` should be excluded or included before the building process begins. You can use conditionals to include/exclude commands of a recipe, change a variable's value or even change which variables should be used in the build.
 
@@ -688,7 +694,8 @@ Expansion of variables occurs as usual. Here's an animation that should help you
 
 ![Conditionals](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/0c23ea0e-d3f3-4cc6-85fb-872fd86126b0)
 
-> **Note:** quotes are only used to detail the extra space.
+> **Note**
+> Quotes are only used to detail the extra space.
 
 There are 4 different conditional directives. Here's a list of all of them:
 
@@ -704,7 +711,7 @@ Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If all 
 For example:
 
 ```Makefile
-VAR = Nuno
+VAR = 0
 
 all: 
 ifeq ($(VAR), 0)
@@ -715,9 +722,6 @@ else
 	@echo This not binary!
 endif
 ```
-	
-<!-- ![ifeq example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/c2ae0d9a-bccc-4ff0-b50f-ccf8cfc5a9d2)
-IMAGE OF THE CODE IN MARKDOWN -->
 
 <pre>
 VAR=0
@@ -731,7 +735,7 @@ ifneq (ARG1, ARG2)
 	...
 endif
 </pre>
-Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If any of the inner values are diferent, the directive evaluates to true, false otherwise.
+Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If any of the inner values are different, the directive evaluates to true or false otherwise.
 
 For example:
 
@@ -747,9 +751,6 @@ else
 endif
 ```
 
-<!-- ![ifneq example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/cff8f955-d411-4e9f-8187-6159ea6468b0) -->
-<!-- IMAGE OF THE CODE IN MARKDOWN -->
-
 <pre>
 VAR is empty.
 </pre>
@@ -763,7 +764,7 @@ ifdef VARIABLE-NAME
 endif
 </pre>
 
-Takes the name of a variable (not its value), altough it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` has an empty value, the conditional evaluates to true. Undefined variables have an empty value by default.
+Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` has an empty value, the conditional evaluates to true. Undefined variables have an empty value by default.
 
 For example:
 
@@ -783,8 +784,6 @@ else
 	@echo WHAT is not defined.
 endif
 ```
-<!-- ![ifdef example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/3be5e099-35ce-4a81-b51a-b8980b85d020) -->
-<!-- IMAGE OF THE CODE IN MARKDOWN -->
 
 <pre>
 VAR=Nuno
@@ -799,7 +798,7 @@ ifndef VARIABLE-NAME
 	...
 endif
 </pre>
-Takes the name of a variable (not its value), altough it can receive a variable that expands to the name of another variable. If VARIABLE-NAME has a non-empty value, the conditional evaluates to true.
+Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If VARIABLE-NAME has a non-empty value, the conditional evaluates to true.
 
 For example:
 
@@ -811,9 +810,6 @@ endif
 all:
 	@echo You are using CFLAGS=-Wall -Werror -Wextra
 ```
-
-<!-- ![ifndef example](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/ff6e563f-6110-4017-a482-aa2e465dda1b) -->
-<!-- IMAGE OF THE CODE IN MARKDOWN -->
 
 <pre>
 You are using CFLAGS=-Wall -Werror -Wextra
@@ -1053,7 +1049,8 @@ make -j  0.12s user 0.06s system 235% cpu 0.076 total
 
 The <code>time</code> command is only used to read the CPU load and execution time.
 
-> **Note:** When recursively calling make, the parallel computation is not imposed in sub-Makes unless you use the `$(MAKE)` variable. You also don't need to use the <code>-j</code> flag in the sub-Make, since you would launch N more threads, which you don't really need to.
+> **Note**
+> When recursively calling make, the parallel computation is not imposed in sub-Makes unless you use the `$(MAKE)` variable. You also don't need to use the <code>-j</code> flag in the sub-Make, since you would launch N more threads, which you don't really need to.
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
