@@ -26,10 +26,10 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 	</ul>
 	<li>Advanced topics</li>
 	<ul style="list-style-type:disc">
-		<li><a href="#conditionals">Conditional Directives</a></li>
+		<li><a href="#conditionals">A1 - Conditional Directives</a></li>
+		<li><a href="#mmd-flag">A2 - The MMD flag</a></li>
 		<!-- <li><a href="#functions">Functions</a></li>
 		<li><a href="#command-line">Command line variables</a></li>
-		<li><a href="#command-line">Dinamically generate dependencies</a></li>
 		<li><a href="#vpath">The vpath directive</a></li> -->
 	</ul>
 	<!-- <li>Tips and tricks</li>
@@ -627,7 +627,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 
 ## Advanced Topics
 
-### <a name="conditionals">Conditional Directives</a>
+### <a name="conditionals">A1 - Conditional Directives</a>
 
 Conditionals are directives that `make` should obey or ignore, depending on string values. Conditionals can use either the expanded values from variables, constant strings, or both.
 
@@ -815,6 +815,163 @@ all:
 You are using CFLAGS=-Wall -Werror -Wextra
 </pre>
 </details>
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
+
+------------------------------------------------------------------
+
+
+### <a href="#mmd-flag">A2 - The MMD flag</a>
+
+Most likely, your Makefile was designed to remake whenever a `.c` file changes. But what if a `.h` changes?
+
+Consider this file tree, saved on [code/12-headers-example/](code/12-headers-example/)...
+
+12-headers-example
+	├── header.h 
+	├── main.c
+	└── Makefile
+
+where `header.h` and `main.c` are displayed below.
+
+```C
+// header.h
+#ifndef HEADER_H
+# define HEADER_H
+# include <stdio.h>
+
+# define NUMBER 42
+
+#endif
+```
+
+```C
+// main.c
+#include "header.h"
+
+int main()
+{
+	printf("This is the number: %d\n", NUMBER);
+	return 0;
+}
+```
+
+The Makefile is initially designed like this:
+
+```Makefile
+##################### Compilation Variables #####################
+CC      	= cc
+CFLAGS		= -Wall -Werror -Wextra
+
+######################## Commands Variables #######################
+RM      	= rm -rf
+
+######################## Files Variables #######################
+NAME		= a.out
+OBJS		= main.o
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+
+clean:
+	$(RM) $(OBJS)
+
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean
+	$(MAKE) all
+```
+
+Running `make` builds `a.out`, which outputs the following when executed:
+
+```sh
+This is the number: 42
+```
+
+What if you were to change the `NUMBER` macro to `24`? Have you tried to `make` and run `a.out` after? For your surprise, the output is exacly the same. Why?
+
+Well, as I explained in section [4.2](#index-4), `make` will remake a target if it notices its dependencies have a newer version. So, our Makefile cannot rely on the depencies it doesn't know about, like `header.h`, considering the `$(NAME)` target up-to-date.
+
+One naive solution would be to add `header.h` as dependency to `$(NAME)`:
+
+```Makefile
+...
+######################## Files Variables #######################
+NAME		= a.out
+OBJS		= main.o
+HEADERS		= header.h
+
+all: $(NAME)
+
+$(NAME): $(OBJS) $(HEADERS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+...
+```
+
+Although this fix solves the issue, its too good to be true. We have yet another issue.
+
+- Changing `header.h` only forces the final linking of all object files, but it won't force recompilation of `.c` files:
+
+```sh
+cc  -Wall -Werror -Wextra main.o -o a.out
+```
+
+We could manually add a rule that specifies what files `main.o` depends on, which also solves the issue, but this is not very scalable.
+
+To automate this process, we can use the `-MMD` compilation flag which generates a micro-makefile in a `.d` file for each `.c`.
+
+By adding `-MMD` and running `make`, ...
+
+```Makefile
+##################### Compilation Variables #####################
+CC      	= cc
+CFLAGS		= -Wall -Werror -Wextra
+CPPFLAGS	= -MMD
+
+...
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(OBJS) -o $(NAME)
+...
+```
+
+...`main.d` is generated, with the following contents:
+
+```Makefile
+main.o: main.c header.h
+```
+
+Great! Now, we just need to **include** the `.d` files in our Makefile. You can use the `include` directive:
+
+```Makefile
+...
+
+######################## Files Variables #######################
+NAME		= a.out
+OBJS		= main.o
+DEPS		= $(OBJS:.o=.d)
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(OBJS) -o $(NAME)
+
+-include $(DEPS)
+
+...
+```
+
+Here's an animation of the whole process
+
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
