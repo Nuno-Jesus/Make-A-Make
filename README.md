@@ -644,7 +644,7 @@ else
 endif
 ```
 
-Conditionals either evaluate to true or false. In case a directive evaluates to false, the nested block inside is ignored. If followed by an `else` or `else if...` directive, those will be tried too. Otherwise, the nested block is executed.
+Just like in `C`, conditionals either evaluate to true or false. In the block above, if `conditional-directive-one` is true, `text-if-one-is-true` is executed, and the rest is ignored. Otherwise, the second conditional is tested and so on, until reaching the `else` directive (may be present or not). 
 
 Also, conditionals must always end in an `endif` directive.
 
@@ -673,7 +673,7 @@ endif
 
 We are currently making use of 3 directives:
 
-`ifeq` - compares the expanded value of the first field with the second one. If it evaluates to true, the nested block is added to the build.
+`ifeq` - after expansion of `VAR1`, compares all the inner strings. If it evaluates to true, the nested block is added to the build.
 `else` - if the `ifeq` directive evaluates to false, the lines below the `else` directive are obeyed.
 `endif` - marks the end of the conditional.
 
@@ -690,14 +690,14 @@ Although `VAR1` and `VAR2` are very similar, `VAR2` ends in space! It was more t
 
 Conditionals determine which parts of the `Makefile` should be excluded or included before the building process begins. You can use conditionals to include/exclude commands of a recipe, change a variable's value or even change which variables should be used in the build.
 
-Expansion of variables occurs as usual. Here's an animation that should help you get it right.
+Expansion of variables occurs as usual. However, automatic variables cannot be used to test conditionals, since their values are only known in the building process. Here's an animation that should help you get it right.
 
 ![Conditionals](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/0c23ea0e-d3f3-4cc6-85fb-872fd86126b0)
 
 > **Note**
 > Quotes are only used to detail the extra space.
 
-There are 4 different conditional directives. Here's a list of all of them:
+There are 4 different conditional directives. Here's a list:
 
 <details>
 	<summary><h4>ifeq</h4></summary>
@@ -706,7 +706,7 @@ ifeq (ARG1, ARG2)
 	...
 endif
 </pre>
-Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If all values are identical, the directive evaluates to true, false otherwise.
+Both <code>ARG1</code> and <code>ARG2</code> are expanded. If all strings are identical, the directive evaluates to true - false otherwise.
 
 For example:
 
@@ -735,7 +735,7 @@ ifneq (ARG1, ARG2)
 	...
 endif
 </pre>
-Both <code>ARG1</code> and <code>ARG2</code> are expanded to its values. If any of the inner values are different, the directive evaluates to true or false otherwise.
+Both <code>ARG1</code> and <code>ARG2</code> are expanded. If any of the strings is different, the directive evaluates to true - false otherwise.
 
 For example:
 
@@ -744,7 +744,7 @@ VAR =
 
 all: 
 #Asserts if the variable is empty
-ifneq ($(VAR), 0)
+ifneq ($(VAR),)
 	@echo VAR=$(VAR).
 else
 	@echo VAR is empty.
@@ -764,7 +764,7 @@ ifdef VARIABLE-NAME
 endif
 </pre>
 
-Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` has an empty value, the conditional evaluates to true. Undefined variables have an empty value by default.
+Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` has a non-empty value, the conditional evaluates to true - false otherwise. **Undefined variables have an empty value by default.**
 
 For example:
 
@@ -798,7 +798,7 @@ ifndef VARIABLE-NAME
 	...
 endif
 </pre>
-Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If VARIABLE-NAME has a non-empty value, the conditional evaluates to true.
+Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If VARIABLE-NAME has an empty value, the conditional evaluates to true.
 
 For example:
 
@@ -815,9 +815,6 @@ all:
 You are using CFLAGS=-Wall -Werror -Wextra
 </pre>
 </details>
-
-<!-- make evaluates conditionals when it reads a makefile. Consequently, you cannot use automatic variables in the tests of conditionals because they are not defined until recipes are run ( -->
-
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
@@ -1138,7 +1135,7 @@ This one is derived from the first. You can get this message if you're attemptin
 
 	make: *** No rule to make target X.  Stop.
 
-This is probably one of the most common errors. It means `make` was trying to build something called `X`, but couldn't find neither an explicit nor implicit rule to do it. It can be caused due to a typo, wrong pattern matching rules (when using `%`), or missing files.
+This is probably one of the most common errors. It means `make` was trying to build something called `X`, but couldn't find an explicit or implicit rule to do so. It can be caused due to a typo, wrong pattern matching rules (when using `%`), or missing files.
 
 	Makefile: *** recipe commences before first target.  Stop.
 
@@ -1179,10 +1176,6 @@ Self-explanatory, you forgot to add an `endif` directive to your conditional.
 Feel free to ask me any questions through Slack (**ncarvalh**).
 
 <!--
-## <a name="index-4">The ifdef, ifndef, ifeq, ifneq directives</a>
-
-## <a name="index-4">Typical errors</a>
-
 ## <a name="index-4">Makefile functions</a>
 
 ## <a name="index-4">Command line variables</a>
@@ -1201,67 +1194,6 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 - Avoid repetition. Use functions when you can
 
 - In this Makefile, what does the $(SRCS:.c=.o) do?
-
-
-## <a name="index-4">Glossary</a>
-
-<details>
-	<summary>A</summary>
-	<ul>
-		<li><strong>Automatic Variable</strong> - </li>
-	</ul>
-</details>
-<details>
-	<summary>D</summary>
-	<ul>
-		<li><strong>Dependency</strong> - </li>
-	</ul>
-</details>
-<details>
-	<summary>E</summary>
-	<ul>
-		<li><strong>Expansion</strong> - </li>
-	</ul>
-</details>
-<details>
-	<summary>F</summary>
-	<ul>
-		<li><strong>Flag</strong> - </li>
-	</ul>
-</details>
-<details>
-	<summary>P</summary>
-	<ul>
-		<li><strong>Pre-requisit</strong> - </li>
-	</ul>
-</details>
-<details>
-	<summary>R</summary>
-	<ul>
-		<li><strong>Recipe</strong> - </li>
-	</ul>
-	<ul>
-		<li><strong>Regular Expression</strong> - </li>
-	</ul>
-	<ul>
-		<li><strong>Re-linking</strong> - </li>
-	</ul>
-	<ul>
-		<li><strong>Rule</strong> - </li>
-	</ul>
-</details>
-<details>
-	<summary>T</summary>
-	<ul>
-		<li><strong>Target</strong> - </li>
-	</ul>
-</details>
-<details>
-	<summary>V</summary>
-	<ul>
-		<li><strong>Variable</strong> - </li>
-	</ul>
-</details>
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
