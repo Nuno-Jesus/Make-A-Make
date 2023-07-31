@@ -1289,7 +1289,7 @@ These are the directories: foo.c bar.c baz.c
 $(addprefix prefix,names…)
 ```
 
-For each reference in `names`, appends a prefix to it. The final result is the prefix concatenated with each reference, separated by a space between each final reference.
+For each reference in `names`, it appends `prefix` to it. The final result is the prefix concatenated with each reference, separated by a space between each final reference.
 
 Here's an example ([code/22-addprefix-example](code/22-addprefix-example)):
 
@@ -1309,6 +1309,35 @@ Final paths: sources/foo.c sources/bar.c sources/baz.c
 ```
 
 </details>
+
+
+<details>
+	<summary><h4>addsuffix</h4> - appends a suffix to strings</summary>
+
+```
+$(addsuffix suffix,names…)
+```
+
+For each reference in `names`, it appends `suffix` to it. The final result is the suffix concatenated with each reference, separated by a space between each final reference.
+
+Here's an example ([code/23-addsuffix-example](code/23-addsuffix-example)):
+
+```Makefile
+FILES = foo bar baz
+
+all:
+	echo Final object files: $(addsuffix .o, $(FILES))
+.SILENT:
+```
+
+Output:
+
+```
+Final object files: foo.o bar.o baz.o
+```
+
+</details>
+
 
 <!-- 
 	Functions for file names
