@@ -1195,13 +1195,34 @@ Result=
 ```
 
 </details>
+<details>
+	<summary><h4>words</h4> - counts the number of words</summary>
+
+```
+$(words text)
+```
+
+Counts the number of words in `text`.
+
+Here's an example ([code/19-words-example](code/19-words-example)):
+
+```Makefile
+VAR = This is a very large string
+
+all:
+	echo VAR has $(words $(VAR)) words
+.SILENT:
+```
+
+Output:
+
+```
+VAR has 6 words
+```
+
+</details>
 
 <!-- 
-	Functions for strings manipulation
-	
-	$(filter pattern…,text)
-	$(words text)
-
 	Functions for file names
 	$(dir names…)
 	$(notdir names…)
