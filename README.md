@@ -685,10 +685,8 @@ endif
 We are currently making use of 3 directives:
 
 `ifeq` - after expansion of `VAR1`, compares all the inner strings with the right field. If any string dont't match, the comparison is evaluated to false.
-
-`else` - if the `ifeq` directive evaluates to false, the lines below the `else` directive are obeyed.
-
-`endif` - marks the end of the conditional.
+- `else` - if the `ifeq` directive evaluates to false, the lines below the `else` directive are obeyed.
+- `endif` - marks the end of the conditional.
 
 This outputs the following:
 ```shell
@@ -696,10 +694,10 @@ VAR1 contains my name
 VAR2 does not contain my name
 ```
 
-Although `VAR1` and `VAR2` are very similar, `VAR2` ends in space! It was more than enough to assert an inequality between the 2 values. However, the first conditional evaluates to true, because all strings from `VAR1` match the strings on the right side. Note that **leading whitespaces are ignored, but trailing spaces are not**.
+Although `VAR1` and `VAR2` are very similar, `VAR2` ends in space! It was more than enough to assert an inequality between the 2 values. On the other hand, the first conditional evaluates to true, because all strings from `VAR1` match the strings on the right side. Note that **leading whitespaces are ignored, but trailing spaces are not**.
 
 > **Note**
-> You can use the `strip` built-in makefile function to remove whitespaces.
+> You can use the `strip` built-in makefile function to remove extra whitespaces.
 
 Conditionals determine which parts of the `Makefile` should be excluded or included before the building process begins.
 
@@ -738,6 +736,8 @@ else
 endif
 ```
 
+Output: 
+
 <pre>
 VAR=0
 </pre>
@@ -765,6 +765,8 @@ else
 	@echo $(VAR1) = $(VAR2)
 endif
 ```
+
+Output:
 
 <pre>
 1 2 3 4 5 != 1 2 3 4 0
@@ -800,6 +802,8 @@ else
 endif
 ```
 
+Output:
+
 <pre>
 VAR=Nuno
 WHAT is not defined.
@@ -814,7 +818,7 @@ ifndef VARIABLE-NAME
 endif
 </pre>
 
-Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` is an empty string, the conditional evaluates to true.
+Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` is an empty string, the conditional evaluates to true. **Undefined variables have an empty value by default.**
 
 For example:
 
@@ -826,6 +830,8 @@ endif
 all:
 	@echo You are using CFLAGS=-Wall -Werror -Wextra
 ```
+
+Output:
 
 <pre>
 You are using CFLAGS=-Wall -Werror -Wextra
@@ -845,7 +851,7 @@ You are using CFLAGS=-Wall -Werror -Wextra
 
 Most likely, your Makefile was designed to remake whenever a `.c` file changes. But what if a `.h` changes?
 
-Consider this file tree, saved on [code/12-headers-example/](code/12-headers-example/) ...
+Consider the following files, saved on [code/12-headers-example/](code/12-headers-example/) ...
 
 	12-headers-example
 		├── header.h 
@@ -880,16 +886,16 @@ int main()
 The Makefile is initially designed like this:
 
 ```Makefile
-##################### Compilation Variables #####################
+###################### Compilation ######################
 CC      	= cc
 CFLAGS		= -Wall -Werror -Wextra
 
-######################## Commands Variables #######################
-RM      	= rm -rf
+######################## Commands #######################
+RM = rm -rf
 
-######################## Files Variables #######################
-NAME		= a.out
-OBJS		= main.o
+######################### Files #########################
+NAME = a.out
+OBJS = main.o
 
 all: $(NAME)
 
@@ -914,15 +920,15 @@ This is the number: 42
 
 What if you were to change the `NUMBER` macro to `24`? Have you tried to `make` and run `a.out` after? To your surprise, the output is exacly the same. Why?
 
-Well, as I explained in section [4.1](#index-4.1), `make` will remake a target if it notices its dependencies have a newer version. So, our Makefile cannot rely on the depedencies it doesn't know about, like `header.h`, considering the `$(NAME)` target up-to-date.
+Well, as I explained in section [4.1](#index-4.1), `make` will remake a target if it notices its dependencies have a newer version. So, our Makefile cannot rely on the depedencies it doesn't know about, like `header.h`.
 
 A naive solution would be to add `header.h` as dependency to `$(NAME)`:
 
 ```Makefile
 ...
-######################## Files Variables #######################
-NAME		= a.out
-OBJS		= main.o
+######################### Files #########################
+NAME 		= a.out
+OBJS 		= main.o
 HEADERS		= header.h
 
 all: $(NAME)
@@ -932,22 +938,25 @@ $(NAME): $(OBJS) $(HEADERS)
 ...
 ```
 
-Although this fix solves the issue, its too good to be true. We have yet another issue.
+It does fix the issue, but its only a band-aid. We have yet another issue:
 
-- Changing `header.h` only forces the final linking of all object files, but it won't force recompilation of `.c` files:
+Changing `header.h` only forces the final linking of all object files...
 
 ```sh
 cc  -Wall -Werror -Wextra main.o -o a.out
 ```
 
+..., but it won't force recompilation of `.c` files.
+
+
 We could manually add a rule that specifies what files `main.o` depends on, which also solves the issue, but this is not very scalable.
 
-To automate this process, we can use the `-MMD` compilation flag which generates a micro-makefile in a `.d` file for each `.c`.
+To automate this process, we can use the `-MMD` compilation flag which generates a micro-makefile with a `.d` extension for each `.c`.
 
 By adding `-MMD` and running `make`, ...
 
 ```Makefile
-##################### Compilation Variables #####################
+###################### Compilation ######################
 CC      	= cc
 CFLAGS		= -Wall -Werror -Wextra
 CPPFLAGS	= -MMD
@@ -972,9 +981,9 @@ Great! Now, we just need to **include** the `.d` files in our Makefile. You can 
 ```Makefile
 ...
 
-######################## Files Variables #######################
-NAME		= a.out
-OBJS		= main.o
+######################### Files #########################
+NAME 		= a.out
+OBJS 		= main.o
 DEPS		= $(OBJS:.o=.d)
 
 all: $(NAME)
@@ -1005,7 +1014,7 @@ Before the building process begins, the Makefile will look for the included file
 
 ## <a name="command-line">A3 - Command-line variables</a>
 
-Just like `argv` in C, `make` allows you to declare variables when running the `make` command. Let's assume we want a variable called `DEBUG` to be declared this way. We can do:
+Just like `argv` in C, `make` allows you to declare variables when running the `make` command. Let's assume we want a variable called `DEBUG` to be declared this way. We can write:
 
 ```sh
 make DEBUG=1
@@ -1017,7 +1026,7 @@ General syntax for variable declaration:
 make variable-name=variable-value
 ```
 
-The `=` is mandatory, as `make` would consider `DEBUG` as another target to make. Remember that, if the `variable-value` is empty, the variable is considered undefined. Assigning a new value to an existent value overrides its old value.
+The `=` is mandatory, as `make` would consider `DEBUG` as another target to make otherwise. Remember that, if the `variable-value` is empty, the variable is considered undefined. **Assigning a new value to an existent variable overrides its old value.**
 
 Here's an example that prints the value of the `DEBUG` variable. You can find the code in [code/14-command-line-example](code/14-command-line-example):
 
@@ -1044,11 +1053,11 @@ Compiling with DEBUG=-g
 
 ## <a name="functions">A4 - Functions</a>
 
-This starts to look a lot like C right? Now we have functions and they are very similar! Functions take arguments that are processed in the function to finally return a value that is later replaced at the point of the function call.
+This starts to look a lot like C right? Now we have functions and they are very similar! Functions take parameters that are processed depending on the behaviour of the function. The result of that function is later returned and replaced wherever the function call happened.
 
 ### <a name="functions-1">A4.1 - Functions Call Syntax</a>
 
-Function calls can appear anywhere a variable can. Calling a function resembles a variable reference:
+Function calls can appear anywhere a variable can. Function calls resemble a variable reference:
 
 ```Makefile
 $(function arguments)
@@ -1060,7 +1069,7 @@ or
 ${function arguments}
 ```
 
-If the `arguments` field is composed of more than 1 argument, they are separated using commas:
+If the `arguments` field is composed of more than 1 parameter, they are separated using commas:
 
 ```Makefile
 $(function arg1, arg2, arg3,...)
@@ -1072,7 +1081,7 @@ Whitespaces and commas are not part of the arguments. Commas and parenthesis are
 COMMA = ,
 EMPTY =
 SPACE = $(EMPTY) $(EMPTY)
-FOO	  = a b c
+FOO   = a b c
 BAR   = $(subst $(SPACE),$(COMMA),$(FOO))
 
 all:
@@ -1101,9 +1110,9 @@ $(patsubst pattern,replacement,text)
 
 Looks for whitespace-separated words that match `pattern` in `text` to replace them with `replacement`. The function returns the result after the replacements.
 
-In `pattern` the `%` symbol may appear, meaning any number of characters that match the pattern. If `%` also appears on `replacement`, the `%` is replaced with whatever matched on `pattern`.
+In `pattern` the `%` symbol may appear, meaning any number of characters that match the pattern. If `%` also appears on `replacement`, the `%` is replaced with the characters matched on `pattern`.
 
-Only the first `%` in `pattern` and `replacement` are treated this way, while the remaining ones, if exist, remain unchanged.
+Only the first `%` in `pattern` and `replacement` are treated this way, while the remaining ones, if any, remain unchanged.
 
 The following example, saved on [code/16-patsubst-example](code/16-patsubst-example/)...
 
@@ -1126,7 +1135,7 @@ OBJS = main.o foo.o bar.o
 ```
 
 > **Note**
-> The notation `$(variable-name:pattern=replacement)` is an equivalent notation. For instance, the assignment of OBJS could become `OBJS = $(FILES:.c=.o)`
+> The notation `$(variable-name:pattern=replacement)` is an equivalent notation. For instance, the assignment of `OBJS` could become `OBJS = $(FILES:.c=.o)`
 
 </details>
 
@@ -1137,7 +1146,7 @@ OBJS = main.o foo.o bar.o
 $(strip string)
 ```
 
-Removes both leading and trailing whitespaces. If multiple whitespaces between strings are condensed into a single whitespace.
+Removes both leading and trailing whitespaces. Multiple whitespaces between strings are condensed into a single space.
 
 Here's an example ([code/17-strip-example](code/17-strip-example)):
 
@@ -1235,7 +1244,7 @@ The following functions were designed to handle file names or paths to files. Th
 $(dir names…)
 ```
 
-Extracts the directory part of every file contained in `names`. The directory part is considered to be all the characters until the last `\` is found (including it).
+Extracts the directory part of every file contained in `names`. The directory part is considered to be all the characters until the last `/` is found (including it).
 
 Here's an example ([code/20-dir-example](code/20-dir-example)):
 
@@ -1262,7 +1271,7 @@ These are the directories: source/ source/ ./
 $(notdir names…)
 ```
 
-Extracts the non-directory part of every file contained in `names`. The non-directory part is considered to be all the characters from the last `\` is found (not including it).
+Extracts the non-directory part of every file contained in `names`. The non-directory part is considered to be all the characters from the last `/` (not including it) to the end.
 
 Here's an example ([code/21-dir-example](code/21-dir-example)):
 
@@ -1277,7 +1286,7 @@ all:
 Output:
 
 ```
-These are the directories: foo.c bar.c baz.c
+These are the files: foo.c bar.c baz.c
 ```
 
 </details>
@@ -1337,16 +1346,6 @@ Final object files: foo.o bar.o baz.o
 ```
 
 </details>
-
-
-<!-- 
-	Functions for file names
-	$(addsuffix suffix,names…)
--->
-	
-
-
-------------------------------------------------------------------
 
 ### <a name="functions-4">A4.4 - Functions for Generic Purpose</a>
 

@@ -1,4 +1,4 @@
-####################### Compilation ######################
+###################### Compilation ######################
 CC      	= cc
 CFLAGS		= -Wall -Werror -Wextra
 CPPFLAGS	= -MMD
