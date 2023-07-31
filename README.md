@@ -29,8 +29,11 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 		<li><a href="#conditionals">A1 - Conditional Directives</a></li>
 		<li><a href="#mmd-flag">A2 - The MMD flag</a></li>
 		<li><a href="#command-line">A3 - Command-line variables</a></li>
-		<!-- <li><a href="#functions">Functions</a></li>
-		<li><a href="#vpath">The vpath directive</a></li> -->
+		<li><a href="#functions">A4 - Functions</a></li>
+		<ul style="list-style-type:disc">
+			<li><a href="#functions-1">A4.1 - Functions Call Syntax</a></li>
+		</ul>
+		<!-- <li><a href="#vpath">The vpath directive</a></li> -->
 	</ul>
 	<!-- <li>Tips and tricks</li>
 	<ul>
@@ -630,9 +633,9 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 ------------------------------------------------------------------
 
 
-## Advanced Topics
+# Advanced Topics
 
-### <a name="conditionals">A1 - Conditional Directives</a>
+## <a name="conditionals">A1 - Conditional Directives</a>
 
 Conditionals are directives that `make` should obey or ignore, depending on string values. Conditionals always use strings, either from variables or constant strings.
 
@@ -679,7 +682,9 @@ endif
 We are currently making use of 3 directives:
 
 `ifeq` - after expansion of `VAR1`, compares all the inner strings with the right field. If any string dont't match, the comparison is evaluated to false.
+
 `else` - if the `ifeq` directive evaluates to false, the lines below the `else` directive are obeyed.
+
 `endif` - marks the end of the conditional.
 
 This outputs the following:
@@ -833,7 +838,7 @@ You are using CFLAGS=-Wall -Werror -Wextra
 ------------------------------------------------------------------
 
 
-### <a name="mmd-flag">A2 - The MMD flag</a>
+## <a name="mmd-flag">A2 - The MMD flag</a>
 
 Most likely, your Makefile was designed to remake whenever a `.c` file changes. But what if a `.h` changes?
 
@@ -995,7 +1000,7 @@ Before the building process begins, the Makefile will look for the included file
 ------------------------------------------------------------------
 
 
-### <a name="command-line">A3 - Command-line variables</a>
+## <a name="command-line">A3 - Command-line variables</a>
 
 Just like `argv` in C, `make` allows you to declare variables when running the `make` command. Let's assume we want a variable called `DEBUG` to be declared this way. We can do:
 
@@ -1034,6 +1039,47 @@ Compiling with DEBUG=-g
 ------------------------------------------------------------------
 
 
+## <a name="functions">A4 - Functions</a>
+
+This starts to look a lot like C right? Now we have functions and they are very similar! Functions take arguments and return a value that is later replaced at the point of the function call.
+
+### <a name="functions-1">A4.1 - Functions Call Syntax</a>
+
+Function calls can appear anywhere a variable can. Calling a function resembles a variable reference:
+
+```Makefile
+$(function arguments)
+```
+
+or 
+
+```Makefile
+${function arguments}
+```
+
+If the `arguments` field is composed of more than 1 argument, they are separated using commas:
+
+```Makefile
+$(function arg1, arg2, arg3,...)
+```
+
+Whitespaces and the commas are not part of the arguments.
+
+
+<!-- 
+	$(patsubst pattern,replacement,text)
+	$(strip string)$(strip string)
+	$(findstring find,in)
+	$(filter pattern…,text)
+	$(words text)
+	$(dir names…)
+	$(notdir names…)
+	$(addsuffix suffix,names…)
+	$(addprefix prefix,names…)
+	$(foreach var,list,text)
+	$(call variable,param,param,…)
+	$(shell command)
+ -->
 ## Useful Topics
 
 I don't think those topics fit either in the beginner's guide or in the advanced topics. However, I think they are useful to know and can be used to improve your Makefiles.
