@@ -899,11 +899,11 @@ Running `make` builds `a.out`, which outputs the following when executed:
 This is the number: 42
 ```
 
-What if you were to change the `NUMBER` macro to `24`? Have you tried to `make` and run `a.out` after? For your surprise, the output is exacly the same. Why?
+What if you were to change the `NUMBER` macro to `24`? Have you tried to `make` and run `a.out` after? To your surprise, the output is exacly the same. Why?
 
 Well, as I explained in section [4.2](#index-4), `make` will remake a target if it notices its dependencies have a newer version. So, our Makefile cannot rely on the depencies it doesn't know about, like `header.h`, considering the `$(NAME)` target up-to-date.
 
-One naive solution would be to add `header.h` as dependency to `$(NAME)`:
+A naive solution would be to add `header.h` as dependency to `$(NAME)`:
 
 ```Makefile
 ...
@@ -969,13 +969,12 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(OBJS) -o $(NAME)
 
--include $(DEPS)
+-include $(DEPS)	
 
 ...
 ```
 
 Here's an animation of the whole process
-
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>

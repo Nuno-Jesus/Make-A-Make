@@ -13,3 +13,5 @@ ifeq ($(VAR2), Nuno Jesus)
 else
 	@echo "VAR2 does not contain my name"
 endif
+
+	echo $(MAKEFLAGS)
