@@ -1015,7 +1015,7 @@ General syntax for variable declaration:
 make variable-name=variable-value
 ```
 
-The `=` is mandatory, as `make` would consider `DEBUG` as another target to make. Remember that, if the `variable-value` is empty, the variable is considered undefined. Assigning a new value to an existent value, overrides its old value.
+The `=` is mandatory, as `make` would consider `DEBUG` as another target to make. Remember that, if the `variable-value` is empty, the variable is considered undefined. Assigning a new value to an existent value overrides its old value.
 
 Here's an example that prints the value of the `DEBUG` variable. You can find the code in [code/14-command-line-example](code/14-command-line-example):
 
@@ -1089,7 +1089,7 @@ BAR=a,b,c
 ### <a name="functions-2">A4.2 - Functions for String Manipulation</a>
 
 <details open>
-	<summary><h4>patsubst</h4> - replacing string patterns</summary>
+	<summary><h4>patsubst</h4> - replaces string patterns</summary>
 	
 ```
 $(patsubst pattern,replacement,text)
@@ -1127,7 +1127,7 @@ OBJS = main.o foo.o bar.o
 </details>
 
 <details>
-	<summary>strip - strips away whitespaces</summary>
+	<summary><h4>strip</h4> - strips away whitespaces</summary>
 	
 ```
 $(strip string)
@@ -1142,18 +1142,26 @@ FILES = a           b c         # Ends here
 
 all:
 ifeq ($(FILES), a b c)
-	echo "FILES = a b c"
+	echo "FILES == a b c"
 else
 	echo "FILES != a b c"
 endif
 
 ifeq ($(strip $(FILES)), a b c)
-	echo "RESULT = a b c"
+	echo "RESULT == a b c"
 else
 	echo "RESULT != a b c"
 endif
 
+
 .SILENT:
+```
+
+Output:
+
+```Makefile
+FILES != a b c
+RESULT == a b c
 ```
 </details>
 
