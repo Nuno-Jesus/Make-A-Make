@@ -977,8 +977,9 @@ $(NAME): $(OBJS)
 > **Note**
 > The `-` prefix in the `include` directive prevents make from quitting if an included file doesn't exist.
 
-Here's an animation of the whole process:
+Before the building process begins, the Makefile will look for the included files and try to append them, just like the animation below demonstrates:
 
+![MMD](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/fb790d73-98ee-4617-9343-d17facf33edd)
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
