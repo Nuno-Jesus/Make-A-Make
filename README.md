@@ -1122,7 +1122,7 @@ OBJS = main.o foo.o bar.o
 ```
 
 > **Note**
-> The notation `OBJS = $(FILES:.c=.o)` is an equivalent notation for this function
+> The notation `$(variable-name:pattern=replacement)` is an equivalent notation. For instance, the assignment of OBJS could become `OBJS = $(FILES:.c=.o)`
 
 
 
