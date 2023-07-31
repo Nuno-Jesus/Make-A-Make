@@ -1234,6 +1234,16 @@ VAR has 6 words
 	$(shell command)
 	$(call variable,param,param,…)
  -->
+
+### <a name="functions-3">A4.3 - Functions for File Names</a>
+
+
+------------------------------------------------------------------
+
+### <a name="functions-4">A4.4 - Functions for Generic Purpose</a>
+
+
+------------------------------------------------------------------
 ## Useful Topics
 
 I don't think those topics fit either in the beginner's guide or in the advanced topics. However, I think they are useful to know and can be used to improve your Makefiles.
@@ -1597,15 +1607,6 @@ Self-explanatory, you forgot to add an `endif` directive to your conditional.
 
 ------------------------------------------------------------------
 
-### <a name="functions-3">A4.3 - Functions for File Names</a>
-
-
-------------------------------------------------------------------
-
-### <a name="functions-4">A4.4 - Functions for Generic Purpose</a>
-
-
-------------------------------------------------------------------
 
 ## 📞 **Contact me**
 Feel free to ask me any questions through Slack (**ncarvalh**).
