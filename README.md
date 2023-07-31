@@ -999,7 +999,7 @@ Before the building process begins, the Makefile will look for the included file
 
 I don't think those topics fit either in the beginner's guide or in the advanced topics. However, I think they are useful to know and can be used to improve your Makefiles.
 
-### <a name="special-targets"> Special Targets</a>
+### <a name="special-targets">Special Targets</a>
 There are a few special targets that can be used in a Makefile. These targets are not files but, rather commands that can be executed by the Makefile. Please note that these are not all the targets, but rather only the ones I use the most/are more useful.
 
 - `.SILENT` - Disables the default logging of Make actions in the terminal. If used with prerequisites, only those targets are executed silently.
@@ -1050,7 +1050,7 @@ Otherwise, if used without prerequisites, all targets are executed sequentially.
 ------------------------------------------------------------------
 
 
-### <a name="flags"> Makefile Flags</a>
+### <a name="flags">Makefile Flags</a>
 
 - `-C <dir>` - used to recursively call another Makefile `<dir>`. The syntax is as follows: `make [target] -C <dir>`. The `target` field can be omitted You can find an example of this in the [code/7-C-flag-example](/code/7-C-flag-example).
 
@@ -1379,8 +1379,6 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 - Compiling a Makefile with another Makefile? Don't use make directly. Instead use $(MAKE), which expands to the same value. Might seem pointless, but some flags might depend on in. The $(MAKE) variables tells the Makefile we are calling another Makefile.
 - Using the '\' operator at the end of the line forces the Makefile to consider the next line as a continuation of the first. Essentially a one line only.
 - Avoid repetition. Use functions when you can
-
-- In this Makefile, what does the $(SRCS:.c=.o) do?
 
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
