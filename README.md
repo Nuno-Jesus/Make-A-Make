@@ -1090,6 +1090,8 @@ BAR=a,b,c
 
 ### <a name="functions-2">A4.2 - Functions for String Manipulation</a>
 
+Up ahead, we have functions that can be used for generic string manipulation.
+
 <details>
 	<summary><h4>patsubst</h4> - replaces string patterns</summary>
 	
@@ -1222,25 +1224,56 @@ VAR has 6 words
 
 </details>
 
+### <a name="functions-3">A4.3 - Functions for File Names</a>
+
+The following functions were designed to handle file names or paths to files. The transformations take place in the same way for every file name and concatenated with a single space in the final result.
+
+<details open>
+	<summary><h4>dir</h4> - extracts the directory part of a file</summary>
+
+```
+$(dir names…)
+```
+
+Extracts the directory part of every file contained in `names`. The directory part is considered to be all the characters until the last `\` is found (including it).
+
+Here's an example ([code/20-dir-example](code/20-dir-example)):
+
+```Makefile
+FILES = source/foo.c source/bar.c baz.c
+
+all:
+	echo These are the directories: $(dir $(FILES))
+.SILENT:
+```
+
+Output:
+
+```
+These are the directories: source/ source/ ./
+```
+
+</details>
 <!-- 
 	Functions for file names
 	$(dir names…)
 	$(notdir names…)
 	$(addsuffix suffix,names…)
-	$(addprefix prefix,names…)
-
-	Functions for generic purpose
-	$(foreach var,list,text)
-	$(shell command)
-	$(call variable,param,param,…)
- -->
-
-### <a name="functions-3">A4.3 - Functions for File Names</a>
+	$(addprefix prefix,names…) 
+-->
+	
 
 
 ------------------------------------------------------------------
 
 ### <a name="functions-4">A4.4 - Functions for Generic Purpose</a>
+
+<!-- 
+	Functions for generic purpose
+	$(foreach var,list,text)
+	$(shell command)
+	$(call variable,param,param,…)
+ -->
 
 
 ------------------------------------------------------------------
