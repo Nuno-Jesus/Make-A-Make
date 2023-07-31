@@ -1226,7 +1226,7 @@ VAR has 6 words
 
 ### <a name="functions-3">A4.3 - Functions for File Names</a>
 
-The following functions were designed to handle file names or paths to files. The transformations take place in the same way for every file name and concatenated with a single space in the final result.
+The following functions were designed to handle file names or paths to files. The transformations take place in the same way for every file name.
 
 <details>
 	<summary><h4>dir</h4> - extracts the directory part of a file</summary>
@@ -1281,11 +1281,38 @@ These are the directories: foo.c bar.c baz.c
 ```
 
 </details>
+
+<details>
+	<summary><h4>addprefix</h4> - appends a prefix to strings</summary>
+
+```
+$(addprefix prefix,names…)
+```
+
+For each reference in `names`, appends a prefix to it. The final result is the prefix concatenated with each reference, separated by a space between each final reference.
+
+Here's an example ([code/22-addprefix-example](code/22-addprefix-example)):
+
+```Makefile
+FILES = foo.c bar.c baz.c
+SOURCES = sources/
+
+all:
+	echo Final path: $(addprefix $(SOURCES), $(FILES))
+.SILENT:
+```
+
+Output:
+
+```
+Final paths: sources/foo.c sources/bar.c sources/baz.c
+```
+
+</details>
+
 <!-- 
 	Functions for file names
-	$(notdir names…)
 	$(addsuffix suffix,names…)
-	$(addprefix prefix,names…) 
 -->
 	
 
