@@ -1228,7 +1228,7 @@ VAR has 6 words
 
 The following functions were designed to handle file names or paths to files. The transformations take place in the same way for every file name and concatenated with a single space in the final result.
 
-<details open>
+<details>
 	<summary><h4>dir</h4> - extracts the directory part of a file</summary>
 
 ```
@@ -1254,9 +1254,35 @@ These are the directories: source/ source/ ./
 ```
 
 </details>
+
+<details>
+	<summary><h4>notdir</h4> - extracts the non-directory part of a file</summary>
+
+```
+$(notdir names…)
+```
+
+Extracts the non-directory part of every file contained in `names`. The non-directory part is considered to be all the characters from the last `\` is found (not including it).
+
+Here's an example ([code/21-dir-example](code/21-dir-example)):
+
+```Makefile
+FILES = source/foo.c source/bar.c baz.c
+
+all:
+	echo These are the files: $(notdir $(FILES))
+.SILENT:
+```
+
+Output:
+
+```
+These are the directories: foo.c bar.c baz.c
+```
+
+</details>
 <!-- 
 	Functions for file names
-	$(dir names…)
 	$(notdir names…)
 	$(addsuffix suffix,names…)
 	$(addprefix prefix,names…) 
