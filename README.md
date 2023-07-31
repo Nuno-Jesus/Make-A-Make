@@ -1349,9 +1349,39 @@ Final object files: foo.o bar.o baz.o
 
 ### <a name="functions-4">A4.4 - Functions for Generic Purpose</a>
 
+<details>
+	<summary><h4>foreach</h4> - good old loops</summary>
+
+```
+$(foreach var,list,text)
+```
+
+For each word in `list`, `var` takes its value and gets transformed according to whatever is expanded on `text`. Both `var` and `list` are expanded before any transformation is applied. The `var` field contains the name of a temporary variable used to reference each word inside `list`. This variable becomes undefined outside the `foreach` call.
+
+Text is expanded as many times as there are whitespaced-separated words in `list`. The multiple expansions are then concatenated with a single space to produce the final result.
+
+The following example replicates the `addprefix` example, saved on [code/24-foreach-example](code/24-foreach-example):
+
+```Makefile
+FILES = foo.c bar.c baz.c
+SOURCES = sources
+
+all:
+	echo Final paths: $(foreach file, $(FILES), $(SOURCES)/$(file))
+.SILENT:
+```
+
+Output:
+
+```
+Final paths: sources/foo.c sources/bar.c sources/baz.c
+```
+
+</details>
+
 <!-- 
 	Functions for generic purpose
-	$(foreach var,list,text)
+	
 	$(shell command)
 	$(call variable,param,param,…)
  -->
