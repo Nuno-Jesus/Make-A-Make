@@ -825,18 +825,19 @@ You are using CFLAGS=-Wall -Werror -Wextra
 ------------------------------------------------------------------
 
 
-### <a href="#mmd-flag">A2 - The MMD flag</a>
+### <a name="mmd-flag">A2 - The MMD flag</a>
 
 Most likely, your Makefile was designed to remake whenever a `.c` file changes. But what if a `.h` changes?
 
-Consider this file tree, saved on [code/12-headers-example/](code/12-headers-example/)...
+Consider this file tree, saved on [code/12-headers-example/](code/12-headers-example/) ...
 
-12-headers-example
-	├── header.h 
-	├── main.c
-	└── Makefile
+	12-headers-example
+		├── header.h 
+		├── main.c
+		└── Makefile
 
-where `header.h` and `main.c` are displayed below.
+
+... where `header.h` and `main.c` are displayed below.
 
 ```C
 // header.h
