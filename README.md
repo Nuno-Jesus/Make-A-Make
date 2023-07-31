@@ -33,6 +33,8 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 		<ul style="list-style-type:disc">
 			<li><a href="#functions-1">A4.1 - Functions Call Syntax</a></li>
 			<li><a href="#functions-2">A4.2 - Functions for String Manipulation</a></li>
+			<li><a href="#functions-3">A4.3 - Functions for File Names</a></li>
+			<li><a href="#functions-4">A4.4 - Functions for Generic Purpose</</li>a>
 		</ul>
 		<!-- <li><a href="#vpath">The vpath directive</a></li> -->
 	</ul>
@@ -1088,7 +1090,7 @@ BAR=a,b,c
 
 ### <a name="functions-2">A4.2 - Functions for String Manipulation</a>
 
-<details open>
+<details>
 	<summary><h4>patsubst</h4> - replaces string patterns</summary>
 	
 ```
@@ -1165,11 +1167,38 @@ RESULT == a b c
 ```
 </details>
 
+<details>
+	<summary><h4>findstring</h4> - looks for occurrences of a string</summary>
+
+```
+$(findstring find,in)
+```
+
+If the text `in` contains a word identical to `find`, the function returns `find`. Otherwise, it returns the empty string.
+
+Here's an example ([code/18-findstring-example](code/18-findstring-example)):
+
+```Makefile
+NAME = Nuno Jesus
+
+all:
+	echo Result=$(findstring Jesus, $(NAME))
+	echo Result=$(findstring Miguel, $(NAME))
+.SILENT:
+```
+
+Output:
+
+```
+Result=Jesus
+Result=
+```
+
+</details>
 
 <!-- 
 	Functions for strings manipulation
 	
-	$(findstring find,in)
 	$(filter pattern…,text)
 	$(words text)
 
@@ -1547,6 +1576,15 @@ Self-explanatory, you forgot to add an `endif` directive to your conditional.
 
 ------------------------------------------------------------------
 
+### <a name="functions-3">A4.3 - Functions for File Names</a>
+
+
+------------------------------------------------------------------
+
+### <a name="functions-4">A4.4 - Functions for Generic Purpose</a>
+
+
+------------------------------------------------------------------
 
 ## 📞 **Contact me**
 Feel free to ask me any questions through Slack (**ncarvalh**).
