@@ -1088,6 +1088,10 @@ bar=a,b,c
 
 ### <a name="functions-2">A4.2 - Functions for String Manipulation</a>
 
+<details>
+	<summary><h4>patsubst</h4> - replacing string patterns</summary>
+	X
+</details>
 
 <!-- 
 	Functions for strings manipulation
