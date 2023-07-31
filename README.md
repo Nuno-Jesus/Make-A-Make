@@ -1124,15 +1124,43 @@ OBJS = main.o foo.o bar.o
 > **Note**
 > The notation `$(variable-name:pattern=replacement)` is an equivalent notation. For instance, the assignment of OBJS could become `OBJS = $(FILES:.c=.o)`
 
-
-
-
 </details>
+
+<details>
+	<summary>strip - strips away whitespaces</summary>
+	
+```
+$(strip string)
+```
+
+Removes both leading and trailing whitespaces. If multiple whitespaces between strings are condensed into a single whitespace.
+
+Here's an example ([code/17-strip-example](code/17-strip-example)):
+
+```Makefile
+FILES = a           b c         # Ends here
+
+all:
+ifeq ($(FILES), a b c)
+	echo "FILES = a b c"
+else
+	echo "FILES != a b c"
+endif
+
+ifeq ($(strip $(FILES)), a b c)
+	echo "RESULT = a b c"
+else
+	echo "RESULT != a b c"
+endif
+
+.SILENT:
+```
+</details>
+
 
 <!-- 
 	Functions for strings manipulation
 	
-	$(strip string)$(strip string)
 	$(findstring find,in)
 	$(filter pattern…,text)
 	$(words text)
