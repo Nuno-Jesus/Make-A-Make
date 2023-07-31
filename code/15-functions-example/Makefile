@@ -1,10 +1,11 @@
-FILES = main hello function
-SRCS  = $(foreach file, $(FILES), $(file).c)
-OBJS  = $(foreach file, $(FILES), $(file).o)
+comma = ,
+empty =
+space = $(empty) $(empty)
+foo	  = a b c
+bar   = $(subst $(space),$(comma),$(foo))
 
 all:
-	echo Prefixes = $(FILES)
-	echo Files = $(SRCS)
-	echo Object files = $(OBJS)
+	echo foo=$(foo)
+	echo bar=$(bar)
 
 .SILENT:

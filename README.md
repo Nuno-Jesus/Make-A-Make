@@ -32,6 +32,7 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 		<li><a href="#functions">A4 - Functions</a></li>
 		<ul style="list-style-type:disc">
 			<li><a href="#functions-1">A4.1 - Functions Call Syntax</a></li>
+			<li><a href="#functions-2">A4.2 - Functions for String Manipulation</a></li>
 		</ul>
 		<!-- <li><a href="#vpath">The vpath directive</a></li> -->
 	</ul>
@@ -1041,7 +1042,7 @@ Compiling with DEBUG=-g
 
 ## <a name="functions">A4 - Functions</a>
 
-This starts to look a lot like C right? Now we have functions and they are very similar! Functions take arguments and return a value that is later replaced at the point of the function call.
+This starts to look a lot like C right? Now we have functions and they are very similar! Functions take arguments that are processed in the function to finally return a value that is later replaced at the point of the function call.
 
 ### <a name="functions-1">A4.1 - Functions Call Syntax</a>
 
@@ -1063,19 +1064,46 @@ If the `arguments` field is composed of more than 1 argument, they are separated
 $(function arg1, arg2, arg3,...)
 ```
 
-Whitespaces and the commas are not part of the arguments.
+Whitespaces and commas are not part of the arguments. Commas and parenthesis are special characters that `make` recognize when it's time to parse a function call. If you need to use these special characters as arguments, you can hide them in variables:
+
+```Makefile
+comma = ,
+empty =
+space = $(empty) $(empty)
+foo	  = a b c
+bar   = $(subst $(space),$(comma),$(foo))
+
+all:
+	echo foo=$(foo)
+	echo bar=$(bar)
+
+.SILENT:
+```
+
+Output
+```shell
+foo=a b c
+bar=a,b,c
+```
+
+### <a name="functions-2">A4.2 - Functions for String Manipulation</a>
 
 
 <!-- 
+	Functions for strings manipulation
 	$(patsubst pattern,replacement,text)
 	$(strip string)$(strip string)
 	$(findstring find,in)
 	$(filter pattern…,text)
 	$(words text)
+
+	Functions for file names
 	$(dir names…)
 	$(notdir names…)
 	$(addsuffix suffix,names…)
 	$(addprefix prefix,names…)
+
+	Functions for generic purpose
 	$(foreach var,list,text)
 	$(call variable,param,param,…)
 	$(shell command)
