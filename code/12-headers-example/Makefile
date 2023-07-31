@@ -1,25 +1,28 @@
-##################### Compilation Variables #####################
+####################### Compilation ######################
 CC      	= cc
 CFLAGS		= -Wall -Werror -Wextra
 CPPFLAGS	= -MMD
 
-######################## Commands Variables #######################
-RM      	= rm -rf
+######################## Commands #######################
+RM = rm -rf
 
-######################## Files Variables #######################
-NAME		= a.out
-OBJS		= main.o
+######################### Files #########################
+NAME = a.out
+OBJS = main.o
+DEPS = $(OBJS:.o=.d)
 
 all: $(NAME)
 
-$(NAME): $(OBJS) header.h
+$(NAME): $(OBJS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(OBJS) -o $(NAME)
+
+-include $(DEPS)
 
 clean:
 	$(RM) $(OBJS) $(OBJS:.o=.d)
 
 fclean: clean
-	$(RM) $(NAME) $(NAME).d
+	$(RM) $(NAME)
 
 re: fclean
 	$(MAKE) all
