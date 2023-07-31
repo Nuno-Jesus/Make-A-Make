@@ -582,6 +582,11 @@ As told before, implicit rules rely on variables already known by the Makefile, 
 			<td><code>make</code></td>
 			<td>Useful when multi-jobs of Makefile come into play. This will be explained later in detail in an upcoming section, but keep in mind this is the best way of calling make targets inside the Makefile</td>
 		</tr>
+		<tr>
+			<td><code>MAKEFLAGS</code></td>
+			<td><code></code></td>
+			<td>The flags given to make.</td>
+		</tr>
 	</tbody>
 </table>
 
@@ -1283,6 +1288,23 @@ cc main.c hello/hello.c
 <div align=center>
 	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
 </div>
+
+- `-I <dir>` - specifies a directory to search for included Makefiles. Useful to prevent building the path to the dependencies. You can find an example of this in the [code/13-I-flag-example](/code/13-I-flag-example).
+
+```shell
+➜  13-I-flag-example git:(advanced-topics) ✗ make          
+Makefile:18: main.d: No such file or directory
+make: *** No rule to make target 'main.d'.  Stop.
+➜  13-I-flag-example git:(advanced-topics) ✗ make -I teste 
+cc -Wall -Werror -Wextra   -c -o main.o main.c
+cc -Wall -Werror -Wextra main.o -o a.out
+➜  13-I-flag-example git:(advanced-topics) ✗ 
+```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
 
 
 ------------------------------------------------------------------ 
