@@ -28,8 +28,8 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 	<ul style="list-style-type:disc">
 		<li><a href="#conditionals">A1 - Conditional Directives</a></li>
 		<li><a href="#mmd-flag">A2 - The MMD flag</a></li>
+		<li><a href="#command-line">A3 - Command-line variables</a></li>
 		<!-- <li><a href="#functions">Functions</a></li>
-		<li><a href="#command-line">Command line variables</a></li>
 		<li><a href="#vpath">The vpath directive</a></li> -->
 	</ul>
 	<!-- <li>Tips and tricks</li>
@@ -995,6 +995,45 @@ Before the building process begins, the Makefile will look for the included file
 ------------------------------------------------------------------
 
 
+### <a name="command-line">A3 - Command-line variables</a>
+
+Just like `argv` in C, `make` allows you to declare variables when running the `make` command. Let's assume we want a variable called `DEBUG` to be declared this way. We can do:
+
+```sh
+make DEBUG=1
+```
+
+General syntax for variable declaration:
+
+```sh
+make variable-name=variable-value
+```
+
+The `=` is mandatory, as `make` would consider `DEBUG` as another target to make. Remember that, if the `variable-value` is empty, the variable is considered undefined. Assigning a new value to an existent value, overrides its old value.
+
+Here's an example that prints the value of the `DEBUG` variable. You can find the code in [code/14-command-line-example](code/14-command-line-example):
+
+```Makefile
+DEBUG =
+
+all:
+	@echo Compiling with DEBUG=$(DEBUG)
+```
+
+```shell
+➜  14-command-line-example git:(advanced-topics) ✗ make DEBUG=-g
+Compiling with DEBUG=-g
+➜  14-command-line-example git:(advanced-topics) ✗ 
+```
+
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+
+
+------------------------------------------------------------------
+
+
 ## Useful Topics
 
 I don't think those topics fit either in the beginner's guide or in the advanced topics. However, I think they are useful to know and can be used to improve your Makefiles.
@@ -1364,8 +1403,6 @@ Feel free to ask me any questions through Slack (**ncarvalh**).
 
 <!--
 ## <a name="index-4">Makefile functions</a>
-
-## <a name="index-4">Command line variables</a>
 
 ## <a name="index-4">The vpath directive and project organization</a>
 
