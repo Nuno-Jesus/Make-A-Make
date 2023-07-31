@@ -1067,35 +1067,71 @@ $(function arg1, arg2, arg3,...)
 Whitespaces and commas are not part of the arguments. Commas and parenthesis are special characters that `make` recognize when it's time to parse a function call. If you need to use these special characters as arguments, you can hide them in variables:
 
 ```Makefile
-comma = ,
-empty =
-space = $(empty) $(empty)
-foo	  = a b c
-bar   = $(subst $(space),$(comma),$(foo))
+COMMA = ,
+EMPTY =
+SPACE = $(EMPTY) $(EMPTY)
+FOO	  = a b c
+BAR   = $(subst $(SPACE),$(COMMA),$(FOO))
 
 all:
-	echo foo=$(foo)
-	echo bar=$(bar)
+	echo FOO=$(FOO)
+	echo BAR=$(BAR)
 
 .SILENT:
 ```
 
 Output
 ```shell
-foo=a b c
-bar=a,b,c
+FOO=a b c
+BAR=a,b,c
 ```
 
 ### <a name="functions-2">A4.2 - Functions for String Manipulation</a>
 
-<details>
+<details open>
 	<summary><h4>patsubst</h4> - replacing string patterns</summary>
-	X
+	
+```
+$(patsubst pattern,replacement,text)
+```
+
+Looks for whitespace-separated words that match `pattern` in `text` to replace them with `replacement`. The function returns the result after the replacements.
+
+In `pattern` the `%` symbol may appear, meaning any number of characters that match the pattern. If `%` also appears on `replacement`, the `%` is replaced with whatever matched on `pattern`.
+
+Only the first `%` in `pattern` and `replacement` are treated this way, while the remaining ones, if exist, remain unchanged.
+
+The following example, saved on [code/16-patsubst-example](code/16-patsubst-example/)...
+
+```Makefile
+FILES = main.c foo.c bar.c
+OBJS = $(patsubst %.c, %.o, $(FILES))
+
+all:
+	echo FILES = $(FILES)
+	echo OBJS = $(OBJS)
+
+.SILENT:
+```
+
+... outputs:
+
+```
+FILES = main.c foo.c bar.c
+OBJS = main.o foo.o bar.o
+```
+
+> **Note**
+> The notation `OBJS = $(FILES:.c=.o)` is an equivalent notation for this function
+
+
+
+
 </details>
 
 <!-- 
 	Functions for strings manipulation
-	$(patsubst pattern,replacement,text)
+	
 	$(strip string)$(strip string)
 	$(findstring find,in)
 	$(filter pattern…,text)
@@ -1109,8 +1145,8 @@ bar=a,b,c
 
 	Functions for generic purpose
 	$(foreach var,list,text)
-	$(call variable,param,param,…)
 	$(shell command)
+	$(call variable,param,param,…)
  -->
 ## Useful Topics
 
