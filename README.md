@@ -629,7 +629,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 
 ### <a name="conditionals">A1 - Conditional Directives</a>
 
-Conditionals are directives that `make` should obey or ignore, depending on string values. Conditionals can use either the expanded values from variables, constant strings, or both.
+Conditionals are directives that `make` should obey or ignore, depending on string values. Conditionals always use strings, either from variables or constant strings.
 
 This is the general syntax for a conditional:
 
@@ -644,7 +644,7 @@ else
 endif
 ```
 
-Just like in `C`, conditionals either evaluate to true or false. In the block above, if `conditional-directive-one` is true, `text-if-one-is-true` is executed, and the rest is ignored. Otherwise, the second conditional is tested and so on, until reaching the `else` directive (may be present or not). 
+Just like in `C`, conditionals either evaluate to true or false. In the block above, if `conditional-directive-one` is true, `text-if-one-is-true` is "obeyed", and the rest is ignored. Otherwise, the second conditional is tested and so on, until reaching the `else` directive (may be present or not). 
 
 Also, conditionals must always end in an `endif` directive.
 
@@ -673,7 +673,7 @@ endif
 
 We are currently making use of 3 directives:
 
-`ifeq` - after expansion of `VAR1`, compares all the inner strings. If it evaluates to true, the nested block is added to the build.
+`ifeq` - after expansion of `VAR1`, compares all the inner strings with the right field. If any string dont't match, the comparison is evaluated to false.
 `else` - if the `ifeq` directive evaluates to false, the lines below the `else` directive are obeyed.
 `endif` - marks the end of the conditional.
 
@@ -683,14 +683,16 @@ VAR1 contains my name
 VAR2 does not contain my name
 ```
 
-Although `VAR1` and `VAR2` are very similar, `VAR2` ends in space! It was more than enough to assert an inequality between the 2 values. However, the first conditional evaluates to true, because all strings from VAR1 match the strings in the right field. Note that **leading whitespaces are ignored, but trailing spaces are not**.
+Although `VAR1` and `VAR2` are very similar, `VAR2` ends in space! It was more than enough to assert an inequality between the 2 values. However, the first conditional evaluates to true, because all strings from `VAR1` match the strings on the right side. Note that **leading whitespaces are ignored, but trailing spaces are not**.
 
 > **Note**
 > You can use the `strip` built-in makefile function to remove whitespaces.
 
-Conditionals determine which parts of the `Makefile` should be excluded or included before the building process begins. You can use conditionals to include/exclude commands of a recipe, change a variable's value or even change which variables should be used in the build.
+Conditionals determine which parts of the `Makefile` should be excluded or included before the building process begins.
 
-Expansion of variables occurs as usual. However, automatic variables cannot be used to test conditionals, since their values are only known in the building process. Here's an animation that should help you get it right.
+Expansion of variables occurs as usual. However, **automatic variables cannot be used to test conditionals, since their values are only known in the building process**. 
+
+The animation below demonstrates how conditionals behave.
 
 ![Conditionals](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/0c23ea0e-d3f3-4cc6-85fb-872fd86126b0)
 
@@ -740,19 +742,19 @@ Both <code>ARG1</code> and <code>ARG2</code> are expanded. If any of the strings
 For example:
 
 ```Makefile
-VAR =
+VAR1 = 1 2 3 4 5
+VAR2 = 1 2 3 4 0
 
 all: 
-#Asserts if the variable is empty
-ifneq ($(VAR),)
-	@echo VAR=$(VAR).
+ifneq ($(VAR1), $(VAR2))
+	@echo $(VAR1) != $(VAR2)
 else
-	@echo VAR is empty.
+	@echo $(VAR1) = $(VAR2)
 endif
 ```
 
 <pre>
-VAR is empty.
+1 2 3 4 5 != 1 2 3 4 0
 </pre>
 </details>
 
@@ -764,7 +766,7 @@ ifdef VARIABLE-NAME
 endif
 </pre>
 
-Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` has a non-empty value, the conditional evaluates to true - false otherwise. **Undefined variables have an empty value by default.**
+Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` isn't an empty string, the conditional evaluates to true - false otherwise. **Undefined variables have an empty value by default.**
 
 For example:
 
@@ -798,7 +800,8 @@ ifndef VARIABLE-NAME
 	...
 endif
 </pre>
-Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If VARIABLE-NAME has an empty value, the conditional evaluates to true.
+
+Takes the name of a variable (not its value), although it can receive a variable that expands to the name of another variable. If `VARIABLE-NAME` is an empty string, the conditional evaluates to true.
 
 For example:
 
