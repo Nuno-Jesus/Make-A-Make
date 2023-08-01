@@ -920,9 +920,9 @@ This is the number: 42
 
 What if you were to change the `NUMBER` macro to `24`? Have you tried to `make` and run `a.out` after? To your surprise, the output is exacly the same. Why?
 
-Well, as I explained in section [4.1](#index-4.1), `make` will remake a target if it notices its dependencies have a newer version. So, our Makefile cannot rely on the depedencies it doesn't know about, like `header.h`.
+Well, as I explained in section [4.1](#index-4.1), `make` will remake a target if it notices its dependencies have a newer version. So, our Makefile cannot rely on the dependencies it doesn't know about, like `header.h`.
 
-A naive solution would be to add `header.h` as dependency to `$(NAME)`:
+A naive solution would be to add `header.h` as a dependency to `$(NAME)`:
 
 ```Makefile
 ...
@@ -938,7 +938,7 @@ $(NAME): $(OBJS) $(HEADERS)
 ...
 ```
 
-It does fix the issue, but its only a band-aid. We have yet another issue:
+It does fix the issue, but it's only a band-aid. We have yet another issue:
 
 Changing `header.h` only forces the final linking of all object files...
 
@@ -946,7 +946,7 @@ Changing `header.h` only forces the final linking of all object files...
 cc  -Wall -Werror -Wextra main.o -o a.out
 ```
 
-..., but it won't force recompilation of `.c` files.
+..., but it won't force the recompilation of `.c` files.
 
 
 We could manually add a rule that specifies what files `main.o` depends on, which also solves the issue, but this is not very scalable.
@@ -1053,7 +1053,7 @@ Compiling with DEBUG=-g
 
 ## <a name="functions">A4 - Functions</a>
 
-This starts to look a lot like C right? Now we have functions and they are very similar! Functions take parameters that are processed depending on the behaviour of the function. The result of that function is later returned and replaced wherever the function call happened.
+This starts to look a lot like C right? Now we have functions and they are very similar! Functions take parameters that are processed depending on the behavior of the function. The result of that function is later returned and replaced wherever the function call happened.
 
 ### <a name="functions-1">A4.1 - Functions Call Syntax</a>
 
@@ -1358,7 +1358,7 @@ $(foreach var,list,text)
 
 For each word in `list`, `var` takes its value and gets transformed according to whatever is expanded on `text`. Both `var` and `list` are expanded before any transformation is applied. The `var` field contains the name of a temporary variable used to reference each word inside `list`. This variable becomes undefined outside the `foreach` call.
 
-Text is expanded as many times as there are whitespaced-separated words in `list`. The multiple expansions are then concatenated with a single space to produce the final result.
+`Text` is expanded as many times as there are whitespace-separated words in `list`. The multiple expansions are then concatenated with a single space to produce the final result.
 
 The following example replicates the `addprefix` example, saved on [code/24-foreach-example](code/24-foreach-example):
 
