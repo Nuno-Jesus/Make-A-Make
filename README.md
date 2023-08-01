@@ -77,8 +77,6 @@ Let's create a simple project to work with.
 	├── main.c
 	└── Makefile
 
-You can find these files in the [code/start-example](/code/start-example/) folder.
-
 ------------------------------------------------------------------
 
 
@@ -146,7 +144,7 @@ re: fclean
 
 
 ## <a name="index-4">4. A simple Makefile</a>
-The Makefile below is capable of compiling our example project. You can find it in the [code/1-start-example](/code/1-start-example/) folder.
+The Makefile below is capable of compiling our example project. You can find it in the [code/01-start-example](/code/01-start-example/) folder.
 
 ```Makefile
 hello.o: hello.c
@@ -263,7 +261,7 @@ Let's add a few files to our project:
 	├── main.c
 	└── Makefile
 
-A naive solution would be to create more rules. You can find the code in the [code/2-naive-example](/code/2-naive-example/) folder:
+A naive solution would be to create more rules. You can find the code in the [code/02-naive-example](/code/02-naive-example/) folder:
 
 ```Makefile
 all: hello.o bye.o highfive.o
@@ -284,7 +282,7 @@ This would be the new dependency graph:
 	<image src=images/graph_2.png>
 </div>
 
-But this is ugly and unnecessary since the pattern is always the same. Let us use the newly learn variables to clean this up! You can find the code in the [3-variables-example](/3-variables-example/) folder:
+But this is ugly and unnecessary since the pattern is always the same. Let us use the newly learn variables to clean this up! You can find the code in the [code/03-variables-example](code/03-variables-example/) folder:
 
 ```Makefile
 OBJS = hello.o bye.o highfive.o # Dependency list of the 'all' rule
@@ -411,7 +409,7 @@ Below, is a table of some of the most useful ones:
 	</table>
 </div>
 
-You can find the code in the [code/4-automatic-variables-example](/code/4-automatic-variables-example/) folder:
+You can find the code in the [code/04-automatic-variables-example](/code/04-automatic-variables-example/) folder:
 ```Makefile
 all: lib.a this.example
 
@@ -465,7 +463,7 @@ re: fclean
 	$(MAKE) all
 ```
 
-After a few hours, you realized your code is not that clean and you need a more secure compilation (compilation flags). You also want to name your executable `project`. For both situations, we can define variables to avoid unnecessary repetition. You can find the code in the [code/5-redundancy-example](/code/5-redundancy-example/) folder.
+After a few hours, you realized your code is not that clean and you need a more secure compilation (compilation flags). You also want to name your executable `project`. For both situations, we can define variables to avoid unnecessary repetition. You can find the code in the [code/05-redundancy-example](/code/05-redundancy-example/) folder.
 Here are the new changes:
 
 ```Makefile
@@ -620,7 +618,7 @@ $(NAME): $(OBJS)
 
 ...
 ```
-You can find the code in the [code/6-relinking-example](/code/6-relinking-example/) folder.
+You can find the code in the [code/06-relinking-example](/code/06-relinking-example/) folder.
 This version does the same job as before. The main difference lies in the new dependency of `all`. The first compilation will assert the project executable is not a file, so it must be remade through the `$(NAME)` rule. In the second run, however, since the `project` file was created before, the dependency is fulfilled and the Makefile directly attempts to execute the `all` recipe. Since it's empty and no other recipes were run, you'll get this message
 
 	make: Nothing to be done for 'all'.
@@ -1445,7 +1443,7 @@ Otherwise, if used without prerequisites, all targets are executed sequentially.
 
 ### <a name="flags">Makefile Flags</a>
 
-- `-C <dir>` - used to recursively call another Makefile `<dir>`. The syntax is as follows: `make [target] -C <dir>`. The `target` field can be omitted You can find an example of this in the [code/7-C-flag-example](/code/7-C-flag-example).
+- `-C <dir>` - used to recursively call another Makefile `<dir>`. The syntax is as follows: `make [target] -C <dir>`. The `target` field can be omitted You can find an example of this in the [code/07-C-flag-example](/code/07-C-flag-example).
 
 ```Makefile
 all:
@@ -1470,7 +1468,7 @@ When <code>make -C</code> is issued, it forces a directory change towards the su
 </div>
 <br>
 
-- `-k` - Usually, when an error happens, the Make aborts execution immediately. Using this flag, the Make is forced to attempt executing further targets. If you need an error list, this flag is for you. You can find an example of this in the [code/8-k-flag-example](/code/8-k-flag-example).
+- `-k` - Usually, when an error happens, the Make aborts execution immediately. Using this flag, the Make is forced to attempt executing further targets. If you need an error list, this flag is for you. You can find an example of this in the [code/08-k-flag-example](/code/08-k-flag-example).
 
 ```shell
 ➜  example-8 git:(master) ✗ make  
@@ -1494,7 +1492,7 @@ Even though <code>bye.o</code> can not be remade, the Makefile attempts to fulfi
 </div>
 <br>
 
-- `-p` - Dumps the whole database of known variables and rules (both explicit and implicit). The output is quite extensive, so I'll only display a small portion of it. For demonstration purposes, we're re-using the [code/6-relinking-example](/code/6-relinking-example) folder.
+- `-p` - Dumps the whole database of known variables and rules (both explicit and implicit). The output is quite extensive, so I'll only display a small portion of it. For demonstration purposes, we're re-using the [code/06-relinking-example](/code/06-relinking-example) folder.
 
 ```shell
 ➜  example-6 git:(master) ✗ make -p
@@ -1514,7 +1512,7 @@ OBJS = hello.o bye.o highfive.o
 </div>
 <br>
 
-- `-s` - Disables the default logging of Make actions in the terminal. Works just like the `.SILENT` special target/ For demonstration purposes, we're re-using the [code/6-relinking-example](/code/6-relinking-example) folder.
+- `-s` - Disables the default logging of Make actions in the terminal. Works just like the `.SILENT` special target/ For demonstration purposes, we're re-using the [code/06-relinking-example](/code/06-relinking-example) folder.
 
 ```shell
 ➜  example-6 git:(master) ✗ make       
@@ -1535,7 +1533,7 @@ cc -Wall -Werror -Wextra main.c hello.o bye.o highfive.o -o project
 </div>
 <br>
 
-- `-r` - Tells the Makefile to ignore any built-in rules. In the example below, we simply omit the rule for compiling C files. You can find an example of this in the [code/9-r-flag-example](/code/9-r-flag-example). 
+- `-r` - Tells the Makefile to ignore any built-in rules. In the example below, we simply omit the rule for compiling C files. You can find an example of this in the [code/09-r-flag-example](/code/09-r-flag-example). 
 
 ```shell
 ➜  example-9 git:(master) ✗ make       
@@ -1624,7 +1622,7 @@ The <code>time</code> command is only used to read the CPU load and execution ti
 </div>
 <br>
 
-- `--debug` - Executes and displays how dependencies are resolved. For demonstration purposes, we're re-using the [code/9-r-flag-example](/code/9-r-flag-example) folder.
+- `--debug` - Executes and displays how dependencies are resolved. For demonstration purposes, we're re-using the [code/09-r-flag-example](/code/09-r-flag-example) folder.
 
 ```shell
 ➜  example-9 git:(master) ✗ make
@@ -1658,7 +1656,7 @@ Successfully remade target file 'all'.
 </div>
 <br>
 
-- `--no-print-directory` Disables message printing whenever the Makefile enters or exits a directory. For demonstration purposes, we're re-using the [code/7-C-flag-example](/code/7-C-flag-example) folder.
+- `--no-print-directory` Disables message printing whenever the Makefile enters or exits a directory. For demonstration purposes, we're re-using the [code/07-C-flag-example](/code/07-C-flag-example) folder.
 
 ```shell
 ➜  example-7 git:(master) ✗ make
