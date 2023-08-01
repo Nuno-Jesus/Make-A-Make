@@ -7,7 +7,7 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 
 ## <a name="index-0">Index</a>
 <ul>
-	<li><strong><a href="#beginners-guide">Beginner's Guide</a></strong></li>
+	<li><strong><a href="#beginners-guide" style="color:white">Beginner's Guide</a></strong></li>
 	<ul style="list-style-type:disc">
 		<li><a href="#index-1">1. What is make?</a></li>
 		<li><a href="#index-2">2. An introduction to Makefiles</a></li>
@@ -24,7 +24,7 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 			<li><a href="#index-7.4">7.4. Relinking</a></li>
 		</ul>
 	</ul>
-	<li><strong><a href="#advanced-guide">Advanced Topics</a></strong></li>
+	<li><strong><a href="#advanced-guide" style="color:white">Advanced Topics</a></strong></li>
 	<ul style="list-style-type:disc">
 		<li><a href="#conditionals">A1 - Conditional Directives</a></li>
 		<li><a href="#mmd-flag">A2 - The MMD flag</a></li>
@@ -34,7 +34,7 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 			<li><a href="#functions-1">A4.1 - Functions Call Syntax</a></li>
 			<li><a href="#functions-2">A4.2 - Functions for String Manipulation</a></li>
 			<li><a href="#functions-3">A4.3 - Functions for File Names</a></li>
-			<li><a href="#functions-4">A4.4 - Functions for Generic Purpose</</li>a>
+			<li><a href="#functions-4">A4.4 - Functions for Generic Purposes</a></li>
 		</ul>
 		<!-- <li><a href="#vpath">The vpath directive</a></li> -->
 	</ul>
@@ -45,7 +45,7 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
 		<li><a href="#general-tips">General tips</a></li>
 	</ul> -->
-	<li><strong><a href="#useful-topics">Useful Topics</a></strong></li>
+	<li><strong><a href="#useful-topics" style="color:white">Useful Topics</a></strong></li>
 	<ul style="list-style-type:disc">
 		<li><a href="#special-targets">Special Targets</a></li>
 		<li><a href="#flags">Makefile Flags</a></li>
@@ -1761,7 +1761,6 @@ Self-explanatory, you forgot to add an `endif` directive to your conditional.
 Feel free to ask me any questions through Slack (**ncarvalh**).
 
 <!--
-## <a name="index-4">Makefile functions</a>
 
 ## <a name="index-4">The vpath directive and project organization</a>
 

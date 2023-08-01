@@ -3,5 +3,4 @@ SOURCES = sources
 
 all:
 	echo Final paths: $(foreach file, $(FILES), $(SOURCES)/$(file))
-	echo $(file)
 .SILENT:
