@@ -1379,7 +1379,7 @@ Final paths: sources/foo.c sources/bar.c sources/baz.c
 
 Visual representation of the example above:
 
-![foreach](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/8454edd3-263f-4523-8c62-07a4710386f0)
+![foreach](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/02d0b529-1fb6-4d45-9591-49275ddf0c8b)
 
 </details>
 
