@@ -7,7 +7,7 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 
 ## <a name="index-0">Index</a>
 <ul>
-	<li>Beginner's guide</li>
+	<li><strong><a href="#beginners-guide">Beginner's Guide</a></strong></li>
 	<ul style="list-style-type:disc">
 		<li><a href="#index-1">1. What is make?</a></li>
 		<li><a href="#index-2">2. An introduction to Makefiles</a></li>
@@ -24,7 +24,7 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 			<li><a href="#index-7.4">7.4. Relinking</a></li>
 		</ul>
 	</ul>
-	<li>Advanced topics</li>
+	<li><strong><a href="#advanced-guide">Advanced Topics</a></strong></li>
 	<ul style="list-style-type:disc">
 		<li><a href="#conditionals">A1 - Conditional Directives</a></li>
 		<li><a href="#mmd-flag">A2 - The MMD flag</a></li>
@@ -45,7 +45,7 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 		<li><a href="#activate-debug">Activate debug commands/flags with conditionals</a></li>
 		<li><a href="#general-tips">General tips</a></li>
 	</ul> -->
-	<li>Useful topics</li>
+	<li><strong><a href="#useful-topics">Useful Topics</a></strong></li>
 	<ul style="list-style-type:disc">
 		<li><a href="#special-targets">Special Targets</a></li>
 		<li><a href="#flags">Makefile Flags</a></li>
@@ -56,6 +56,8 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 
 ------------------------------------------------------------------
 
+
+# <a name="beginners-guide">Beginner's Guide</a>
 
 ## <a name="index-1">1. What is make?</a>
 The `make` utility is an automatic tool capable of deciding which commands can / should be executed. The `make` utility is mostly used to automate the compilation process, preventing manual file-by-file compilation. This utility is used through a special file called `Makefile`.
@@ -634,7 +636,7 @@ And there you have it! I hope this beginner's guide cleared a bit of your doubts
 ------------------------------------------------------------------
 
 
-# Advanced Topics
+# <a name="advanced-guide">Advanced Topics</a>
 
 ## <a name="conditionals">A1 - Conditional Directives</a>
 
@@ -1386,11 +1388,12 @@ Final paths: sources/foo.c sources/bar.c sources/baz.c
 
 
 ------------------------------------------------------------------
-## Useful Topics
+
+# <a name="useful-topics">Useful Topics</a>
 
 I don't think those topics fit either in the beginner's guide or in the advanced topics. However, I think they are useful to know and can be used to improve your Makefiles.
 
-### <a name="special-targets">Special Targets</a>
+## <a name="special-targets">Special Targets</a>
 There are a few special targets that can be used in a Makefile. These targets are not files but, rather commands that can be executed by the Makefile. Please note that these are not all the targets, but rather only the ones I use the most/are more useful.
 
 - `.SILENT` - Disables the default logging of Make actions in the terminal. If used with prerequisites, only those targets are executed silently.
@@ -1441,7 +1444,7 @@ Otherwise, if used without prerequisites, all targets are executed sequentially.
 ------------------------------------------------------------------
 
 
-### <a name="flags">Makefile Flags</a>
+## <a name="flags">Makefile Flags</a>
 
 - `-C <dir>` - used to recursively call another Makefile `<dir>`. The syntax is as follows: `make [target] -C <dir>`. The `target` field can be omitted You can find an example of this in the [code/07-C-flag-example](/code/07-C-flag-example).
 
@@ -1701,7 +1704,7 @@ cc -Wall -Werror -Wextra main.o -o a.out
 ------------------------------------------------------------------ 
 
 
-### <a name="errors">Good-to-know Errors</a>
+## <a name="errors">Good-to-know Errors</a>
 
 	Makefile: *** missing separator.  Stop.
 
