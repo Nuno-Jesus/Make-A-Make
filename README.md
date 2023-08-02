@@ -1414,18 +1414,51 @@ Linux
 
 </details>
 
+<details>
+	<summary><h4>call</h4> - call your own defined functions</summary>
 
+```
+$(call variable,param,param,…)
+```
 
+- `variable` - the name of the function to call. 
+- `param` - strings that will serve as arguments of the function defined in `variable`.
 
-<!-- 
-	Functions for generic purpose
-	
-	$(shell command)
-	$(call variable,param,param,…)
- -->
+If you're constantly writing the same complex expressions, you can define a function of your own and assign it the expression. When the times to expand the function, each `param` is assigned to the temporary variables `$(1)`, `$(2)`, etc. As for `$(0)` it receives the variable in `variable`.
+
+Let's assume you need to compile a few sub-Makefiles and echo a message to alert it has been done. Something like this:
+
+```Makefile
+all:
+	echo "Compiling folder-1"
+	$(MAKE) -C folder-1
+
+	echo "Compiling folder-2"
+	$(MAKE) -C folder-2
+
+	echo "Compiling folder-3"
+	$(MAKE) -C folder-3
+```
+
+The example below, saved on [code/26-call-example](code/26-call-example) refactors the Makefile above by defining an expression that holds both the `echo` and the `make` commands:
+
+```Makefile
+SUBFOLDERS = folder-1 folder-2 folder-3
+
+define compile
+echo "Compiling $(1)"
+$(MAKE) -C $(1)
+endef
+
+all:
+	$(foreach f, $(SUBFOLDERS), $(call compile, $(f)))
+```
+
+</details>
 
 
 ------------------------------------------------------------------
+
 
 # <a name="useful-topics">Useful Topics</a>
 
