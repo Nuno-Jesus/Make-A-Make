@@ -189,7 +189,7 @@ You should see something like this on the terminal:
 This is great! The compilation worked out and finally, we can execute our program and use our `hello` function! But what if one wanted to compile `N` more files? Would they need to create `N` more rules?
 
 
-## <a name="index-4.1">4.1. Dependencies and rules processing</a>
+### <a name="index-4.1">4.1. Dependencies and rules processing</a>
 Consider a portion of the previous Makefile:
 
 ```Makefile
@@ -1356,7 +1356,9 @@ Final object files: foo.o bar.o baz.o
 $(foreach var,list,text)
 ```
 
-For each word in `list`, `var` takes its value and gets transformed according to whatever is expanded on `text`. Both `var` and `list` are expanded before any transformation is applied. The `var` field contains the name of a temporary variable used to reference each word inside `list`. This variable becomes undefined outside the `foreach` call.
+For each word in `list`, `var` takes its value and gets transformed according to whatever is expanded on `text`. Both `var` and `list` are expanded before any transformation is applied. 
+
+The `var` field contains the name of a temporary variable used to reference each word inside `list`. This variable becomes undefined outside the `foreach` call.
 
 `Text` is expanded as many times as there are whitespace-separated words in `list`. The multiple expansions are then concatenated with a single space to produce the final result.
 
@@ -1382,6 +1384,38 @@ Visual representation of the example above:
 ![foreach](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/02d0b529-1fb6-4d45-9591-49275ddf0c8b)
 
 </details>
+
+<details>
+	<summary><h4>shell</h4> - using shell commands</summary>
+
+```
+$(shell command)	
+```
+
+The `shell` function has a particular behavior. It's responsible to communicate with the environment outside `make`, invoke a shell and execute a command, just like what happens in a recipe. The result is then returned and replaced wherever the function was called. Newlines are replaced with a single space.
+
+The `command` parameter is the command that should be run in the shell, alongside its arguments.
+
+The following example detects and prints the current kernel, by running the `uname` command ([code/25-shell-example](code/25-shell-example)):
+
+```Makefile
+OS = $(shell uname -s)
+
+all:
+	echo $(OS)	
+.SILENT:
+```
+
+Output:
+
+``` shell
+Linux
+```
+
+</details>
+
+
+
 
 <!-- 
 	Functions for generic purpose
