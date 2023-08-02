@@ -1414,7 +1414,7 @@ Linux
 
 </details>
 
-<details>
+<details open>
 	<summary><h4>call</h4> - call your own defined functions</summary>
 
 ```
@@ -1426,7 +1426,7 @@ $(call variable,param,param,…)
 
 If you're constantly writing the same complex expressions, you can define a function of your own and assign it the expression. When the times to expand the function, each `param` is assigned to the temporary variables `$(1)`, `$(2)`, etc. As for `$(0)` it receives the variable in `variable`.
 
-Let's assume you need to compile a few sub-Makefiles and echo a message to alert it has been done. Something like this:
+Let's assume you need to compile a few sub-Makefiles. You also want to keep track of the progress using some custom messages. Something like this:
 
 ```Makefile
 all:
@@ -1446,13 +1446,16 @@ The example below, saved on [code/26-call-example](code/26-call-example) refacto
 SUBFOLDERS = folder-1 folder-2 folder-3
 
 define compile
-echo "Compiling $(1)"
-$(MAKE) -C $(1)
+	$(info Compiling $(1))
+	$(MAKE) -C $(1)
 endef
 
 all:
-	$(foreach f, $(SUBFOLDERS), $(call compile, $(f)))
+	$(foreach folder, $(SUBFOLDERS), $(call compile,$(folder)))
+
 ```
+
+Although it might be confusing, the example above simply automates the tasks manually written before. It iterates through the list of subfolders where the Makefiles are at and calls the commands to both log and compile.
 
 </details>
 
