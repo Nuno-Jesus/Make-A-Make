@@ -1458,6 +1458,7 @@ Linux
 $(call variable,param,param,…)
 ```
 
+
 **Arguments**
 - `variable` - the name of the function to call. 
 - `param` - strings that will serve as arguments of the function defined in `variable`.
