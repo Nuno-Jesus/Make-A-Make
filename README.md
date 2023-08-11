@@ -1101,12 +1101,17 @@ BAR=a,b,c
 
 Up ahead, we have functions that can be used for generic string manipulation.
 
-<details>
+<details open>
 	<summary><h4>patsubst</h4> - replaces string patterns</summary>
 	
 ```
 $(patsubst pattern,replacement,text)
 ```
+
+**Arguments**
+- `pattern` - A pattern to look for
+- `replacement` - What to replace `pattern with`  
+- `text` - The string(s) to operate on
 
 Looks for whitespace-separated words that match `pattern` in `text` to replace them with `replacement`. The function returns the result after the replacements.
 
@@ -1145,6 +1150,9 @@ OBJS = main.o foo.o bar.o
 ```
 $(strip string)
 ```
+
+**Arguments**
+- `string` - The string(s) to operate on
 
 Removes both leading and trailing whitespaces. Multiple whitespaces between strings are condensed into a single space.
 
@@ -1185,6 +1193,10 @@ RESULT == a b c
 $(findstring find,in)
 ```
 
+**Arguments**
+- `in` - The string(s) to operate on
+- `find` - The string to look for on `in`
+
 If the text `in` contains a word identical to `find`, the function returns `find`. Otherwise, it returns the empty string.
 
 Here's an example ([code/18-findstring-example](code/18-findstring-example)):
@@ -1212,6 +1224,9 @@ Result=
 ```
 $(words text)
 ```
+
+**Arguments**
+- `text` - The string(s) to operate on
 
 Counts the number of words in `text`.
 
@@ -1244,6 +1259,9 @@ The following functions were designed to handle file names or paths to files. Th
 $(dir names…)
 ```
 
+**Arguments**
+- `names` - The string(s) to operate on
+
 Extracts the directory part of every file contained in `names`. The directory part is considered to be all the characters until the last `/` is found (including it).
 
 Here's an example ([code/20-dir-example](code/20-dir-example)):
@@ -1271,6 +1289,9 @@ These are the directories: source/ source/ ./
 $(notdir names…)
 ```
 
+**Arguments**
+- `names` - The string(s) to operate on
+
 Extracts the non-directory part of every file contained in `names`. The non-directory part is considered to be all the characters from the last `/` (not including it) to the end.
 
 Here's an example ([code/21-dir-example](code/21-dir-example)):
@@ -1297,6 +1318,10 @@ These are the files: foo.c bar.c baz.c
 ```
 $(addprefix prefix,names…)
 ```
+
+**Arguments**
+- `prefix` - The prefix to append
+- `names` - The string(s) to operate on
 
 For each reference in `names`, it appends `prefix` to it. The final result is the prefix concatenated with each reference, separated by a space between each final reference.
 
@@ -1327,6 +1352,10 @@ Final paths: sources/foo.c sources/bar.c sources/baz.c
 $(addsuffix suffix,names…)
 ```
 
+**Arguments**
+- `suffix` - The suffix to append
+- `names` - The string(s) to operate on
+
 For each reference in `names`, it appends `suffix` to it. The final result is the suffix concatenated with each reference, separated by a space between each final reference.
 
 Here's an example ([code/23-addsuffix-example](code/23-addsuffix-example)):
@@ -1355,6 +1384,11 @@ Final object files: foo.o bar.o baz.o
 ```
 $(foreach var,list,text)
 ```
+
+**Arguments**
+- `var` - The name of a variable that will work as a temporary iterator
+- `list` - The string(s) to operate on
+- `text` - The final result to each string on `list`
 
 For each word in `list`, `var` takes its value and gets transformed according to whatever is expanded on `text`. Both `var` and `list` are expanded before any transformation is applied. 
 
@@ -1392,6 +1426,9 @@ Visual representation of the example above:
 $(shell command)	
 ```
 
+**Arguments**
+- `command` - The string(s) to operate on
+
 The `shell` function has a particular behavior. It's responsible to communicate with the environment outside `make`, invoke a shell and execute a command, just like what happens in a recipe. The result is then returned and replaced wherever the function was called. Newlines are replaced with a single space.
 
 The `command` parameter is the command that should be run in the shell, alongside its arguments.
@@ -1421,6 +1458,7 @@ Linux
 $(call variable,param,param,…)
 ```
 
+**Arguments**
 - `variable` - the name of the function to call. 
 - `param` - strings that will serve as arguments of the function defined in `variable`.
 
@@ -1455,7 +1493,7 @@ all:
 
 ```
 
-Although it might be confusing, the example above simply automates the tasks manually written before. It iterates through the list of subfolders where the Makefiles are at and calls the commands to both log and compile.
+Although it might be confusing, the example above simply automates the tasks manually written before. It iterates through the list of subfolders where the Makefiles are and calls the commands to both log and compile.
 
 </details>
 
