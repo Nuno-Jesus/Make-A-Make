@@ -1055,6 +1055,11 @@ Compiling with DEBUG=-g
 
 This starts to look a lot like C right? Now we have functions and they are very similar! Functions take parameters that are processed depending on the behavior of the function. The result of that function is later returned and replaced wherever the function call happened.
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
 ### <a name="functions-1">A4.1 - Functions Call Syntax</a>
 
 Function calls can appear anywhere a variable can. Function calls resemble a variable reference:
@@ -1097,11 +1102,16 @@ FOO=a b c
 BAR=a,b,c
 ```
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
 ### <a name="functions-2">A4.2 - Functions for String Manipulation</a>
 
 Up ahead, we have functions that can be used for generic string manipulation.
 
-<details open>
+<details>
 	<summary><h4>patsubst</h4> - replaces string patterns</summary>
 	
 ```
@@ -1110,7 +1120,7 @@ $(patsubst pattern,replacement,text)
 
 **Arguments**
 - `pattern` - A pattern to look for
-- `replacement` - What to replace `pattern with`  
+- `replacement` - What to replace `pattern` with  
 - `text` - The string(s) to operate on
 
 Looks for whitespace-separated words that match `pattern` in `text` to replace them with `replacement`. The function returns the result after the replacements.
@@ -1152,7 +1162,7 @@ $(strip string)
 ```
 
 **Arguments**
-- `string` - The string(s) to operate on
+- `string` - The string(s) to work on
 
 Removes both leading and trailing whitespaces. Multiple whitespaces between strings are condensed into a single space.
 
@@ -1194,8 +1204,8 @@ $(findstring find,in)
 ```
 
 **Arguments**
-- `in` - The string(s) to operate on
-- `find` - The string to look for on `in`
+- `find` - The string to look for on
+- `in` - The string(s) to search on
 
 If the text `in` contains a word identical to `find`, the function returns `find`. Otherwise, it returns the empty string.
 
@@ -1248,9 +1258,14 @@ VAR has 6 words
 
 </details>
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
 ### <a name="functions-3">A4.3 - Functions for File Names</a>
 
-The following functions were designed to handle file names or paths to files. The transformations take place in the same way for every file name.
+The following functions were designed to handle file names or paths to files. The transformations take place in the same way for every string.
 
 <details>
 	<summary><h4>dir</h4> - extracts the directory part of a file</summary>
@@ -1376,6 +1391,11 @@ Final object files: foo.o bar.o baz.o
 
 </details>
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
+
 ### <a name="functions-4">A4.4 - Functions for Generic Purpose</a>
 
 <details>
@@ -1388,13 +1408,13 @@ $(foreach var,list,text)
 **Arguments**
 - `var` - The name of a variable that will work as a temporary iterator
 - `list` - The string(s) to operate on
-- `text` - The final result to each string on `list`
+- `text` - The final transformation for each reference in `list`
 
-For each word in `list`, `var` takes its value and gets transformed according to whatever is expanded on `text`. Both `var` and `list` are expanded before any transformation is applied. 
+For each word in `list`, `var` takes its value and gets transformed according to whatever is expanded on `text`. Both `var` and `list` are expanded before any transformation is applied.
 
 The `var` field contains the name of a temporary variable used to reference each word inside `list`. This variable becomes undefined outside the `foreach` call.
 
-`Text` is expanded as many times as there are whitespace-separated words in `list`. The multiple expansions are then concatenated with a single space to produce the final result.
+The `text` variable is expanded as many times as there are whitespace-separated words in `list`. The multiple expansions are then concatenated with a single space to produce the final result.
 
 The following example replicates the `addprefix` example, saved on [code/24-foreach-example](code/24-foreach-example):
 
@@ -1433,7 +1453,7 @@ The `shell` function has a particular behavior. It's responsible to communicate 
 
 The `command` parameter is the command that should be run in the shell, alongside its arguments.
 
-The following example detects and prints the current kernel, by running the `uname` command ([code/25-shell-example](code/25-shell-example)):
+The following example detects and prints the current kernel ([code/25-shell-example](code/25-shell-example)):
 
 ```Makefile
 OS = $(shell uname -s)
@@ -1451,7 +1471,7 @@ Linux
 
 </details>
 
-<details open>
+<details>
 	<summary><h4>call</h4> - call your own defined functions</summary>
 
 ```
@@ -1463,7 +1483,7 @@ $(call variable,param,param,…)
 - `variable` - the name of the function to call. 
 - `param` - strings that will serve as arguments of the function defined in `variable`.
 
-If you're constantly writing the same complex expressions, you can define a function of your own and assign it the expression. When the times to expand the function, each `param` is assigned to the temporary variables `$(1)`, `$(2)`, etc. As for `$(0)` it receives the variable in `variable`.
+If you're constantly writing the same complex expressions, you can define a function of your own and assign it the expression. On expansion time, each `param` is assigned to the temporary variables `$(1)`, `$(2)`, etc. As for `$(0)` it receives the value of `variable`.
 
 Let's assume you need to compile a few sub-Makefiles. You also want to keep track of the progress using some custom messages. Something like this:
 
@@ -1498,6 +1518,10 @@ Although it might be confusing, the example above simply automates the tasks man
 
 </details>
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+<br>
 
 ------------------------------------------------------------------
 
