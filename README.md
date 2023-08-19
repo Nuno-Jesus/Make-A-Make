@@ -36,7 +36,7 @@ It starts with a beginner's guide, followed up by some medium-advanced concepts.
 			<li><a href="#functions-3">A4.3 - Functions for File Names</a></li>
 			<li><a href="#functions-4">A4.4 - Functions for Generic Purposes</a></li>
 		</ul>
-		<!-- <li><a href="#vpath">The vpath directive</a></li> -->
+		<li><a href="#vpath">A5 - The vpath directive</a></li>
 	</ul>
 	<!-- <li>Tips and tricks</li>
 	<ul>
@@ -1525,6 +1525,71 @@ Although it might be confusing, the example above simply automates the tasks man
 
 ------------------------------------------------------------------
 
+
+
+## <a name="vpath">A5 - The vpath directive</a>
+
+It's exhausting to manually assemble and write the relative path of files. Assuming you stored some source files in `nc_utils` and your Makefile is right next to that folder...
+
+	├── ... 
+	├── nc_utils
+		├── nc_clamp.c
+		├── nc_count.c
+		├── nc_free.c
+		├── nc_numlen.c
+		├── main.c
+	└── Makefile
+
+...you would have to either write those paths down...
+
+```Makefile
+SOURCES = nc_utils/nc_clamp.c \
+          nc_utils/nc_count.c \
+          nc_utils/nc_free.c \
+          nc_utils/nc_numlen.c \
+          nc_utils/main.c
+```
+
+...or make use of some builtin Makefile function...
+
+```Makefile
+SOURCES = nc_clamp.c nc_count.c nc_free.c nc_numlen.c main.c
+SOURCES := $(addprefix utils/, $(SOURCES))
+```
+
+The first one is, obviously, **not scalable**. Although the second option looking friendly, how much more you have to change if the source files are placed among multiple folders? (this is the directory tree from [my own library](https://github.com/Nuno-Jesus/42_libnc))
+
+	├── ...
+	├── nc_binary_search_tree/
+	├── nc_conversions/
+	├── nc_dictionary/
+	├── nc_is/
+	├── nc_linked_list/
+	├── nc_matrix/
+	├── nc_memory/
+	├── nc_pair/
+	├── nc_print/
+	├── nc_str/
+	├── nc_utils/
+	├── nc_vector/
+	├── Makefile
+	└── ...
+
+Or even sub-folders? The `addprefix` solution doesn't seem so friendly anymore!
+
+This is when the `vpath` directive comes into play. This directive states what directories `make` should search on. Thus, if any pre-requisite or target is not found on the same directory level as your Makefile, `make` will search on that list of directories for a file with that name.
+
+The most used syntax for `vpath` is down below:
+
+```Makefile
+vpath pattern directories
+```
+
+- `pattern` - a string containing most often a `%` to match a sequence of characters. If `%` is not present, pattern must match the exact name of a file (not very useful to be honest).
+
+- `directories` - a list of directories to search on by files that match `pattern`, separated by `:`
+
+<!--! WAS GIVING AN EXAMPLE  -->
 
 # <a name="useful-topics">Useful Topics</a>
 
