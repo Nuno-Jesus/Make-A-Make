@@ -1615,6 +1615,14 @@ There is also a Makefile implicit `VPATH` variable that serves the same purpose.
 VPATH = nc_utils nc_str
 ```
 
+<div align=center>
+	<strong><a href="#index-0">🚀 Go back to top 🚀</a></strong>
+</div>
+
+
+------------------------------------------------------------------
+
+
 
 # <a name="useful-topics">Useful Topics</a>
 
