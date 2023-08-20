@@ -1529,7 +1529,7 @@ Although it might be confusing, the example above simply automates the tasks man
 
 ## <a name="vpath">A5 - The vpath directive</a>
 
-It's exhausting to manually assemble and write the relative path of files. Assuming you stored some source files in `nc_utils` and your Makefile is right next to that folder...
+It's exhausting to manually assemble and write the relative path of files. Assuming you stored some source files in a `nc_utils` folder and your Makefile is right next to that folder...
 
 	├── ... 
 	├── nc_utils
@@ -1550,14 +1550,14 @@ SOURCES = nc_utils/nc_clamp.c \
           nc_utils/main.c
 ```
 
-...or make use of some builtin Makefile function...
+...or make use of some built-in Makefile function...
 
 ```Makefile
 SOURCES = nc_clamp.c nc_count.c nc_free.c nc_numlen.c main.c
 SOURCES := $(addprefix utils/, $(SOURCES))
 ```
 
-The first one is, obviously, **not scalable**. Although the second option looking friendly, how much more you have to change if the source files are placed among multiple folders? (this is the directory tree from [my own library](https://github.com/Nuno-Jesus/42_libnc))
+The first approach is, obviously, **not scalable**. Despite the second looking more friendly, how much more do you have to add if the source files are placed among multiple folders? (this is the directory tree from [my C library](https://github.com/Nuno-Jesus/42_libnc))
 
 	├── ...
 	├── nc_binary_search_tree/
@@ -1577,19 +1577,44 @@ The first one is, obviously, **not scalable**. Although the second option lookin
 
 Or even sub-folders? The `addprefix` solution doesn't seem so friendly anymore!
 
-This is when the `vpath` directive comes into play. This directive states what directories `make` should search on. Thus, if any pre-requisite or target is not found on the same directory level as your Makefile, `make` will search on that list of directories for a file with that name.
+The `vpath` directive offers a more flexible approach. This directive states what directories `make` should search on. Thus, if any pre-requisite or target is not found on the same directory level as your Makefile, `make` will search on that list of directories for a file with that name.
 
-The most used syntax for `vpath` is down below:
+The most common syntax for `vpath` is down below:
 
 ```Makefile
 vpath pattern directories
 ```
 
-- `pattern` - a string containing most often a `%` to match a sequence of characters. If `%` is not present, pattern must match the exact name of a file (not very useful to be honest).
+- `pattern` - a string containing most often a `%` to match a sequence of characters. If `%` is not present, the `pattern` must match the exact name of a file (quite useless)
 
-- `directories` - a list of directories to search on by files that match `pattern`, separated by `:`
+- `directories` - a list of directories to search on by files that match `pattern`
 
-<!--! WAS GIVING AN EXAMPLE  -->
+Using `vpath` simplifies the search of source files in `nc_utils`:
+
+```Makefile
+SOURCES = nc_clamp.c nc_count.c nc_free.c nc_numlen.c main.c
+
+vpath %.c nc_utils
+```
+
+Adding more folders into play is a simple matter of adding the source files' names and a new directory to the `vpath` directive. Example with string functions:
+
+```Makefile
+SOURCES =  nc_clamp.c nc_count.c nc_free.c nc_numlen.c
+SOURCES += nc_strlen.c nc_strncmp.c nc_substr.c
+SOURCES += main.c
+
+vpath %.c nc_utils nc_str
+```
+
+You can find the example above in [code/27-vpath-example](code/27-vpath-example).
+
+There is also a Makefile implicit `VPATH` variable that serves the same purpose. However, it does not allow you to specify a pattern. One could re-write the `vpath` directive like this:
+
+```Makefile
+VPATH = nc_utils nc_str
+```
+
 
 # <a name="useful-topics">Useful Topics</a>
 
