@@ -134,7 +134,7 @@ re: fclean
 	$(MAKE) all
 ```
 
-> **Note**
+> [!Note]
 > `$(MAKE)` is a variable which expands to `make`. We'll see more about variables up ahead.
 
 <div align=center>
@@ -178,7 +178,7 @@ In the terminal, run:
 
 	make all
 
-> **Warning**
+> [!Warning]
 > If the `<target>` field is ommited, the Makefile will execute the first rule. And yes, this example is not doing that, the primary rule should be 'all'.
 
 You should see something like this on the terminal:
@@ -244,7 +244,7 @@ LAST_NAMES  = Carvalho de Jesus
 FULL_NAME   = $(FIRST_NAMES) $(LAST_NAMES) # Nuno Miguel Carvalho de Jesus
 ```
 
-> **Note**
+> [!Note]
 > The naming convention for variables is uppercase, to distinguish from Makefile rules.
 
 You can use variables in rules and other variables as well. To access their values, you must use:
@@ -301,7 +301,7 @@ clean:
 ...
 ```
 
-> **Note**
+> [!Note]
 > Have you have ever run `make -p > logs` ? Neither did I, but it's pretty useful! Detailed explanation on this in an upcoming section.
 
 Ok, pause. I know this is a lot to take in. Let's look into the details.When running `make`:
@@ -488,7 +488,7 @@ fclean: clean
 
 ```
 
-> **Note**
+> [!Note]
 > The `-o` flag signals the compiler, to specify the name the executable will have.
 
 <div align=center>
@@ -679,7 +679,7 @@ else
 endif
 ```
 
-> **Warning**
+> [!Warning]
 > The directives **cannot** be indented inside a recipe, otherwise `make` will consider those as commands and will attempt to execute them.
 
 We are currently making use of 3 directives:
@@ -696,7 +696,7 @@ VAR2 does not contain my name
 
 Although `VAR1` and `VAR2` are very similar, `VAR2` ends in space! It was more than enough to assert an inequality between the 2 values. On the other hand, the first conditional evaluates to true, because all strings from `VAR1` match the strings on the right side. Note that **leading whitespaces are ignored, but trailing spaces are not**.
 
-> **Note**
+> [!Note]
 > You can use the `strip` built-in makefile function to remove extra whitespaces.
 
 Conditionals determine which parts of the `Makefile` should be excluded or included before the building process begins.
@@ -707,7 +707,7 @@ The animation below demonstrates how conditionals behave.
 
 ![Conditionals](https://github.com/Nuno-Jesus/Make-A-Make/assets/93390807/0c23ea0e-d3f3-4cc6-85fb-872fd86126b0)
 
-> **Note**
+> [!Note]
 > Quotes are only used to detail the extra space.
 
 There are 4 different conditional directives. Here's a list:
@@ -996,7 +996,7 @@ $(NAME): $(OBJS)
 ...
 ```
 
-> **Note**
+> [!Note]
 > The `-` prefix in the `include` directive prevents make from quitting if an included file doesn't exist.
 
 Before the building process begins, the Makefile will look for the included files and try to append them, just like the animation below demonstrates:
@@ -1149,7 +1149,7 @@ FILES = main.c foo.c bar.c
 OBJS = main.o foo.o bar.o
 ```
 
-> **Note**
+> [!Note]
 > The notation `$(variable-name:pattern=replacement)` is an equivalent notation. For instance, the assignment of `OBJS` could become `OBJS = $(FILES:.c=.o)`
 
 </details>
@@ -1845,7 +1845,7 @@ make -j  0.12s user 0.06s system 235% cpu 0.076 total
 
 The <code>time</code> command is only used to read the CPU load and execution time.
 
-> **Note**
+> [!Note]
 > When recursively calling make, the parallel computation is not imposed in sub-Makes unless you use the `$(MAKE)` variable. You also don't need to use the <code>-j</code> flag in the sub-Make, since you would launch N more threads, which you don't really need to.
 
 <div align=center>
