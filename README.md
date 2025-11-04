@@ -313,7 +313,7 @@ all: $(OBJS)
 	cc main.c $(OBJS)
 ```
 
-**2.** The `OBJS` variable is expanded its values, creating multiple dependencies:
+**2.** The `OBJS` variable is expanded into its values, creating multiple dependencies:
 
 ```Makefile
 all: hello.o bye.o highfive.o
